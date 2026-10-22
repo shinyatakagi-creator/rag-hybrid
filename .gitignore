@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+data/
+# embedding cache (lives under data/ by default; listed explicitly in case it moves)
+embed_cache/
+*.embcache.jsonl
+.DS_Store
