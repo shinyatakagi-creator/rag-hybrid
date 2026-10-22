@@ -95,9 +95,10 @@ class Cleaner:
     # -- main ------------------------------------------------------------
     def clean(self, text: str, page_dir: Path, depth: int = 0) -> str:
         text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
-        text = re.sub(_sc("comment") + r".*?" + _sc("/comment"), "", text, flags=re.S)
+        text = re.sub(_sc("comment") + r".*?" + _sc(r"/\s*comment"), "", text, flags=re.S)
+        text = re.sub(r"^(?=\{\{[<%]\s*heading\b)", "## ", text, flags=re.M)  # bare heading shortcode -> H2
 
-        text = re.sub(_sc(r"highlight[^>%]*hl_inline=true[^>%]*") + r"(.*?)" + _sc("/highlight"), r"`\1`", text, flags=re.S)
+        text = re.sub(_sc(r"highlight[^>%]*hl_inline=true[^>%]*") + r"(.*?)" + _sc(r"/\s*highlight"), r"`\1`", text, flags=re.S)
 
         def sc(m: re.Match) -> str:
             name, args = m.group(1), m.group(2)
@@ -113,8 +114,8 @@ class Cleaner:
                 return attrs.get("text") or attrs.get("term_id", "").replace("-", " ")
             if name == "glossary_definition":
                 return self._glossary_def(attrs)
-            if name == "heading":
-                return f"## {HEADING_I18N.get(pos.group(1), pos.group(1))}" if pos else ""
+            if name == "heading":  # Hugo pages write `## {{% heading "x" %}}`; the hashes are already there
+                return HEADING_I18N.get(pos.group(1), pos.group(1)) if pos else ""
             if name == "feature-state":
                 if "feature_gate_name" in attrs:
                     return f"Feature gate: {attrs['feature_gate_name']}"
@@ -142,8 +143,8 @@ class Cleaner:
 
         text = re.sub(r"\{\{[<%]\s*([a-zA-Z_-]+)([^>%]*?)\s*[>%]\}\}", sc, text)
         # closing tags: highlight/mermaid end a fence, everything else disappears
-        text = re.sub(_sc(r"/(?:highlight|mermaid)"), "```", text)
-        text = re.sub(r"\{\{[<%]\s*/[a-zA-Z_-]+\s*[>%]\}\}", "", text)
+        text = re.sub(_sc(r"/\s*(?:highlight|mermaid)"), "```", text)  # `{{</ mermaid >}}` has a space after the slash
+        text = re.sub(r"\{\{[<%]\s*/\s*[a-zA-Z_-]+\s*[>%]\}\}", "", text)
         return self._strip_html(text)
 
     @staticmethod

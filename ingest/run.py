@@ -10,13 +10,16 @@ from collections import Counter
 from pathlib import Path
 
 from .chunkers import CHUNKERS, MAX_TOKENS, embed_text, ntok
-from .loaders import _FENCE_SPLIT, Cleaner, load_corpus
+from .loaders import Cleaner, load_corpus
 
-LEFTOVER = re.compile(r"\{\{|\}\}|\{%|%\}|<!--|-->")
+STRICT = re.compile(r"\{\{|\}\}|\{%|%\}|<!--")  # any brace/comment fragment (Go templates and JSON in code match too)
+SHORTCODE = re.compile(r"\{\{\s*[<%/]|[>%/]\s*\}\}|\{%|<!--")  # shortcode-shaped: must be 0 everywhere
+FENCE = re.compile(r"^[ \t]*(```|~~~).*?^[ \t]*\1[^\n]*$", re.S | re.M)  # also indented (list-item) fences
+INLINE_CODE = re.compile(r"`[^`\n]*`")
 
 
 def outside_fences(text: str) -> str:
-    return "".join(_FENCE_SPLIT.split(text)[::2])
+    return INLINE_CODE.sub("", FENCE.sub("", text))
 
 
 def table_without_header(content: str) -> bool:
@@ -77,19 +80,37 @@ def main() -> None:
         s = stats[name] = chunker_stats(chunks)
         per_doc = Counter(c["doc_id"] for c in chunks)
         s["top_docs_by_chunks"] = per_doc.most_common(10)
-        left = [c for c in chunks if LEFTOVER.search(outside_fences(embed_text(c)))]
-        s["leftover_shortcode_chunks_outside_fences"] = len(left)
-        s["leftover_examples"] = [(c["chunk_id"], LEFTOVER.search(outside_fences(embed_text(c))).group(), c["doc_id"]) for c in left[:5]]
-        s["braces_inside_fences_(legit code)"] = sum(bool(LEFTOVER.search(c["content"])) for c in chunks) - len(left)
+        s["under_100_share"] = round(s["under_100"] / s["chunks"], 4)
+        s["table_split_across_chunks"] = sum(
+            a["doc_id"] == b["doc_id"] and a["content"].rstrip().split("\n")[-1].lstrip().startswith("|") and b["content"].lstrip().startswith("|")
+            for a, b in zip(chunks, chunks[1:])
+        )
+        texts = [(c, embed_text(c)) for c in chunks]
+        s["shortcode_shaped_fragments_anywhere"] = sum(bool(SHORTCODE.search(t)) for _, t in texts)
+        s["strict_fragments_total"] = sum(bool(STRICT.search(t)) for _, t in texts)
+        s["strict_fragments_outside_code"] = sum(bool(STRICT.search(outside_fences(t))) for _, t in texts)
+        s["strict_outside_code_examples"] = [
+            (c["doc_id"], STRICT.search(outside_fences(t)).group(), outside_fences(t)[max(0, STRICT.search(outside_fences(t)).start() - 40):][:90])
+            for c, t in texts if STRICT.search(outside_fences(t))
+        ][:5]
         print(f"\n[{name}] -> {out / (name + '.jsonl')}")
-        print(json.dumps({k: v for k, v in s.items() if k not in ("top_docs_by_chunks", "leftover_examples")}, indent=1))
+        print(json.dumps({k: v for k, v in s.items() if k not in ("top_docs_by_chunks",)}, indent=1, ensure_ascii=False))
+        print("  10 biggest pages by chunk count:")
+        for doc_id, n in s["top_docs_by_chunks"]:
+            print(f"    {n:4d}  {doc_id}")
         if s["over_800"]:
             raise SystemExit(f"FAIL: {s['over_800']} {name} chunks exceed {MAX_TOKENS} tokens")
 
     Path(a.stats_out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.stats_out).write_text(json.dumps(stats, indent=1, ensure_ascii=False))
-    left_docs = sum(bool(LEFTOVER.search(outside_fences(d.text))) for d in docs)
-    print(f"\ncleaned docs with leftover shortcode/comment markers outside fences: {left_docs}/{len(docs)}")
+    left_docs = [d.doc_id for d in docs if SHORTCODE.search(d.text)]
+    print(f"\ncleaned docs with shortcode-shaped fragments (anywhere): {len(left_docs)}/{len(docs)} {left_docs[:5]}")
+    chunked = {c["doc_id"] for c in chunks}
+    unchunked = [d.doc_id for d in docs if d.doc_id not in chunked]
+    stats["pages_without_chunks"] = unchunked
+    print(f"pages loaded: {len(docs)}; failed to load: 0 (load errors would raise); pages with no body text after front matter/shortcode cleanup, so no chunks: {len(unchunked)}")
+    print("  " + ", ".join(unchunked))
+    Path(a.stats_out).write_text(json.dumps(stats, indent=1, ensure_ascii=False))
 
 
 if __name__ == "__main__":

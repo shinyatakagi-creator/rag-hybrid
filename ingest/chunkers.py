@@ -85,8 +85,10 @@ def _blocks(text: str) -> list[tuple[str, str]]:
             cur, kind, in_fence = [line], "fence", True
         elif s.startswith("|"):
             if kind != "table":
-                flush()
+                header = cur.pop() if kind == "text" and cur and "|" in cur[-1] and _SEP_ROW.match(line) else None
+                flush()  # header row without a leading pipe belongs to the table, not the paragraph above
                 kind = "table"
+                cur = [header] if header else []
             cur.append(line)
         elif not s:
             flush()
@@ -149,34 +151,62 @@ def split_section(text: str, budget: int) -> list[str]:
     return chunks
 
 
-def _sections(doc: Doc) -> list[list]:
-    """[[path_parts, text], ...] from MarkdownHeaderTextSplitter, tiny sections merged forward."""
+def _can_merge(a: dict, b: dict) -> bool:
+    """A tiny section may merge with a neighbour only inside one parent heading: b is a descendant of a
+    (page intro -> first H2, empty H2 -> its first H3) or both are H3 siblings under the same H2.
+    Never across an H2/H1 boundary."""
+    descendant = a["level"] < b["level"] and b["path"][: len(a["path"])] == a["path"]
+    siblings = a["level"] == b["level"] == 3 and a["path"][:-1] == b["path"][:-1]
+    return descendant or siblings
+
+
+def _labelled(s: dict) -> str:
+    """Section text with its own heading re-inserted, for when it moves under another section's path."""
+    return f"{s['path'][-1]}\n{s['text']}".strip() if s["level"] else s["text"]
+
+
+def _group(parts: list[dict], final: dict) -> dict:
+    text = "\n\n".join([_labelled(p) for p in parts] + [final["text"]]).strip()
+    return {"path": final["path"], "level": final["level"], "text": text}
+
+
+def _sections(doc: Doc) -> list[dict]:
+    """Sections from MarkdownHeaderTextSplitter as {path, level, text}; tiny ones merged within their parent."""
     md = MarkdownHeaderTextSplitter([("#", "h1"), ("##", "h2"), ("###", "h3")], strip_headers=True)
     secs = []
     for d in md.split_text(doc.text):
-        path = [doc.title] + [d.metadata[k] for k in ("h1", "h2", "h3") if k in d.metadata]
+        keys = [k for k in ("h1", "h2", "h3") if k in d.metadata]
+        path = [doc.title] + [d.metadata[k] for k in keys]
         if len(path) > 1 and path[1] == doc.title:
             del path[1]
-        secs.append([path, d.page_content.strip()])
-    out, pending = [], []
-    for i, (path, text) in enumerate(secs):
-        last = i == len(secs) - 1
-        label = path[-1] if len(path) > 1 else ""
-        labelled = f"{label}\n{text}".strip()
-        if not last and ntok("\n\n".join(pending + [text])) < MIN_SECTION:
-            pending.append(labelled)  # tiny: moves under the next section's heading path
+        secs.append({"path": path, "level": max((int(k[1]) for k in keys), default=0), "text": d.page_content.strip()})
+    out, pending = [], []  # pending: tiny sections waiting to move under the next section
+    for s in secs:
+        if pending and not _can_merge(pending[-1], s):  # parent boundary: the tiny run stays where it is
+            out.append(_group(pending[:-1], pending[-1]))
+            pending = []
+        if ntok("\n\n".join([_labelled(p) for p in pending] + [s["text"]])) < MIN_SECTION:
+            pending.append(s)
             continue
-        if last and ntok(text) < MIN_SECTION and out and ntok("\n\n".join([out[-1][1]] + pending + [labelled])) <= HEADING_TARGET:
-            out[-1][1] = "\n\n".join([out[-1][1]] + pending + [labelled])
-        else:
-            out.append([path, "\n\n".join(pending + [text]).strip()])
+        out.append(_group(pending, s))
         pending = []
-    return out
+    if pending:
+        out.append(_group(pending[:-1], pending[-1]))
+    # a tiny leftover (e.g. last section under its parent) folds back into its parent/sibling if it fits
+    merged = []
+    for s in out:
+        if merged and ntok(s["text"]) < MIN_SECTION and _can_merge(merged[-1], s) \
+                and ntok(merged[-1]["text"] + "\n\n" + _labelled(s)) <= HEADING_TARGET:
+            merged[-1]["text"] += "\n\n" + _labelled(s)
+        else:
+            merged.append(s)
+    return merged
 
 
 def heading_chunks(doc: Doc) -> list[dict]:
     recs = []
-    for path, text in _sections(doc):
+    for sec in _sections(doc):
+        path, text = sec["path"], sec["text"]
         if not text:
             continue
         hp = " > ".join(path)

@@ -1,0 +1,178 @@
+{
+ "pages": 511,
+ "corpus_tokens_raw": 1484310,
+ "corpus_tokens_cleaned": 1304088,
+ "unknown_shortcodes": {
+  "api-reference": 13,
+  "example": 4,
+  "link": 1,
+  "page-api-reference": 1,
+  "cve-feed": 1,
+  "pageinfo": 1,
+  "legacy-repos-deprecation": 3
+ },
+ "missing_refs": [],
+ "fixed": {
+  "chunks": 4211,
+  "docs": 489,
+  "tokens_min": 3,
+  "tokens_median": 367,
+  "tokens_max": 408,
+  "tokens_total": 1407982,
+  "over_800": 0,
+  "under_100": 131,
+  "unbalanced_fence": 207,
+  "table_without_header": 15,
+  "title_only_heading_path": 4211,
+  "top_docs_by_chunks": [
+   [
+    "reference/instrumentation/metrics",
+    109
+   ],
+   [
+    "reference/access-authn-authz/authentication",
+    94
+   ],
+   [
+    "reference/labels-annotations-taints/_index",
+    82
+   ],
+   [
+    "concepts/workloads/controllers/job",
+    56
+   ],
+   [
+    "reference/using-api/api-concepts",
+    54
+   ],
+   [
+    "tasks/extend-kubernetes/custom-resources/custom-resource-definitions",
+    53
+   ],
+   [
+    "reference/config-api/kubeadm-config.v1beta4",
+    43
+   ],
+   [
+    "reference/config-api/kubelet-config.v1beta1",
+    43
+   ],
+   [
+    "concepts/workloads/controllers/deployment",
+    42
+   ],
+   [
+    "reference/access-authn-authz/extensible-admission-controllers",
+    40
+   ]
+  ],
+  "under_100_share": 0.0311,
+  "table_split_across_chunks": 16,
+  "shortcode_shaped_fragments_anywhere": 2,
+  "strict_fragments_total": 56,
+  "strict_fragments_outside_code": 2,
+  "strict_outside_code_examples": [
+   [
+    "concepts/scheduling-eviction/resource-bin-packing",
+    "{{",
+    "Resource weights:\n\n\n\nFunctionShapePoint {{0, 0}, {100, 10}}\n\nNode 1 spec:\n\n\n\nNode score:\n\n"
+   ],
+   [
+    "tasks/administer-cluster/dns-horizontal-autoscaling",
+    "}}",
+    "e\":true,\"includeUnschedulableNodes\":true}}\n          - --logtostderr=true\n          - --v="
+   ]
+  ]
+ },
+ "heading": {
+  "chunks": 4824,
+  "docs": 489,
+  "tokens_min": 15,
+  "tokens_median": 235.0,
+  "tokens_max": 649,
+  "tokens_total": 1345370,
+  "over_800": 0,
+  "under_100": 568,
+  "unbalanced_fence": 0,
+  "table_without_header": 0,
+  "title_only_heading_path": 231,
+  "top_docs_by_chunks": [
+   [
+    "reference/labels-annotations-taints/_index",
+    143
+   ],
+   [
+    "reference/instrumentation/metrics",
+    71
+   ],
+   [
+    "reference/access-authn-authz/authentication",
+    59
+   ],
+   [
+    "reference/config-api/kubelet-config.v1beta1",
+    54
+   ],
+   [
+    "reference/using-api/api-concepts",
+    54
+   ],
+   [
+    "reference/config-api/kube-controller-manager-config.v1alpha1",
+    49
+   ],
+   [
+    "reference/using-api/declarative-validation",
+    48
+   ],
+   [
+    "concepts/workloads/controllers/job",
+    46
+   ],
+   [
+    "reference/config-api/kubeadm-config.v1beta4",
+    45
+   ],
+   [
+    "concepts/workloads/controllers/deployment",
+    42
+   ]
+  ],
+  "under_100_share": 0.1177,
+  "table_split_across_chunks": 6,
+  "shortcode_shaped_fragments_anywhere": 2,
+  "strict_fragments_total": 55,
+  "strict_fragments_outside_code": 1,
+  "strict_outside_code_examples": [
+   [
+    "concepts/scheduling-eviction/resource-bin-packing",
+    "{{",
+    "source weights:  \n\n\n\nFunctionShapePoint {{0, 0}, {100, 10}}  \nNode 1 spec:  \n\n\n\nNode score"
+   ]
+  ]
+ },
+ "pages_without_chunks": [
+  "concepts/storage/_index",
+  "reference/config-api/_index",
+  "reference/debug-cluster/_index",
+  "reference/encodings/_index",
+  "reference/external-api/_index",
+  "reference/kubelet-api/_index",
+  "reference/scheduling/_index",
+  "tasks/access-application-cluster/_index",
+  "tasks/administer-cluster/_index",
+  "tasks/administer-cluster/manage-resources/_index",
+  "tasks/administer-cluster/network-policy-provider/_index",
+  "tasks/configmap-secret/_index",
+  "tasks/configure-pod-container/_index",
+  "tasks/configure-pod-container/assign-resources/_index",
+  "tasks/extend-kubernetes/_index",
+  "tasks/extend-kubernetes/custom-resources/_index",
+  "tasks/inject-data-application/_index",
+  "tasks/job/_index",
+  "tasks/manage-daemon/_index",
+  "tasks/network/_index",
+  "tasks/run-application/_index",
+  "tasks/tls/_index"
+ ]
+}
