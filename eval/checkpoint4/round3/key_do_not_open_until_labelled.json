@@ -1,0 +1,235 @@
+{
+ "seed": 7919,
+ "n_yes": 24,
+ "validity_rule": "invalid if more than 1 of the 6 controls is mislabelled",
+ "items": {
+  "r3-f5dd75a1": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "c004",
+   "sentence_no": 1,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "r3-268e2d8f": {
+   "kind": "control_wrong",
+   "source": "K2",
+   "subtype": "inverted claim",
+   "expected": "unsupported"
+  },
+  "r3-3c231992": {
+   "kind": "control_wrong",
+   "source": "K1",
+   "subtype": "changed number",
+   "expected": "unsupported"
+  },
+  "r3-e842976a": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "m007",
+   "sentence_no": 4,
+   "citation": 7,
+   "verifier": "yes"
+  },
+  "r3-78a19d95": {
+   "kind": "control_correct",
+   "source": "K5",
+   "subtype": "faithful paraphrase",
+   "expected": "supported"
+  },
+  "r3-3b3d55de": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "c006",
+   "sentence_no": 1,
+   "citation": 6,
+   "verifier": "yes"
+  },
+  "r3-b8cad59f": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e008",
+   "sentence_no": 1,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "r3-15bdea05": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e008",
+   "sentence_no": 3,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "r3-76380b10": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c005",
+   "sentence_no": 1,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "r3-8665660f": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e006",
+   "sentence_no": 1,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "r3-f7f155d9": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e002",
+   "sentence_no": 2,
+   "citation": 4,
+   "verifier": "yes"
+  },
+  "r3-46b4e6a5": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e005",
+   "sentence_no": 2,
+   "citation": 4,
+   "verifier": "yes"
+  },
+  "r3-2bb92838": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "e005",
+   "sentence_no": 4,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "r3-4912f659": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c008",
+   "sentence_no": 3,
+   "citation": 5,
+   "verifier": "yes"
+  },
+  "r3-73c695d4": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c003",
+   "sentence_no": 1,
+   "citation": 7,
+   "verifier": "yes"
+  },
+  "r3-f1a1975b": {
+   "kind": "control_correct",
+   "source": "K6",
+   "subtype": "faithful paraphrase",
+   "expected": "supported"
+  },
+  "r3-0b486d82": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "e008",
+   "sentence_no": 2,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "r3-b0ee704e": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e003",
+   "sentence_no": 1,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "r3-5e4c8842": {
+   "kind": "control_wrong",
+   "source": "K3",
+   "subtype": "swapped citation",
+   "expected": "unsupported"
+  },
+  "r3-bf43bcbc": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "m002",
+   "sentence_no": 2,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "r3-e4b69e24": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "c008",
+   "sentence_no": 1,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "r3-7b9db584": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "m005",
+   "sentence_no": 4,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "r3-6540080d": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c004",
+   "sentence_no": 6,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "r3-789f81da": {
+   "kind": "control_correct",
+   "source": "K4",
+   "subtype": "verbatim",
+   "expected": "supported"
+  },
+  "r3-a297dc57": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e006",
+   "sentence_no": 4,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "r3-6ec5d1a5": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c006",
+   "sentence_no": 2,
+   "citation": 4,
+   "verifier": "yes"
+  },
+  "r3-5f66ffb2": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "c003",
+   "sentence_no": 5,
+   "citation": 5,
+   "verifier": "yes"
+  },
+  "r3-24ae9cee": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "m002",
+   "sentence_no": 2,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "r3-fe8ba39b": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "c003",
+   "sentence_no": 4,
+   "citation": 5,
+   "verifier": "yes"
+  },
+  "r3-b545007e": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "m007",
+   "sentence_no": 1,
+   "citation": 7,
+   "verifier": "yes"
+  }
+ }
+}
