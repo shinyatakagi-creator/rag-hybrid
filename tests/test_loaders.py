@@ -67,6 +67,14 @@ def test_whats_next_at_end_of_page_and_case_and_anchor_variants():
     assert out == "## A\nkeep" and len(removed) == 1
 
 
+def test_whats_next_heading_indented_up_to_three_spaces_is_still_a_heading():
+    text = "1. step\n\n    ```shell\n    kubectl uncordon x\n    ```\n ## What's next\n\n* [link](/x)\n\n## B\nkeep"
+    out, removed = strip_whats_next(text)
+    assert "What's next" not in out and "link" not in out and out.endswith("## B\nkeep") and len(removed) == 1
+    # four spaces is an indented code block, not a heading
+    assert strip_whats_next("para\n\n    ## What's next\n    code")[1] == []
+
+
 def test_whats_next_inside_a_code_fence_is_not_a_heading():
     text = "## A\n```md\n## What's next\n* not a heading\n```\nafter"
     assert strip_whats_next(text) == (text, [])

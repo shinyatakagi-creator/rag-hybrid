@@ -162,8 +162,9 @@ class Cleaner:
         return re.sub(r"\n{3,}", "\n\n", re.sub(r"[ \t]+\n", "\n", text)).strip()
 
 
-_WHATS_NEXT = re.compile(r"^(#{1,6})[ \t]+what['’]s[ \t]+next[ \t]*(\{#[^}]*\})?[ \t]*$", re.I)
-_ANY_HEADING = re.compile(r"^(#{1,6})[ \t]+\S")
+# CommonMark allows an ATX heading to be indented by up to 3 spaces (one page has ` ## What's next`)
+_WHATS_NEXT = re.compile(r"^ {0,3}(#{1,6})[ \t]+what['’]s[ \t]+next[ \t]*(\{#[^}]*\})?[ \t]*$", re.I)
+_ANY_HEADING = re.compile(r"^ {0,3}(#{1,6})[ \t]+\S")
 
 
 def strip_whats_next(text: str) -> tuple[str, list[str]]:

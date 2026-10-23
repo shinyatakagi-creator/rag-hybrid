@@ -20,7 +20,9 @@
 
 ## Counts (from the Phase 1 run, eval/results/phase1_stats.txt)
 - 511 pages loaded; 489 produce chunks; the other 22 are section `_index.md` pages with front matter only (no body text).
-- Chunks: 4,211 fixed, 4,824 heading.
+- Chunks (after stripping "What's next" navigation sections, final rule): 4,103 fixed, 4,544 heading. 281 sections / 30,606 tokens were removed in the loader before chunking (see NOTES.md). Before that rule: 4,211 fixed, 4,824 heading.
+- Index `rag-docs`: 8,647 docs (4,103 fixed + 4,544 heading), 8,621 unique embedded texts.
+- Known scope wart: 9 of the 511 pages are headless include partials under `tasks/tools/included/` (`headless: true`, not public pages); see NOTES.md.
 
 `doc_id` = page path relative to `content/en/docs/`, without extension.
 The golden set depends on this staying fixed; do not update the checkout.
