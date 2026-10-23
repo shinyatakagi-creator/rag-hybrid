@@ -54,10 +54,10 @@ def cache_key(model: str, dims: int, text: str) -> str:
 
 
 class EmbedCache:
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, load: bool = True):
         self.path = Path(path)
         self.vectors: dict[str, list[float]] = {}
-        if self.path.exists():
+        if load and self.path.exists():  # load=False: append-only handle that never reads the big file
             for line in self.path.read_text(encoding="utf8").splitlines():
                 rec = json.loads(line)
                 self.vectors[rec["k"]] = rec["v"]
