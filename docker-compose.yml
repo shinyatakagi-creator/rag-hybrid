@@ -1,3 +1,7 @@
+# The project name is fixed so every clone of this repository, whatever its folder is called, uses the same containers and volumes
+# (one Elasticsearch, one API) instead of starting a second stack that fights for port 9200. Override only on purpose: docker compose -p other ...
+name: rag-hybrid
+
 services:
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:9.5.5
@@ -6,7 +10,7 @@ services:
       - xpack.security.enabled=false
       - ES_JAVA_OPTS=-Xms1g -Xmx1g
     ports:
-      - "127.0.0.1:9200:9200"
+      - "127.0.0.1:${ES_HOST_PORT:-9200}:9200"
     volumes:
       - esdata:/usr/share/elasticsearch/data
     ulimits:
@@ -38,7 +42,7 @@ services:
     environment:
       - ES_URL=http://es:9200   # overrides the host-side value in .env
     ports:
-      - "127.0.0.1:8000:8000"   # published on loopback only
+      - "127.0.0.1:${API_HOST_PORT:-8000}:8000"   # published on loopback only
     depends_on:
       es:
         condition: service_healthy
