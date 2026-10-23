@@ -66,9 +66,15 @@ Pre-registered: Haiku judges each answered answerable answer (hybrid 21, dense 2
 ## Checkpoint 4 round 1 (done; scored 2026-10-23)
 `eval/checkpoint4/my_labels.csv` (owner's labels, unmodified) and `agreement.json` are committed as the **first pass: first pass; labels not edited after unblinding; the disagreement review found apparent labelling inconsistencies (e.g. L25, L18, L08 near-verbatim but labelled unsupported; L06/L21 half-covered but labelled supported).** Numbers: exact agreement 11 of 30 (0.367); `yes` stratum 8 of 19, not-`yes` stratum 3 of 11; population-weighted 0.411; false-yes rate 11 of 19 = 0.579 (exact 95% CI 0.335-0.797), `unsupported`-only 6 of 19 = 0.316 (0.126-0.566). Do not quote these as the verifier's accuracy until round 2.
 
+## Checkpoint 4 round 2 (sampler BUILT, labels NOT yet given; nothing is computed until you finish)
+`python -m eval.checkpoint4_round2 sample` (done; seed 2026; no API calls): `eval/checkpoint4/round2/labelling_sheet.md` has 30 items M01..M30 in the round-1 format (sentence + cited excerpt only), the rubric at the top (split into claims; supported = every claim in the excerpt or directly implied, paraphrase counts; partial = some claims present, none contradicted; unsupported = the excerpt contradicts the sentence or the main claim is absent). Contents: 24 verifier-`yes` pairs not in round 1 + 6 controls from the verifier mutation set (3 known-wrong: M01 swapped citation, M06 changed number, M10 inverted claim, expected `unsupported`; 3 verbatim-correct: C02, C04, C05, expected `supported`), shuffled, nothing marks the controls. Key in `eval/checkpoint4/round2/key_do_not_open_until_labelled.json`.
+- You: fill `eval/checkpoint4/round2/my_labels.csv` (`id,label,note`).
+- **Pre-registered validity rule:** if you mislabel more than 1 of the 6 controls (2 or more), the round is INVALID for judging the verifier and is redone; `score` then reports the controls and stops.
+- Only after all 30 are saved: `python -m eval.checkpoint4_round2 score` (refuses on incomplete labels) reports, in this order: control results; false-yes rate over the 24 yes pairs (not `supported`, and `unsupported`-only) with exact Clopper-Pearson 95% intervals; the distribution of your labels over the verifier's `yes` (agreement = share `supported`). Output: `eval/checkpoint4/round2/agreement.json`.
+
 ## Next steps
-1. Spot-check about 10 rows of `correctness_review.md` (mark column).
-2. Label the 30 pairs; then I run `score`.
+1. Spot-check about 10 rows of `correctness_review.md` (mark column; still pending: marks not yet received, so no reference correction for m007/c007 has been made).
+2. Label round 2 (M01..M30); then I run `score`.
 3. Phase 8: API, Docker, small query-embedding cache. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
 
 ## Spend so far: about $0.2895 of the $5 limit (plus about $0.000015 for the baseline and bare-term query embeddings and $0.7295 for the answer eval, plus $0.0073 for the correctness check, so about $1.03 in total)

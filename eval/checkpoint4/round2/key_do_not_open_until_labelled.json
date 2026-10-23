@@ -1,0 +1,229 @@
+{
+ "seed": 2026,
+ "n_yes": 24,
+ "validity_rule": "invalid if more than 1 of 6 controls are mislabelled",
+ "items": {
+  "M01": {
+   "kind": "control_correct",
+   "source": "C04",
+   "expected": "supported"
+  },
+  "M02": {
+   "kind": "control_wrong",
+   "source": "M10",
+   "expected": "unsupported"
+  },
+  "M03": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "c007",
+   "sentence_no": 3,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "M04": {
+   "kind": "control_wrong",
+   "source": "M01",
+   "expected": "unsupported"
+  },
+  "M05": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "c006",
+   "sentence_no": 2,
+   "citation": 6,
+   "verifier": "yes"
+  },
+  "M06": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "m007",
+   "sentence_no": 3,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "M07": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c001",
+   "sentence_no": 1,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "M08": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "m005",
+   "sentence_no": 2,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "M09": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "e005",
+   "sentence_no": 1,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "M10": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "e002",
+   "sentence_no": 2,
+   "citation": 6,
+   "verifier": "yes"
+  },
+  "M11": {
+   "kind": "control_correct",
+   "source": "C05",
+   "expected": "supported"
+  },
+  "M12": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "m003",
+   "sentence_no": 1,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "M13": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e007",
+   "sentence_no": 2,
+   "citation": 4,
+   "verifier": "yes"
+  },
+  "M14": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "e006",
+   "sentence_no": 3,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "M15": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "m005",
+   "sentence_no": 5,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "M16": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "m007",
+   "sentence_no": 1,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "M17": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e006",
+   "sentence_no": 2,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "M18": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c005",
+   "sentence_no": 4,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "M19": {
+   "kind": "control_correct",
+   "source": "C02",
+   "expected": "supported"
+  },
+  "M20": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "m006",
+   "sentence_no": 2,
+   "citation": 6,
+   "verifier": "yes"
+  },
+  "M21": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c005",
+   "sentence_no": 7,
+   "citation": 8,
+   "verifier": "yes"
+  },
+  "M22": {
+   "kind": "control_wrong",
+   "source": "M06",
+   "expected": "unsupported"
+  },
+  "M23": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e001",
+   "sentence_no": 4,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "M24": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "m004",
+   "sentence_no": 4,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "M25": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e005",
+   "sentence_no": 4,
+   "citation": 4,
+   "verifier": "yes"
+  },
+  "M26": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "m008",
+   "sentence_no": 2,
+   "citation": 4,
+   "verifier": "yes"
+  },
+  "M27": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "e007",
+   "sentence_no": 4,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "M28": {
+   "kind": "yes_pair",
+   "config": "heading/hybrid",
+   "qid": "c004",
+   "sentence_no": 6,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "M29": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c002",
+   "sentence_no": 2,
+   "citation": 5,
+   "verifier": "yes"
+  },
+  "M30": {
+   "kind": "yes_pair",
+   "config": "heading/dense",
+   "qid": "c005",
+   "sentence_no": 2,
+   "citation": 1,
+   "verifier": "yes"
+  }
+ }
+}
