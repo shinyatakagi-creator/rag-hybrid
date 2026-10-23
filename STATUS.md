@@ -20,18 +20,21 @@ Phases 0-6 are built; Phase 7 (eval) has not been started. Run `git log --onelin
 - Hard-refusal question (answer only in an excluded page): the model refused.
 
 ## Open items
-1. **Checkpoint 4 (yours): hand-label 25 verifier judgements** before any verifier number is quoted. Not built yet: a sampler that prints 25 (sentence, chunk, verdict) triples and computes agreement from your labels. With only 12 real pairs in the saved answers, I would generate more answers first (a paid step, to be estimated and confirmed).
+1. **Checkpoint 4 (yours): hand-label 25 verifier judgements** before any verifier number is quoted. The sampler is deliberately *not built yet*: it needs real golden-set answers, so it comes after `answer_eval`. Agreed design (owner, 2026-10-24): **blind** labelling (the labeller never sees the verifier's verdict, reason or claim statuses while labelling; verdicts are revealed only when agreement is computed) and a **stratified** sample that includes **every `partial` and `no`** plus a random set of `yes` to fill the 25 (if there are more than 25 partial/no, sample among them and say so). Report agreement overall and per verdict class.
 2. ~~`partial` is a loose bucket~~ Addressed by rubric v2 (claims + derived verdict). The real test is your hand labels: v2 has only been checked on my hand-built dev set and 12 real pairs.
 3. **BM25 exhausted-list rule**: implemented in `eval/metrics.py`; to be wired into `eval/retrieval_eval.py` in Phase 7.
 4. **Pool sweep** (50/100/200) on the golden set before stating any hybrid result (window changes dense accuracy and RRF order, see `NOTES.md` Phase 4b).
 5. **Phase 8 query-cache note**: plan written, no code.
 
 ## Decisions / work pending from you
-- **Golden set (checkpoint 2):** you write the `exact_term` and `unanswerable` questions; I draft only `conceptual` and `mixed` (with the `eval/overlap.py` check) and stop for you to choose the `expected_doc_ids`. The corpus is now fixed at the 502 pages above, so the set can be written against it.
+- **Golden set (checkpoint 2):** you write 10 `exact_term` and 5 `unanswerable` questions into `eval/golden_owner.jsonl` (format and helpers: `eval/GOLDEN_README.md`; check with `python -m eval.golden_check eval/golden_owner.jsonl`; page list `eval/doc_ids.tsv`; term check `python -m eval.term_stats`). I draft `conceptual` (22) and `mixed` (16) with `python -m eval.draft_questions` **once you approve the cost** (dry run: about $0.22 typical, $0.64 worst case, 38 drafts on Sonnet 5.5), then stop for you to choose the `expected_doc_ids`. No retrieval eval and no answer generation until the golden set is final.
+- **HTML entities in chunk text** (decision for you): about 4% of chunks (38 docs, mostly generated `reference/config-api` pages) contain raw `&quot;` / `&#34;` / `&lt;`. Recommended: decode them in the loader, re-embed the ~160 changed chunks (a fraction of a cent) and re-index *before* the golden set is final. Details in `NOTES.md` (Phase 7a).
 - **Native RRF (checkpoint 3):** you start the trial licence (`POST _license/start_trial?acknowledge=true`); the cluster is on the basic licence.
 
 ## Next step
-Phase 7 (eval), but its inputs are not ready: it needs the golden set (yours to write/choose) and, for the answer-eval half, the checkpoint-4 hand labels. I can build `eval/retrieval_eval.py` (no paid calls except query embeddings) in the meantime.
+1. You: approve (or change) the drafting run, decide on the HTML-entity fix, and write `eval/golden_owner.jsonl`.
+2. Me, on approval: `python -m eval.draft_questions` (then stop); you review `eval/golden_drafts.md` and choose the `expected_doc_ids`.
+3. Then `eval/retrieval_eval.py` (with the exhausted-list rule from `eval/metrics.py` and the pool sweep), then `eval/answer_eval.py`, then the checkpoint-4 sampler (blind, stratified: every partial/no plus random yes; see open item 1).
 
 ## Spend so far (about $0.150 of the $5 limit)
 | Item | Cost | Source |

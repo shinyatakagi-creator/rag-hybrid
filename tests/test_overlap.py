@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from eval.overlap import content_terms, distinctive_shared, doc_frequency, overlap_ratio, shared_terms, stem
+from eval.overlap import content_terms, distinctive_shared, doc_frequency, overlap_ratio, shared_ngrams, shared_terms, stem
 from ingest.loaders import load_corpus
 
 
@@ -11,6 +11,14 @@ def test_shared_words_give_a_non_zero_overlap():
     assert shared_terms(q, p) >= {"fork", "bomb"}
     assert overlap_ratio(q, p) > 0.5  # fork, bomb, stop? -> 2 of {stop, fork, bomb} shared
     assert 0 < overlap_ratio(q, p) <= 1
+
+
+def test_shared_ngrams_finds_a_copied_phrase_and_ignores_stopword_runs():
+    p = "A single Pod will not be able to bring the whole machine down, and it is possible to set a limit."
+    assert shared_ngrams("how can one pod bring the whole machine down", p) == ["bring the whole machine", "the whole machine down"]
+    assert shared_ngrams("is it possible to", "it is possible to set a limit") == []  # 4 words but only one content word
+    assert shared_ngrams("keep tenants apart", "node isolation keeps tenant pods apart") == []  # no 4-word run
+    assert shared_ngrams("", "anything") == []
 
 
 def test_unrelated_texts_give_zero():

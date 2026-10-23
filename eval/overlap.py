@@ -41,6 +41,15 @@ def overlap_ratio(question: str, passage: str) -> float:
     return len(q & content_terms(passage)) / len(q) if q else 0.0
 
 
+def shared_ngrams(question: str, passage: str, n: int = 4, min_content: int = 2) -> list[str]:
+    """Runs of `n` consecutive words that appear in both texts (a copied phrase). Runs made mostly of stopwords
+    ("it is possible to") are ignored: at least `min_content` of the n words must be content words."""
+    words = lambda t: re.findall(r"[a-z0-9]+", t.lower())
+    q, p = words(question), words(passage)
+    grams = lambda ws: {tuple(ws[i : i + n]) for i in range(len(ws) - n + 1)}
+    return sorted(" ".join(g) for g in grams(q) & grams(p) if sum(w not in STOPWORDS and len(w) > 2 for w in g) >= min_content)
+
+
 def doc_frequency(texts: list[str]) -> Counter:
     """Number of texts containing each stemmed content term."""
     df: Counter = Counter()
