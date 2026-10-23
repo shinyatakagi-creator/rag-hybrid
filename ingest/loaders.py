@@ -43,6 +43,7 @@ class Cleaner:
     def __init__(self, root: Path):
         self.root = Path(root)
         self.unknown: Counter = Counter()
+        self.whats_next_removed: list[str] = []
         self.missing: list[str] = []
         self.glossary = self._load_glossary()
 
@@ -161,6 +162,34 @@ class Cleaner:
         return re.sub(r"\n{3,}", "\n\n", re.sub(r"[ \t]+\n", "\n", text)).strip()
 
 
+_WHATS_NEXT = re.compile(r"^(#{1,6})[ \t]+what['’]s[ \t]+next[ \t]*(\{#[^}]*\})?[ \t]*$", re.I)
+_ANY_HEADING = re.compile(r"^(#{1,6})[ \t]+\S")
+
+
+def strip_whats_next(text: str) -> tuple[str, list[str]]:
+    """Remove every "What's next" section (its heading up to the next heading of the same or higher level).
+
+    Those sections are navigation links, not answer content. Fence-aware: a `## What's next` inside a code block is
+    left alone. Returns the cleaned text and the removed sections (for counting)."""
+    out, removed, cur, skip_level, fence = [], [], [], None, False
+    for line in text.split("\n"):
+        is_fence = line.lstrip().startswith(("```", "~~~"))
+        if is_fence:
+            fence = not fence
+        elif not fence and (m := _ANY_HEADING.match(line)):
+            level = len(m.group(1))
+            if skip_level is not None and level <= skip_level:
+                removed.append("\n".join(cur))
+                skip_level = None
+            if skip_level is None and _WHATS_NEXT.match(line):
+                skip_level, cur = level, [line]
+                continue
+        (cur if skip_level is not None else out).append(line)
+    if skip_level is not None:
+        removed.append("\n".join(cur))
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip(), removed
+
+
 def in_scope(rel: Path) -> bool:
     s = rel.as_posix()
     return rel.suffix == ".md" and s.split("/")[0] in SECTIONS and not s.startswith(tuple(e + "/" for e in EXCLUDE))
@@ -193,6 +222,10 @@ def load_corpus(root: Path, cleaner: Cleaner | None = None, raw: bool = False) -
         fm, body = (m.group(1), t[m.end():]) if m else ("", t)
         doc_id, url = doc_id_and_url(rel)
         title = parse_title(fm, rel.parent.name if rel.name == "_index.md" else rel.stem)
-        text = body.strip() if raw else cleaner.clean(body, p.parent)
+        if raw:
+            text = body.strip()
+        else:  # before either chunker, so fixed and heading see the same text
+            text, removed = strip_whats_next(cleaner.clean(body, p.parent))
+            cleaner.whats_next_removed.extend(removed)
         docs.append(Doc(doc_id, url, title, text))
     return docs

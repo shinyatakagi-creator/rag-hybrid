@@ -65,7 +65,11 @@ def main() -> None:
         "corpus_tokens_cleaned": sum(ntok(d.text) for d in docs),
         "unknown_shortcodes": dict(cleaner.unknown),
         "missing_refs": cleaner.missing,
+        "whats_next_sections_removed": len(cleaner.whats_next_removed),
+        "whats_next_tokens_removed": sum(ntok(s) for s in cleaner.whats_next_removed),
     }
+    print(f"What's-next sections removed in the loader: {stats['whats_next_sections_removed']} "
+          f"({stats['whats_next_tokens_removed']:,} tokens)")
     print(f"pages={stats['pages']}  tokens raw={stats['corpus_tokens_raw']:,} cleaned={stats['corpus_tokens_cleaned']:,}")
     print(f"unknown shortcodes stripped: {stats['unknown_shortcodes']}  missing refs: {stats['missing_refs']}")
 

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from ingest.loaders import Cleaner, doc_id_and_url, in_scope, load_corpus
+from ingest.loaders import Cleaner, doc_id_and_url, in_scope, load_corpus, strip_whats_next
 
 
 def make_corpus(root: Path) -> Path:
@@ -53,6 +53,43 @@ def test_shortcodes_cleaned_and_references_inlined(tmp_path):
     assert "Note:" in t and "**Linux**" in t and "Feature state: Kubernetes v1.21 [stable]" in t
     assert "(/docs/tasks/other)" in t and "hidden" not in t
     assert "{{" not in t and "}}" not in t and "<!--" not in t
+
+
+def test_whats_next_section_is_removed_up_to_the_next_same_or_higher_heading():
+    text = "## A\nkeep a\n\n## What's next\n* [link](/x)\n### sub\nmore links\n\n## B\nkeep b\n"
+    out, removed = strip_whats_next(text)
+    assert out == "## A\nkeep a\n\n## B\nkeep b"
+    assert len(removed) == 1 and "sub" in removed[0] and "link" in removed[0]
+
+
+def test_whats_next_at_end_of_page_and_case_and_anchor_variants():
+    out, removed = strip_whats_next("## A\nkeep\n## What’s Next {#next}\n* [x](/x)")
+    assert out == "## A\nkeep" and len(removed) == 1
+
+
+def test_whats_next_inside_a_code_fence_is_not_a_heading():
+    text = "## A\n```md\n## What's next\n* not a heading\n```\nafter"
+    assert strip_whats_next(text) == (text, [])
+
+
+def test_whats_next_nested_h3_stops_at_the_next_h3_or_higher():
+    out, removed = strip_whats_next("## A\n### What's next\nlinks\n### Other\nkeep\n## B\nkeep b")
+    assert out == "## A\n### Other\nkeep\n## B\nkeep b" and len(removed) == 1
+
+
+def test_text_without_whats_next_is_unchanged_and_other_headings_survive():
+    text = "## A\nsee what's next in the text\n## What's more\nx"
+    assert strip_whats_next(text) == (text, [])
+
+
+def test_load_corpus_strips_whats_next_for_every_page(tmp_path):
+    root = make_corpus(tmp_path)
+    p = root / "docs/concepts/pods/_index.md"
+    p.write_text(p.read_text() + '\n\n## {{% heading "whatsnext" %}}\n* [elsewhere](/docs/x)\n', encoding="utf8")
+    cleaner = Cleaner(root)
+    docs = {d.doc_id: d for d in load_corpus(root, cleaner)}
+    assert "What's next" not in docs["concepts/pods/_index"].text and "elsewhere" not in docs["concepts/pods/_index"].text
+    assert len(cleaner.whats_next_removed) == 1
 
 
 def test_glossary_tooltip_becomes_plain_text(tmp_path):

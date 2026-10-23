@@ -1,23 +1,24 @@
-pages=511  tokens raw=1,484,310 cleaned=1,304,088
+What's-next sections removed in the loader: 280 (30,575 tokens)
+pages=511  tokens raw=1,484,310 cleaned=1,273,431
 unknown shortcodes stripped: {'api-reference': 13, 'example': 4, 'link': 1, 'page-api-reference': 1, 'cve-feed': 1, 'pageinfo': 1, 'legacy-repos-deprecation': 3}  missing refs: []
 
 [fixed] -> data/chunks/fixed.jsonl
 {
- "chunks": 4211,
+ "chunks": 4103,
  "docs": 489,
  "tokens_min": 3,
  "tokens_median": 367,
  "tokens_max": 408,
- "tokens_total": 1407982,
+ "tokens_total": 1374459,
  "over_800": 0,
- "under_100": 131,
- "unbalanced_fence": 207,
+ "under_100": 132,
+ "unbalanced_fence": 206,
  "table_without_header": 15,
- "title_only_heading_path": 4211,
- "under_100_share": 0.0311,
+ "title_only_heading_path": 4103,
+ "under_100_share": 0.0322,
  "table_split_across_chunks": 16,
  "shortcode_shaped_fragments_anywhere": 2,
- "strict_fragments_total": 56,
+ "strict_fragments_total": 55,
  "strict_fragments_outside_code": 2,
  "strict_outside_code_examples": [
   [
@@ -36,7 +37,7 @@ unknown shortcodes stripped: {'api-reference': 13, 'example': 4, 'link': 1, 'pag
      109  reference/instrumentation/metrics
       94  reference/access-authn-authz/authentication
       82  reference/labels-annotations-taints/_index
-      56  concepts/workloads/controllers/job
+      54  concepts/workloads/controllers/job
       54  reference/using-api/api-concepts
       53  tasks/extend-kubernetes/custom-resources/custom-resource-definitions
       43  reference/config-api/kubeadm-config.v1beta4
@@ -46,18 +47,18 @@ unknown shortcodes stripped: {'api-reference': 13, 'example': 4, 'link': 1, 'pag
 
 [heading] -> data/chunks/heading.jsonl
 {
- "chunks": 4824,
+ "chunks": 4545,
  "docs": 489,
  "tokens_min": 15,
- "tokens_median": 235.0,
+ "tokens_median": 245,
  "tokens_max": 649,
- "tokens_total": 1345370,
+ "tokens_total": 1313488,
  "over_800": 0,
- "under_100": 568,
+ "under_100": 415,
  "unbalanced_fence": 0,
  "table_without_header": 0,
  "title_only_heading_path": 231,
- "under_100_share": 0.1177,
+ "under_100_share": 0.0913,
  "table_split_across_chunks": 6,
  "shortcode_shaped_fragments_anywhere": 2,
  "strict_fragments_total": 55,
@@ -73,14 +74,14 @@ unknown shortcodes stripped: {'api-reference': 13, 'example': 4, 'link': 1, 'pag
   10 biggest pages by chunk count:
      143  reference/labels-annotations-taints/_index
       71  reference/instrumentation/metrics
-      59  reference/access-authn-authz/authentication
+      58  reference/access-authn-authz/authentication
       54  reference/config-api/kubelet-config.v1beta1
       54  reference/using-api/api-concepts
       49  reference/config-api/kube-controller-manager-config.v1alpha1
-      48  reference/using-api/declarative-validation
-      46  concepts/workloads/controllers/job
+      47  reference/using-api/declarative-validation
+      45  concepts/workloads/controllers/job
       45  reference/config-api/kubeadm-config.v1beta4
-      42  concepts/workloads/controllers/deployment
+      41  concepts/workloads/controllers/deployment
 
 cleaned docs with shortcode-shaped fragments (anywhere): 2/511 ['tasks/job/parallel-processing-expansion', 'tasks/run-application/scale-stateful-set']
 pages loaded: 511; failed to load: 0 (load errors would raise); pages with no body text after front matter/shortcode cleanup, so no chunks: 22
