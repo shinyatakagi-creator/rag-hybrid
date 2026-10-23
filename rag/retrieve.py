@@ -12,7 +12,8 @@ from fractions import Fraction
 from dotenv import load_dotenv
 from elasticsearch import Elasticsearch
 
-from ingest.embed_cache import EmbedCache, SpendGuard, cache_key, cost_usd, count_tokens, embed_missing
+from ingest.embed_cache import SpendGuard, cache_key, cost_usd, count_tokens, embed_missing
+from rag.query_cache import QueryCache, scan_ingestion, serving_path
 
 DIMS = 1536
 POOL = 200  # size of each inner list fed to RRF (and the kNN k); 50 left 6-30% of queries with <10 distinct docs, see eval/results/pool_check.txt
@@ -114,45 +115,63 @@ def search(es: Elasticsearch, index: str, query: str, mode: str, chunker: str, k
 
 
 # -- query embeddings: same cache file, key and spend guard as ingestion -----------------------
+class _ServingStore:
+    """Adapter so embed_missing can use the sqlite serving cache like an EmbedCache: `in cache.vectors` and `add_many`."""
+
+    def __init__(self, cache: QueryCache, model: str, dims: int):
+        self.cache, self.model, self.dims = cache, model, dims
+        self.memory: dict[str, list[float]] = {}
+        self.vectors = self  # embed_missing checks `key in cache.vectors`
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.memory or self.cache.has(key)
+
+    def __getitem__(self, key: str) -> list[float]:
+        if key not in self.memory:
+            v = self.cache.get(key)
+            if v is None:
+                raise KeyError(key)
+            self.memory[key] = v
+        return self.memory[key]
+
+    def add_many(self, items: dict[str, list[float]]) -> None:
+        self.cache.put_many(items, self.model, self.dims)
+        self.memory.update(items)
+
+
 class QueryEmbedder:
-    """Embeds a query through the ingestion cache (key = model + dims + exact text) and spend guard.
+    """Embeds a query through the small serving cache (sqlite, key = sha256(model + dims + exact text)) and the spend guard.
 
-    The cache file (hundreds of MB) is not loaded into memory: a miss in the small in-process dict is
-    answered by streaming the file for the key. New queries are appended to the same file."""
+    The 273 MB ingestion cache is only READ, never written: with `legacy_fallback=True` (eval, CLI) a miss in the serving cache is
+    looked up once by streaming that file and, if found, copied into the serving cache; with `legacy_fallback=False` (the API) a miss
+    goes straight to the embedding call. New vectors are written to the serving cache only."""
 
-    def __init__(self, cache_path, model: str, client_factory, guard: SpendGuard, dims: int = DIMS, confirm=None):
+    def __init__(self, cache_path, model: str, client_factory, guard: SpendGuard, dims: int = DIMS, confirm=None,
+                 serving_cache: QueryCache | None = None, legacy_fallback: bool = True):
         self.path, self.model, self.dims, self.guard = cache_path, model, dims, guard
         self.client_factory, self.confirm, self.client = client_factory, confirm, None
-        self.cache = EmbedCache(cache_path, load=False)
+        self.legacy_fallback = legacy_fallback
+        self.cache = _ServingStore(serving_cache or QueryCache(serving_path(cache_path)), model, dims)
         self.calls = 0
 
-    def _scan_many(self, keys: set[str]) -> dict[str, list[float]]:
-        """One pass over the cache file; lines look like {"k": "<64 hex>", "v": [...]}."""
-        found, start = {}, len('{"k": "')
-        try:
-            with open(self.path, encoding="utf8") as f:
-                for line in f:
-                    k = line[start : start + 64]
-                    if k in keys:
-                        found[k] = json.loads(line)["v"]
-                        if len(found) == len(keys):
-                            break
-        except FileNotFoundError:
-            pass
-        return found
+    def _fill_from_ingestion(self, keys: set[str]) -> None:
+        if self.legacy_fallback and keys:
+            found = scan_ingestion(self.path, keys)
+            if found:
+                self.cache.add_many(found)  # copies into the serving cache; the ingestion file is untouched
 
     def is_cached(self, text: str) -> bool:
         key = cache_key(self.model, self.dims, text)
-        if key not in self.cache.vectors:
-            self.cache.vectors.update(self._scan_many({key}))
-        return key in self.cache.vectors
+        if key not in self.cache:
+            self._fill_from_ingestion({key})
+        return key in self.cache
 
     def prefetch(self, texts: list[str]) -> int:
         """Embed all uncached texts in batched calls after one confirmation; returns API calls made."""
         uncached = list(dict.fromkeys(texts))
         keys = {cache_key(self.model, self.dims, t): t for t in uncached}
-        self.cache.vectors.update(self._scan_many({k for k in keys if k not in self.cache.vectors}))
-        todo = [t for k, t in keys.items() if k not in self.cache.vectors]
+        self._fill_from_ingestion({k for k in keys if k not in self.cache})
+        todo = [t for k, t in keys.items() if k not in self.cache]
         if not todo:
             return 0
         tokens = sum(count_tokens(t) for t in todo)
@@ -173,7 +192,7 @@ class QueryEmbedder:
                 raise SystemExit("cancelled")
             self.client = self.client or self.client_factory()
             self.calls += embed_missing([text], self.cache, self.model, self.dims, self.client, self.guard)
-        return self.cache.vectors[cache_key(self.model, self.dims, text)]
+        return self.cache[cache_key(self.model, self.dims, text)]
 
 
 # -- CLI -----------------------------------------------------------------------------------------
