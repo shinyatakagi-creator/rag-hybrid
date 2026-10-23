@@ -81,7 +81,7 @@ Round 3 details for the record: interactive tool `eval/checkpoint4_round3.py` (c
 
 ## Next steps
 1. Spot-check about 10 rows of `correctness_review.md` (mark column; still pending: marks not yet received, so no reference correction for m007/c007 has been made).
-3. Phase 8: API, Docker, small query-embedding cache. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
+2. Phase 8: API, Docker, small query-embedding cache. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
 
 ## Spend so far: about $0.2895 of the $5 limit (plus about $0.000015 for the baseline and bare-term query embeddings and $0.7295 for the answer eval, plus $0.0073 for the correctness check, so about $1.03 in total)
 | Item | Cost |
