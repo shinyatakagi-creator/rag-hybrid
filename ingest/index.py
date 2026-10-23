@@ -147,7 +147,15 @@ def main(argv=None) -> int:
         except BudgetExceeded as e:
             print(f"ABORT: {e}")
             return 2
-        print(f"embedding calls made: {calls}  est. spend ${guard.spent:.4f}")
+        est, act = p["tokens_to_embed"], guard.api_tokens
+        diff = (act - est) / est
+        usage = {"calls": calls, "estimated_tokens": est, "api_reported_tokens": act, "diff": round(diff, 4),
+                 "estimated_cost_usd": cost_usd(model, est), "actual_cost_usd": cost_usd(model, act)}
+        Path("eval/results").mkdir(parents=True, exist_ok=True)
+        Path("eval/results/embed_run.json").write_text(json.dumps(usage, indent=1))
+        print(f"embedding calls made: {calls}")
+        print(f"API usage: {act:,} tokens = ${usage['actual_cost_usd']:.4f}  vs estimate {est:,} = ${usage['estimated_cost_usd']:.4f}  "
+              f"({diff:+.2%}){'  ** FLAG: differs by more than 5% **' if abs(diff) > 0.05 else ''}")
     else:
         print("embedding calls made: 0 (everything cached)")
 

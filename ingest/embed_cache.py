@@ -29,6 +29,7 @@ class SpendGuard:
 
     def __init__(self, max_usd: float):
         self.max_usd, self.spent = max_usd, 0.0
+        self.api_tokens = 0  # tokens the API reported in response.usage, summed over batches
 
     def charge(self, usd: float, what: str = "call") -> None:
         if self.spent + usd > self.max_usd + 1e-12:
@@ -69,11 +70,12 @@ class EmbedCache:
         self.vectors.update(items)
 
 
-def _embed_batch(client, model: str, batch: list[str], sleep) -> list[list[float]]:
+def _embed_batch(client, model: str, batch: list[str], sleep) -> tuple[list[list[float]], int]:
     for attempt in range(MAX_RETRIES + 1):
         try:
             resp = client.embeddings.create(model=model, input=batch)
-            return [d.embedding for d in sorted(resp.data, key=lambda d: d.index)]
+            usage = getattr(resp, "usage", None)
+            return [d.embedding for d in sorted(resp.data, key=lambda d: d.index)], getattr(usage, "total_tokens", 0)
         except openai.RateLimitError as e:
             if getattr(e, "code", None) == "insufficient_quota" or attempt == MAX_RETRIES:
                 raise  # out of credit is not a transient 429
@@ -91,7 +93,8 @@ def embed_missing(texts: list[str], cache: EmbedCache, model: str, dims: int, cl
     for i in range(0, len(todo), batch_size):
         batch = todo[i : i + batch_size]
         guard.charge(cost_usd(model, sum(count_tokens(t) for t in batch)), f"batch {i // batch_size + 1}")
-        vecs = _embed_batch(client, model, batch, sleep)
+        vecs, used = _embed_batch(client, model, batch, sleep)
+        guard.api_tokens += used
         calls += 1
         assert all(len(v) == dims for v in vecs), f"expected {dims}-dim vectors, got {len(vecs[0])}"
         cache.add_many({cache_key(model, dims, t): v for t, v in zip(batch, vecs)})
