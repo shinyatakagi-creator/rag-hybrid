@@ -1,0 +1,49 @@
+{
+ "n": 30,
+ "agreement": 0.36666666666666664,
+ "agreement_count": 11,
+ "confusion_human_rows_verifier_columns": {
+  "supported": {
+   "supported": 8,
+   "partial": 2,
+   "unsupported": 0
+  },
+  "partial": {
+   "supported": 5,
+   "partial": 3,
+   "unsupported": 1
+  },
+  "unsupported": {
+   "supported": 6,
+   "partial": 5,
+   "unsupported": 0
+  }
+ },
+ "yes_stratum": {
+  "n": 19,
+  "agree": 8
+ },
+ "not_yes_stratum": {
+  "n": 11,
+  "agree": 3
+ },
+ "population_weighted_agreement": 0.411164274322169,
+ "false_yes_rate": {
+  "k": 11,
+  "n": 19,
+  "rate": 0.5789473684210527,
+  "ci95_exact": [
+   0.33499784401173527,
+   0.7974785610228372
+  ]
+ },
+ "false_yes_rate_unsupported_only": {
+  "k": 6,
+  "n": 19,
+  "rate": 0.3157894736842105,
+  "ci95_exact": [
+   0.1257606358729833,
+   0.5655015688461509
+  ]
+ }
+}

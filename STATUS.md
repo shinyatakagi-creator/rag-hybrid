@@ -63,6 +63,9 @@ Pre-registered: Haiku judges each answered answerable answer (hybrid 21, dense 2
 - You: write one label per row (`supported` / `partial` / `unsupported`, from that excerpt alone) in `eval/checkpoint4/my_labels.csv` (`id,label,note`).
 - Only after all 30 are saved: `python -m eval.checkpoint4 score` (refuses on incomplete labels) writes `eval/checkpoint4/agreement.json`: exact agreement (verifier yes/partial/no vs supported/partial/unsupported), 3x3 confusion matrix (human rows, verifier columns), per-stratum agreement and a population-weighted agreement (the sample over-represents non-yes pairs), and the false-yes rate = share of the 19 verifier-`yes` pairs you did not label `supported` (also the stricter `unsupported`-only version) with an exact Clopper-Pearson 95% interval. `sample` refuses to overwrite a labels file that already has labels.
 
+## Checkpoint 4 round 1 (done; scored 2026-10-23)
+`eval/checkpoint4/my_labels.csv` (owner's labels, unmodified) and `agreement.json` are committed as the **first pass: first pass; labels not edited after unblinding; the disagreement review found apparent labelling inconsistencies (e.g. L25, L18, L08 near-verbatim but labelled unsupported; L06/L21 half-covered but labelled supported).** Numbers: exact agreement 11 of 30 (0.367); `yes` stratum 8 of 19, not-`yes` stratum 3 of 11; population-weighted 0.411; false-yes rate 11 of 19 = 0.579 (exact 95% CI 0.335-0.797), `unsupported`-only 6 of 19 = 0.316 (0.126-0.566). Do not quote these as the verifier's accuracy until round 2.
+
 ## Next steps
 1. Spot-check about 10 rows of `correctness_review.md` (mark column).
 2. Label the 30 pairs; then I run `score`.
