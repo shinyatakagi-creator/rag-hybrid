@@ -2,7 +2,7 @@
 
 The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
-**Current phase: Phase 7 is done (baseline, sensitivity, native-RRF cross-check, answer eval, correctness check; checkpoints 2, 3 and 4 closed); Phase 8 (serving) is in progress. The golden set is FINAL and frozen.** `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last full test run: 312 passed.
+**Current phase: Phase 7 is done (baseline, sensitivity, native-RRF cross-check, answer eval, correctness check; checkpoints 2, 3 and 4 closed); Phase 8 (serving) is in progress. The golden set is FINAL and frozen.** `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last full test run: 312 passed (unchanged by the Docker work).
 
 ## Phases done
 
@@ -85,9 +85,12 @@ No reference answers or golden-set items were changed by these decisions (the m0
 ## Phase 8 step 2 done and run live once (2026-10-24): the FastAPI app
 `api/main.py`, `api/service.py`, `api/ledger.py`, `api/dryrun.py`; tests with fakes only (312 passed). Bound to 127.0.0.1. Ledger seeded with 1.05; one live `/search` (hybrid, $0.0000002), one live `/ask` (drain-a-node, answerable, 12 sentences, all verifier `yes`, real cost $0.0173 against a $0.0127 typical estimate and $0.053 worst case) and one `/ask` refusal (sourdough, $0.0103). Ledger now $1.0776 settled of $5. No key, `.env` content or path in any response or log; server stopped, no process left. Full figures in NOTES.md. Not yet done: Docker (compose for the API) and the fresh-clone check from the guide. To run it: `python -m api.main` (reads `.env` itself), then `curl -X POST http://127.0.0.1:8000/ask -H 'content-type: application/json' -d '{"query": "..."}'`.
 
+## Phase 8 step 3 done: Docker Compose (2026-10-24; no paid calls)
+`Dockerfile`, `.dockerignore`, `requirements-api.txt`, `api` service in `docker-compose.yml`. Image has code only (no `.env`, keys, data or corpus; scanned). Loopback-only ports, non-root, read-only rootfs, caps dropped; ledger and serving cache on the named volume `rag-hybrid_apidata` (survives container recreation: proven with a fake spend). Compose stack is up and healthy; free bm25 `/search` from the host works. Run: `docker compose up -d` (needs `.env` with the keys); `docker compose ps`; free check `curl -s -X POST http://127.0.0.1:8000/search -H 'content-type: application/json' -d '{"query":"kubectl drain","mode":"bm25","k":3}'`. Container ledger (1.0776146) is separate from the host `data/api` ledger. See NOTES.md for the limitation on egress. **Not done: the clean-clone test.**
+
 ## Next steps
 1. (Open, optional) the spot-check of `correctness_review.md` was not done; see the README limitations above. No reference correction for m007/c007 has been made.
-2. Phase 8 step 3: Docker (compose for the API, localhost-only port) and the fresh-clone check from the guide. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
+2. The clean-clone test from the guide (fresh clone, `docker compose up`, ingest, index, then `/search` and `/ask`), then checkpoint 5 (README results and CV bullet, only after you have seen the saved eval outputs). Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
 
 ## Spend so far: about $0.2895 of the $5 limit (plus about $0.000015 for the baseline and bare-term query embeddings and $0.7295 for the answer eval, plus $0.0073 for the correctness check and $0.0276 for the first live API calls, so about $1.06 in total)
 | Item | Cost |

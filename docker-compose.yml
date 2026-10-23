@@ -28,5 +28,35 @@ services:
       es:
         condition: service_healthy
 
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rag-hybrid-api:0.1.0
+    env_file:
+      - .env            # the only place the keys come from; never copied into the image
+    environment:
+      - ES_URL=http://es:9200   # overrides the host-side value in .env
+    ports:
+      - "127.0.0.1:8000:8000"   # published on loopback only
+    depends_on:
+      es:
+        condition: service_healthy
+    volumes:
+      - apidata:/app/data       # spend ledger, request logs, serving query cache: survive container recreation
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=4).status == 200 else 1)"]
+      interval: 10s
+      timeout: 6s
+      retries: 6
+      start_period: 10s
+
 volumes:
   esdata:
+  apidata:

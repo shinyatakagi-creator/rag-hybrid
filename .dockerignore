@@ -1,0 +1,22 @@
+# Whitelist build context: everything is excluded unless listed below.
+*
+!requirements-api.txt
+!api
+!rag
+!ingest/__init__.py
+!ingest/embed_cache.py
+
+# Belt and braces (these must never enter an image, even if the whitelist above is edited)
+.env
+.env.*
+**/.env
+**/.env.*
+data
+.venv
+.git
+eval/results
+**/__pycache__
+**/*.pyc
+**/*.jsonl
+**/*.sqlite
+api/dryrun.py
