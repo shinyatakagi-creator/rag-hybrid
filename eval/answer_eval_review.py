@@ -62,27 +62,35 @@ def main() -> None:
     L += ["## Verifier output that is not `yes`", ""]
     errs = [(k, v["error"]) for k, v in vers.items() if "error" in v]
     L += [f"Verification errors (no verdicts, excluded from faithfulness): " + ("; ".join(f"{c} {q}: {e}" for (c, q), e in errs) if errs else "none"), ""]
-    n_pairs = n_bad = 0
-    out = []
+    n_pairs = 0
+    bad = []  # one entry per (config, question, sentence, citation) pair that is not `yes`, in a fixed order
     for (c, qid), v in sorted(vers.items()):
         if "judgements" not in v:
             continue
         g = gens[(c, qid)]
-        sents = g["answer"]["sentences"]
-        excerpt = {ch["n"]: ch for ch in g["chunks"]}
         best = best_verdict_per_sentence(v["judgements"])
-        for j in v["judgements"]:
+        for j in sorted(v["judgements"], key=lambda j: (j["sentence"], j["citation"])):
             n_pairs += 1
-            if j["verdict"] == "yes":
-                continue
-            n_bad += 1
-            ch = excerpt[j["citation"]]
-            claims = ", ".join(f"{x['status']}: {x['claim']}" for x in j["claims"])
-            out += [f"### {c} {qid} sentence {j['sentence']} vs excerpt [{j['citation']}]: **{j['verdict'].upper()}** (sentence's best verdict: {best[j['sentence']]})", "",
-                    f"Sentence: {sents[j['sentence'] - 1]['sentence']}", "",
-                    f"Verifier reason: {j['reason']}", "", f"Claims: {claims}", "",
-                    f"Excerpt [{j['citation']}] ({ch['doc_id']} | {ch['heading_path']}; expected doc: {ch['doc_id'] in gold[qid]['expected_doc_ids']}):", "", "````text", ch["content"], "````", ""]
-    L += [f"{n_bad} of {n_pairs} cited pairs were not `yes`.", ""] + out
+            if j["verdict"] != "yes":
+                bad.append((c, qid, j, best[j["sentence"]], g))
+    ids = {(c, q, j["sentence"], j["citation"]): f"P{i:02d}" for i, (c, q, j, _, _) in enumerate(bad, 1)}
+    a_pairs = [x for x in bad if x[3] != "yes"]
+    a_sents = {(c, q, j["sentence"]) for c, q, j, _, _ in a_pairs}
+    L += [f"{len(bad)} of {n_pairs} cited pairs were not `yes`. Each appears once below with an id. "
+          f"Group A: {len(a_pairs)} pairs on {len(a_sents)} sentences whose best verdict is not `yes` (these sentences count as not strictly supported). "
+          f"Group B: {len(bad) - len(a_pairs)} pairs whose sentence is still `yes` through another citation.", "",
+          "| id | config | question | sentence | excerpt | verdict | sentence's best verdict | group |", "|---|---|---|---|---|---|---|---|"]
+    for c, qid, j, bv, _ in bad:
+        L.append(f"| {ids[(c, qid, j['sentence'], j['citation'])]} | {c} | {qid} | s{j['sentence']} | [{j['citation']}] | {j['verdict'].upper()} | {bv} | {'A' if bv != 'yes' else 'B'} |")
+    L.append("")
+    for c, qid, j, bv, g in bad:
+        ch = {x["n"]: x for x in g["chunks"]}[j["citation"]]
+        sent = g["answer"]["sentences"][j["sentence"] - 1]["sentence"]
+        claims = ", ".join(f"{x['status']}: {x['claim']}" for x in j["claims"])
+        L += [f"### {ids[(c, qid, j['sentence'], j['citation'])]}: {c} {qid} sentence {j['sentence']} vs excerpt [{j['citation']}]: **{j['verdict'].upper()}** (sentence's best verdict: {bv}; group {'A' if bv != 'yes' else 'B'})", "",
+              f"Sentence: {sent}", "", f"Verifier reason: {j['reason']}", "", f"Claims: {claims}", "",
+              f"Excerpt [{j['citation']}] ({ch['doc_id']} | {ch['heading_path']}; expected doc: {ch['doc_id'] in gold[qid]['expected_doc_ids']}):", "", "````text", ch["content"], "````", ""]
+    n_bad = len(bad)
     Path("eval/results/answer_eval_review.md").write_text("\n".join(L), encoding="utf8")
     print(f"saved eval/results/answer_eval_review.md ({n_bad} of {n_pairs} pairs not yes)")
 

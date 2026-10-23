@@ -81,9 +81,23 @@ The run printed a total spend of $0.7295 (spend guard); the logs sum to less bec
 
 Verification errors (no verdicts, excluded from faithfulness): heading/hybrid e007: pairs missing [(5, 4)], unexpected []
 
-11 of 159 cited pairs were not `yes`.
+11 of 159 cited pairs were not `yes`. Each appears once below with an id. Group A: 7 pairs on 6 sentences whose best verdict is not `yes` (these sentences count as not strictly supported). Group B: 4 pairs whose sentence is still `yes` through another citation.
 
-### heading/dense c002 sentence 1 vs excerpt [5]: **PARTIAL** (sentence's best verdict: partial)
+| id | config | question | sentence | excerpt | verdict | sentence's best verdict | group |
+|---|---|---|---|---|---|---|---|
+| P01 | heading/dense | c002 | s1 | [5] | PARTIAL | partial | A |
+| P02 | heading/dense | c007 | s1 | [3] | PARTIAL | yes | B |
+| P03 | heading/dense | c007 | s3 | [4] | PARTIAL | partial | A |
+| P04 | heading/dense | m005 | s1 | [1] | PARTIAL | partial | A |
+| P05 | heading/hybrid | c003 | s1 | [6] | PARTIAL | partial | A |
+| P06 | heading/hybrid | c003 | s3 | [5] | PARTIAL | yes | B |
+| P07 | heading/hybrid | c004 | s5 | [1] | PARTIAL | partial | A |
+| P08 | heading/hybrid | c004 | s5 | [3] | PARTIAL | partial | A |
+| P09 | heading/hybrid | e005 | s1 | [1] | NO | yes | B |
+| P10 | heading/hybrid | e006 | s5 | [6] | PARTIAL | yes | B |
+| P11 | heading/hybrid | m008 | s3 | [4] | PARTIAL | partial | A |
+
+### P01: heading/dense c002 sentence 1 vs excerpt [5]: **PARTIAL** (sentence's best verdict: partial; group A)
 
 Sentence: The add-on both rely on is metrics-server, which collects the resource metrics used by the Horizontal Pod Autoscaler controller (the controller that grows and shrinks workloads) and by the `kubectl top` utility.
 
@@ -118,7 +132,7 @@ This API is served at `/metrics/resource` on the kubelet's authenticated and
 read-only ports.
 ````
 
-### heading/dense c007 sentence 1 vs excerpt [3]: **PARTIAL** (sentence's best verdict: yes)
+### P02: heading/dense c007 sentence 1 vs excerpt [3]: **PARTIAL** (sentence's best verdict: yes; group B)
 
 Sentence: When a container is created without a memory request or limit in a namespace that has a LimitRange, the cluster applies the default memory request and limit from that LimitRange to the container.
 
@@ -145,7 +159,7 @@ the control plane applies the default memory limit to that container, and the Po
 allowed to run in a namespace that is restricted by a memory ResourceQuota.
 ````
 
-### heading/dense c007 sentence 3 vs excerpt [4]: **PARTIAL** (sentence's best verdict: partial)
+### P03: heading/dense c007 sentence 3 vs excerpt [4]: **PARTIAL** (sentence's best verdict: partial; group A)
 
 Sentence: Without such defaults, a container with no memory limit would have no upper bound on memory use, could use all of the memory available on the Node, and could invoke the OOM Killer.
 
@@ -165,7 +179,7 @@ Container is automatically assigned the default limit. Cluster administrators ca
 to specify a default value for the memory limit.
 ````
 
-### heading/dense m005 sentence 1 vs excerpt [1]: **PARTIAL** (sentence's best verdict: partial)
+### P04: heading/dense m005 sentence 1 vs excerpt [1]: **PARTIAL** (sentence's best verdict: partial; group A)
 
 Sentence: No, they do not matter: the scheduler only considers nodes that have all of the topologySpreadConstraints[*].topologyKey labels present at the same time, and nodes missing any of them are bypassed.
 
@@ -198,7 +212,7 @@ having 2 Pods labeled as `foo: bar`, and zone `B` having 1 Pod labeled as
 `topologySpreadConstraints[*].labelSelector` to match the labels in the pod template.
 ````
 
-### heading/hybrid c003 sentence 1 vs excerpt [6]: **PARTIAL** (sentence's best verdict: partial)
+### P05: heading/hybrid c003 sentence 1 vs excerpt [6]: **PARTIAL** (sentence's best verdict: partial; group A)
 
 Sentence: The newer approach is Server-Side Apply, which is meant as a replacement for the original client-side implementation of `kubectl apply`.
 
@@ -233,7 +247,7 @@ change the API version they are using, but Server-Side Apply supports this use
 case.
 ````
 
-### heading/hybrid c003 sentence 3 vs excerpt [5]: **PARTIAL** (sentence's best verdict: yes)
+### P06: heading/hybrid c003 sentence 3 vs excerpt [5]: **PARTIAL** (sentence's best verdict: yes; group B)
 
 Sentence: Rather than tracking a user's last applied state as the legacy `last-applied` annotation does, Server-Side Apply tracks an object's field management, so information about which field manager manages each field becomes available.
 
@@ -281,37 +295,7 @@ Compared to the (legacy)
 annotation managed by `kubectl`, Server-Side Apply uses a more declarative
 ````
 
-### heading/hybrid c004 sentence 5 vs excerpt [3]: **PARTIAL** (sentence's best verdict: partial)
-
-Sentence: Users who can run privileged Pods can use that access to gain node access and potentially elevate their privileges further, and any containers running with privileged: true on a node can access all Secrets used on that node.
-
-Verifier reason: Excerpt 3 covers privileged Pods gaining node access but not the Secrets claim, which is in excerpt 1.
-
-Claims: supported: Users who can run privileged Pods can gain node access and potentially elevate privileges further., unsupported: Containers running with privileged: true on a node can access all Secrets used on that node.
-
-Excerpt [3] (concepts/security/rbac-good-practices | Role Based Access Control Good Practices > Kubernetes RBAC - privilege escalation risks {#privilege-escalation-risks} > Workload creation; expected doc: False):
-
-````text
-Permission to create workloads (either Pods, or
-[workload resources](/docs/concepts/workloads/controllers/) that manage Pods) in a namespace
-implicitly grants access to many other resources in that namespace, such as Secrets, ConfigMaps, and
-PersistentVolumes that can be mounted in Pods. Additionally, since Pods can run as any
-[ServiceAccount](/docs/reference/access-authn-authz/service-accounts-admin/), granting permission
-to create workloads also implicitly grants the API access levels of any service account in that
-namespace.  
-Users who can run privileged Pods can use that access to gain node access and potentially to
-further elevate their privileges. Where you do not fully trust a user or other principal
-with the ability to create suitably secure and isolated Pods, you should enforce either the
-**Baseline** or **Restricted** Pod Security Standard.
-You can use [Pod Security admission](/docs/concepts/security/pod-security-admission/)
-or other (third party) mechanisms to implement that enforcement.  
-For these reasons, namespaces should be used to separate resources requiring different levels of
-trust or tenancy. It is still considered best practice to follow [least privilege](#least-privilege)
-principles and assign the minimum set of permissions, but boundaries within a namespace should be
-considered weak.
-````
-
-### heading/hybrid c004 sentence 5 vs excerpt [1]: **PARTIAL** (sentence's best verdict: partial)
+### P07: heading/hybrid c004 sentence 5 vs excerpt [1]: **PARTIAL** (sentence's best verdict: partial; group A)
 
 Sentence: Users who can run privileged Pods can use that access to gain node access and potentially elevate their privileges further, and any containers running with privileged: true on a node can access all Secrets used on that node.
 
@@ -356,7 +340,37 @@ Any containers that run with `privileged: true` on a node can access all
 Secrets used on that node.
 ````
 
-### heading/hybrid e005 sentence 1 vs excerpt [1]: **NO** (sentence's best verdict: yes)
+### P08: heading/hybrid c004 sentence 5 vs excerpt [3]: **PARTIAL** (sentence's best verdict: partial; group A)
+
+Sentence: Users who can run privileged Pods can use that access to gain node access and potentially elevate their privileges further, and any containers running with privileged: true on a node can access all Secrets used on that node.
+
+Verifier reason: Excerpt 3 covers privileged Pods gaining node access but not the Secrets claim, which is in excerpt 1.
+
+Claims: supported: Users who can run privileged Pods can gain node access and potentially elevate privileges further., unsupported: Containers running with privileged: true on a node can access all Secrets used on that node.
+
+Excerpt [3] (concepts/security/rbac-good-practices | Role Based Access Control Good Practices > Kubernetes RBAC - privilege escalation risks {#privilege-escalation-risks} > Workload creation; expected doc: False):
+
+````text
+Permission to create workloads (either Pods, or
+[workload resources](/docs/concepts/workloads/controllers/) that manage Pods) in a namespace
+implicitly grants access to many other resources in that namespace, such as Secrets, ConfigMaps, and
+PersistentVolumes that can be mounted in Pods. Additionally, since Pods can run as any
+[ServiceAccount](/docs/reference/access-authn-authz/service-accounts-admin/), granting permission
+to create workloads also implicitly grants the API access levels of any service account in that
+namespace.  
+Users who can run privileged Pods can use that access to gain node access and potentially to
+further elevate their privileges. Where you do not fully trust a user or other principal
+with the ability to create suitably secure and isolated Pods, you should enforce either the
+**Baseline** or **Restricted** Pod Security Standard.
+You can use [Pod Security admission](/docs/concepts/security/pod-security-admission/)
+or other (third party) mechanisms to implement that enforcement.  
+For these reasons, namespaces should be used to separate resources requiring different levels of
+trust or tenancy. It is still considered best practice to follow [least privilege](#least-privilege)
+principles and assign the minimum set of permissions, but boundaries within a namespace should be
+considered weak.
+````
+
+### P09: heading/hybrid e005 sentence 1 vs excerpt [1]: **NO** (sentence's best verdict: yes; group B)
 
 Sentence: preBind plugins perform any work required before a Pod is bound.
 
@@ -412,7 +426,7 @@ least one bind plugin is required.
 1. `postBind`: This is an informational extension point that is called after
 ````
 
-### heading/hybrid e006 sentence 5 vs excerpt [6]: **PARTIAL** (sentence's best verdict: yes)
+### P10: heading/hybrid e006 sentence 5 vs excerpt [6]: **PARTIAL** (sentence's best verdict: yes; group B)
 
 Sentence: Controllers copy the schedulingPolicy from the template into each CompositePodGroup they create, and minGroupCount in a CompositePodGroupTemplate is immutable.
 
@@ -441,7 +455,7 @@ minGroupCount: 2
 ```
 ````
 
-### heading/hybrid m008 sentence 3 vs excerpt [4]: **PARTIAL** (sentence's best verdict: partial)
+### P11: heading/hybrid m008 sentence 3 vs excerpt [4]: **PARTIAL** (sentence's best verdict: partial; group A)
 
 Sentence: Those packet filtering rules direct DNS queries to a local Pod that is now unhealthy, so lookups fail.
 
