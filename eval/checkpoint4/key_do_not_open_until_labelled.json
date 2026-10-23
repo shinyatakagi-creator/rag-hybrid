@@ -1,0 +1,221 @@
+{
+ "seed": 30,
+ "n_yes_sampled": 19,
+ "population": {
+  "pairs": 165,
+  "yes": 154,
+  "not_yes": 11
+ },
+ "items": {
+  "L01": {
+   "config": "heading/dense",
+   "qid": "c001",
+   "sentence_no": 2,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "L02": {
+   "config": "heading/hybrid",
+   "qid": "c003",
+   "sentence_no": 3,
+   "citation": 5,
+   "verifier": "partial"
+  },
+  "L03": {
+   "config": "heading/dense",
+   "qid": "c004",
+   "sentence_no": 7,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "L04": {
+   "config": "heading/hybrid",
+   "qid": "e007",
+   "sentence_no": 1,
+   "citation": 4,
+   "verifier": "yes"
+  },
+  "L05": {
+   "config": "heading/dense",
+   "qid": "e007",
+   "sentence_no": 2,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "L06": {
+   "config": "heading/hybrid",
+   "qid": "c004",
+   "sentence_no": 5,
+   "citation": 1,
+   "verifier": "partial"
+  },
+  "L07": {
+   "config": "heading/dense",
+   "qid": "m003",
+   "sentence_no": 3,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "L08": {
+   "config": "heading/dense",
+   "qid": "c004",
+   "sentence_no": 1,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "L09": {
+   "config": "heading/hybrid",
+   "qid": "m003",
+   "sentence_no": 3,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "L10": {
+   "config": "heading/hybrid",
+   "qid": "c003",
+   "sentence_no": 1,
+   "citation": 6,
+   "verifier": "partial"
+  },
+  "L11": {
+   "config": "heading/dense",
+   "qid": "e005",
+   "sentence_no": 3,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "L12": {
+   "config": "heading/hybrid",
+   "qid": "e006",
+   "sentence_no": 5,
+   "citation": 6,
+   "verifier": "partial"
+  },
+  "L13": {
+   "config": "heading/dense",
+   "qid": "c007",
+   "sentence_no": 1,
+   "citation": 3,
+   "verifier": "partial"
+  },
+  "L14": {
+   "config": "heading/dense",
+   "qid": "m004",
+   "sentence_no": 2,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "L15": {
+   "config": "heading/hybrid",
+   "qid": "m008",
+   "sentence_no": 3,
+   "citation": 4,
+   "verifier": "partial"
+  },
+  "L16": {
+   "config": "heading/dense",
+   "qid": "e003",
+   "sentence_no": 1,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "L17": {
+   "config": "heading/dense",
+   "qid": "m005",
+   "sentence_no": 1,
+   "citation": 1,
+   "verifier": "partial"
+  },
+  "L18": {
+   "config": "heading/dense",
+   "qid": "c004",
+   "sentence_no": 2,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "L19": {
+   "config": "heading/hybrid",
+   "qid": "e005",
+   "sentence_no": 1,
+   "citation": 1,
+   "verifier": "no"
+  },
+  "L20": {
+   "config": "heading/hybrid",
+   "qid": "c008",
+   "sentence_no": 3,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "L21": {
+   "config": "heading/hybrid",
+   "qid": "c004",
+   "sentence_no": 5,
+   "citation": 3,
+   "verifier": "partial"
+  },
+  "L22": {
+   "config": "heading/dense",
+   "qid": "c002",
+   "sentence_no": 1,
+   "citation": 5,
+   "verifier": "partial"
+  },
+  "L23": {
+   "config": "heading/hybrid",
+   "qid": "m008",
+   "sentence_no": 4,
+   "citation": 4,
+   "verifier": "yes"
+  },
+  "L24": {
+   "config": "heading/dense",
+   "qid": "c007",
+   "sentence_no": 3,
+   "citation": 4,
+   "verifier": "partial"
+  },
+  "L25": {
+   "config": "heading/hybrid",
+   "qid": "e002",
+   "sentence_no": 1,
+   "citation": 2,
+   "verifier": "yes"
+  },
+  "L26": {
+   "config": "heading/hybrid",
+   "qid": "m004",
+   "sentence_no": 5,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "L27": {
+   "config": "heading/dense",
+   "qid": "c005",
+   "sentence_no": 8,
+   "citation": 1,
+   "verifier": "yes"
+  },
+  "L28": {
+   "config": "heading/dense",
+   "qid": "c005",
+   "sentence_no": 6,
+   "citation": 3,
+   "verifier": "yes"
+  },
+  "L29": {
+   "config": "heading/dense",
+   "qid": "m007",
+   "sentence_no": 3,
+   "citation": 7,
+   "verifier": "yes"
+  },
+  "L30": {
+   "config": "heading/hybrid",
+   "qid": "m004",
+   "sentence_no": 2,
+   "citation": 1,
+   "verifier": "yes"
+  }
+ }
+}
