@@ -68,9 +68,9 @@ answerable=False; context: _index, job, kube-controller-manager-config.v1alpha1,
 | step | calls | input tokens | output tokens | cost | per call |
 |---|---|---|---|---|---|
 | generation | 60 | 296,371 | 11,613 | $0.7089 | 4,940 in / 194 out / $0.0118 |
-| verification | 43 | 89,542 | 22,075 | $0.0200 | 2,082 in / 513 out / $0.0005 |
+| verification | 44 | 92,715 | 22,884 | $0.0207 | 2,107 in / 520 out / $0.0005 |
 
-Total $0.7289 for 60 questions x configs ($0.0121 per question-config; 0.0243 per question across both configs). Refusals cost less (about 70 output tokens) than answers.
+Total $0.7296 for 60 questions x configs ($0.0122 per question-config; 0.0243 per question across both configs). Refusals cost less (about 70 output tokens) than answers.
 
 The run printed a total spend of $0.7295 (spend guard); the logs sum to less because the one failed verification call (hybrid e007) did not record its usage in this run (fixed in rag/verify.py afterwards, see NOTES.md).
 
@@ -79,9 +79,9 @@ The run printed a total spend of $0.7295 (spend guard); the logs sum to less bec
 
 ## Verifier output that is not `yes`
 
-Verification errors (no verdicts, excluded from faithfulness): heading/hybrid e007: pairs missing [(5, 4)], unexpected []
+Verification errors (no verdicts, excluded from faithfulness): none
 
-11 of 159 cited pairs were not `yes`. Each appears once below with an id. Group A: 7 pairs on 6 sentences whose best verdict is not `yes` (these sentences count as not strictly supported). Group B: 4 pairs whose sentence is still `yes` through another citation.
+11 of 165 cited pairs were not `yes`. Each appears once below with an id. Group A: 7 pairs on 6 sentences whose best verdict is not `yes` (these sentences count as not strictly supported). Group B: 4 pairs whose sentence is still `yes` through another citation.
 
 | id | config | question | sentence | excerpt | verdict | sentence's best verdict | group |
 |---|---|---|---|---|---|---|---|

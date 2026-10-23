@@ -136,6 +136,8 @@ def main(argv=None) -> int:
     ap.add_argument("--golden", default="eval/golden.jsonl")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--yes", action="store_true", help="the owner approved the estimate")
+    ap.add_argument("--retry-failed-verification", action="store_true", help="re-verify answers whose latest verification row is an error (one more attempt each; the failed rows stay in the log)")
+    ap.add_argument("--report-only", action="store_true", help="rebuild eval/results/answer_eval.{json,md} from the saved logs; no API call")
     ap.add_argument("--ids", help="comma-separated question ids (a restricted run; the report then covers only those)")
     a = ap.parse_args(argv)
     golden = load_golden(a.golden)
@@ -158,11 +160,16 @@ def main(argv=None) -> int:
     es = Elasticsearch(os.environ.get("ES_URL", "http://127.0.0.1:9200"))
     if a.dry_run:
         return dry_run(golden, es, index, emb, model_a, model_v)
+    if a.report_only:
+        report(golden, read_log(GEN_LOG, lambda r: (r["config"], r["qid"])), read_log(VER_LOG, lambda r: (r["config"], r["qid"])), model_a, model_v)
+        return 0
     if not a.yes:
         print("refusing to call paid APIs without --yes (run --dry-run first and get the estimate approved)")
         return 2
     import anthropic
     client = anthropic.Anthropic()
+    if a.retry_failed_verification:
+        return retry_failed(client, guard, model_v, golden)
     emb.prefetch([q["question"] for q in golden])
     gens = read_log(GEN_LOG, lambda r: (r["config"], r["qid"]))
     vers = read_log(VER_LOG, lambda r: (r["config"], r["qid"]))
@@ -189,6 +196,30 @@ def main(argv=None) -> int:
                 vers = read_log(VER_LOG, lambda r: (r["config"], r["qid"]))
             print(f"{config} {q['id']}: " + ("refused" if "answer" in row and not row["answer"]["answerable"] else "invalid" if "answer" not in row else "answered"), f"(spent this run ${guard.spent:.4f})")
     report(golden, gens, vers, model_a, model_v)
+    return 0
+
+
+def retry_failed(client, guard, model_v, golden) -> int:
+    """One more verification attempt for every answer whose latest verification row is an error. The failed row stays in
+    the log; the new row (attempt 2) comes after it and is the one the report uses. A second failure is logged as well."""
+    gens = read_log(GEN_LOG, lambda r: (r["config"], r["qid"]))
+    vers = read_log(VER_LOG, lambda r: (r["config"], r["qid"]))
+    for key, v in vers.items():
+        if "error" not in v or v.get("attempt", 1) >= 2:
+            continue
+        config, qid = key
+        g = gens[key]
+        rec = {"ts": datetime.now(timezone.utc).isoformat(), "config": config, "qid": qid, "model": model_v, "effort": V.EFFORT, "rubric": V.RUBRIC, "attempt": 2,
+               "retry_of_error": v["error"]}
+        try:
+            r = V.verify_answer(client, guard, model_v, g["answer"]["sentences"], {c["n"]: c["content"] for c in g["chunks"]})
+            rec.update({k: x for k, x in r.items() if k != "estimate"})
+        except V.InvalidVerdicts as e:
+            rec.update(error=str(e), usage=e.usage, cost_usd=e.cost_usd)
+        with open(VER_LOG, "a", encoding="utf8") as f:
+            f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+        print(f"retry {config} {qid}: " + ("failed again: " + rec["error"] if "error" in rec else f"ok, {len(rec['judgements'])} judgements") + f" (spent ${guard.spent:.6f})")
+    report(golden, gens, read_log(VER_LOG, lambda r: (r["config"], r["qid"])), os.environ["ANSWER_MODEL"], model_v)
     return 0
 
 

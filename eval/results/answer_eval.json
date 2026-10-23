@@ -1,9 +1,10 @@
 {
  "meta": {
-  "timestamp": "2026-10-23T05:22:10+00:00",
+  "timestamp": "2026-10-23T05:27:35+00:00",
   "git": {
-   "sha": "6220fb44a22641a6d7dfdbaa0c529ed11163aa5c",
+   "sha": "8717133bc89552e4b1aac25a042b0aa9c625cbb1",
    "dirty_files": [
+    "M eval/answer_eval.py",
     "?? eval/golden_owner.v1.jsonl"
    ]
   },
@@ -19,7 +20,7 @@
    "retrieve_k": 40,
    "hybrid_dense_weight": 1
   },
-  "cost_usd_from_logs": 0.728864,
+  "cost_usd_from_logs": 0.729585,
   "logs": [
    "eval/results/answer_eval_generation.jsonl",
    "eval/results/answer_eval_verification.jsonl"
@@ -35,23 +36,23 @@
     "answered_unanswerable": 0,
     "false_refusals": 5,
     "invalid_answers": 0,
-    "verification_errors": 1,
+    "verification_errors": 0,
     "context_has_expected": "21 of 26",
     "faithfulness_all_answered": {
-     "questions": 20,
-     "sentences": 73,
-     "strict": 0.958904109589041,
+     "questions": 21,
+     "sentences": 78,
+     "strict": 0.9615384615384616,
      "lenient": 1.0,
-     "citations": 78,
-     "citation_precision": 0.9102564102564102
+     "citations": 84,
+     "citation_precision": 0.9166666666666666
     },
     "faithfulness_answerable_only": {
-     "questions": 20,
-     "sentences": 73,
-     "strict": 0.958904109589041,
+     "questions": 21,
+     "sentences": 78,
+     "strict": 0.9615384615384616,
      "lenient": 1.0,
-     "citations": 78,
-     "citation_precision": 0.9102564102564102
+     "citations": 84,
+     "citation_precision": 0.9166666666666666
     },
     "by_type": {
      "exact_term": {
@@ -59,12 +60,12 @@
       "false_refusals": 0,
       "invalid": 0,
       "faithfulness": {
-       "questions": 7,
-       "sentences": 24,
+       "questions": 8,
+       "sentences": 29,
        "strict": 1.0,
        "lenient": 1.0,
-       "citations": 26,
-       "citation_precision": 0.9230769230769231
+       "citations": 32,
+       "citation_precision": 0.9375
       }
      },
      "mixed": {
@@ -229,9 +230,22 @@
      "type": "exact_term",
      "answerable": true,
      "outcome": "answered",
-     "sentence_verdicts": [],
-     "pair_verdicts": [],
-     "verify_error": true,
+     "sentence_verdicts": [
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ],
+     "pair_verdicts": [
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ],
+     "verify_error": false,
      "context_has_expected": true,
      "n_sentences": 5,
      "error": null
