@@ -41,6 +41,11 @@ Code `eval/sensitivity.py` (`bare-term`, `rrf-weights`, `index-options`), `eval/
 - **index_options** (`index_options.json/.md`; `rag-docs-hnsw` = explicit hnsw m16 / ef_construction 100, built from the cache with 0 embedding calls, mapping in `mapping_hnsw.json`; **kept for now**, delete it with `curl -X DELETE localhost:9200/rag-docs-hnsw` when no longer needed): dense and hybrid rows are identical to bbq_hnsw (top-10 chunk overlap 1.000 for dense, 0.992 / 1.000 for hybrid; one question's first-rank changes, fixed hybrid).
 - **Failure analysis** (`failure_analysis.md`): c009, c010, c002 are hard conceptual questions whose answer is one sentence inside a longer section and whose wording avoids the sentence's key nouns; not golden-set errors.
 
+## Robustness, index cleanup, native RRF (2026-10-23)
+- `eval/results/robustness_summary.{json,md}` (from saved results only, `eval/robustness_summary.py`): Recall@10 / MRR per row on exact_term, mixed, conceptual and bare_term, plus the worst slice (conceptual for every row); weighted-RRF hybrid rows are a separate sensitivity section.
+- `rag-docs-hnsw` deleted (results and `mapping_hnsw.json` are saved). `rag-docs` untouched: 8,599 docs (4,072 fixed + 4,527 heading), effective bbq_hnsw, and a baseline rerun after the delete is identical.
+- **Checkpoint 3 done.** Trial licence started by the owner (expires 2026-11-22). `eval/results/native_rrf_check.{json,md}` (`eval/native_rrf_check.py`): native `rrf` retriever (rank_constant 60, rank_window_size 200, same filters) vs Python RRF on 26 questions x 2 chunkers: first expected-doc rank identical in 52 of 52; top-10 chunk order identical in 48 of 52, the 4 differences are exact RRF score ties ordered differently (float32 vs exact fractions), one of which shifts the 10th distinct doc (m004 heading, 9 of 10 docs in common). The Python fusion is validated.
+
 ## Next steps
 1. `eval/answer_eval.py`, then the checkpoint-4 sampler (blind labelling, stratified: every `partial` and `no` plus random `yes` to make 25).
 2. Native-RRF cross-check only if you want it (checkpoint 3: you start the trial licence); the pool sweep 50/100/200 has not been run.
