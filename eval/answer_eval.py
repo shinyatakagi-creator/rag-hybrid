@@ -80,6 +80,61 @@ def summarize_config(rows: list[dict]) -> dict:
     return out
 
 
+def bootstrap_ratio(items: list[tuple[float, float]], n_boot: int = 10000, seed: int = 0, alpha: float = 0.05) -> tuple[float, float] | None:
+    """Percentile bootstrap interval of sum(num)/sum(den), resampling QUESTIONS (items) with replacement; fixed seed."""
+    import random
+    if not items:
+        return None
+    rng, n, vals = random.Random(seed), len(items), []
+    for _ in range(n_boot):
+        pick = [items[rng.randrange(n)] for _ in range(n)]
+        den = sum(d for _, d in pick)
+        if den:
+            vals.append(sum(x for x, _ in pick) / den)
+    vals.sort()
+    return vals[int(len(vals) * alpha / 2)], vals[min(len(vals) - 1, int(len(vals) * (1 - alpha / 2)))]
+
+
+def ci_summary(rows: list[dict]) -> dict:
+    """Point estimate and bootstrap 95% CI per metric for one config (questions are the resampling unit)."""
+    ans = [r for r in rows if r["answerable"]]
+    verified = [r for r in rows if r["outcome"] == "answered" and not r["verify_error"]]
+
+    def est(items):
+        den = sum(d for _, d in items)
+        ci = bootstrap_ratio(items)
+        return {"value": (sum(x for x, _ in items) / den) if den else None, "ci95": [round(c, 4) for c in ci] if ci else None, "units": len(items), "denominator": den}
+
+    return {
+        "faithfulness_strict": est([(sum(v == "yes" for v in r["sentence_verdicts"]), len(r["sentence_verdicts"])) for r in verified if r["sentence_verdicts"]]),
+        "faithfulness_lenient": est([(sum(v in ("yes", "partial") for v in r["sentence_verdicts"]), len(r["sentence_verdicts"])) for r in verified if r["sentence_verdicts"]]),
+        "citation_precision": est([(sum(v == "yes" for v in r["pair_verdicts"]), len(r["pair_verdicts"])) for r in verified if r["pair_verdicts"]]),
+        "false_refusal_rate": est([(r["outcome"] == "refused", 1) for r in ans]),
+        "answer_coverage": est([(r["outcome"] == "answered", 1) for r in ans]),  # answered share of the answerable questions
+        "context_coverage": est([(bool(r["context_has_expected"]), 1) for r in ans]),  # expected doc present in the 8-chunk context
+    }
+
+
+def strict_share(row: dict) -> float | None:
+    v = row["sentence_verdicts"]
+    return (sum(x == "yes" for x in v) / len(v)) if v and row["outcome"] == "answered" and not row["verify_error"] else None
+
+
+def paired_hybrid_vs_dense(hy: list[dict], de: list[dict]) -> dict:
+    """Per question: both answered / only hybrid / only dense / both refused; and, where both answered and verified, whether
+    hybrid's strict sentence share is higher (win), equal (tie) or lower (loss) than dense's."""
+    cross = {"both_answered": 0, "only_hybrid_answered": 0, "only_dense_answered": 0, "both_refused": 0, "other": 0}
+    f = {"win": 0, "tie": 0, "loss": 0}
+    for h, d in zip(hy, de):
+        ha, da = h["outcome"] == "answered", d["outcome"] == "answered"
+        key = "both_answered" if ha and da else "only_hybrid_answered" if ha else "only_dense_answered" if da else "both_refused" if h["outcome"] == "refused" and d["outcome"] == "refused" else "other"
+        cross[key] += 1
+        sh, sd = strict_share(h), strict_share(d)
+        if sh is not None and sd is not None:
+            f["win" if sh > sd else "loss" if sh < sd else "tie"] += 1
+    return {"outcomes": cross, "faithfulness_both_verified": f}
+
+
 # -- run ---------------------------------------------------------------------------------------------------
 def read_log(path: str, key) -> dict:
     p = Path(path)
@@ -237,30 +292,49 @@ def report(golden, gens, vers, model_a, model_v) -> None:
                          "verify_error": outcome == "answered" and (v is None or "error" in v), "context_has_expected": bool(set(q["expected_doc_ids"]) & ctx_docs),
                          "n_sentences": len(g["answer"]["sentences"]) if "answer" in g else 0, "error": g.get("error")})
         configs[config] = {"summary": summarize_config(rows), "questions": rows}
+    for c, d in configs.items():
+        d["ci"] = ci_summary(d["questions"])
+    hy, de = configs["heading/hybrid"]["questions"], configs["heading/dense"]["questions"]
+    paired = {"all_30": paired_hybrid_vs_dense(hy, de), "answerable_26": paired_hybrid_vs_dense([r for r in hy if r["answerable"]], [r for r in de if r["answerable"]])}
     cost = sum(r.get("cost_usd", 0) for r in gens.values()) + sum(r.get("cost_usd", 0) for r in vers.values())
     doc = {"meta": {"timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"), "git": git_info(), "answer_model": model_a, "verifier_model": model_v,
                     "rubric": V.RUBRIC, "answer_effort": G.EFFORT, "verifier_effort": V.EFFORT, "context": {"chunker": "heading", "max_chunks": G.MAX_CHUNKS, "per_doc": G.PER_DOC,
-                    "retrieve_k": G.RETRIEVE_K, "hybrid_dense_weight": 1}, "cost_usd_from_logs": round(cost, 6), "logs": [GEN_LOG, VER_LOG]}, "configs": configs}
+                    "retrieve_k": G.RETRIEVE_K, "hybrid_dense_weight": 1}, "cost_usd_from_logs": round(cost, 6), "run_cost_usd_reported": 0.7295,
+                    "bootstrap": {"n": 10000, "seed": 0, "method": "percentile, resampling questions"}, "logs": [GEN_LOG, VER_LOG]}, "configs": configs, "paired_hybrid_vs_dense": paired}
     Path(OUT + ".json").write_text(json.dumps(doc, indent=1))
-    L = ["# Answer eval", "", f"Git `{doc['meta']['git']['sha'][:7]}` | {doc['meta']['timestamp']} | answers `{model_a}` (effort {G.EFFORT}), verifier `{model_v}` ({V.RUBRIC}, effort {V.EFFORT}) | cost from logs ${cost:.4f}", "",
-         "Faithfulness strict = sentences with at least one cited excerpt judged yes; lenient = yes or partial. Citation precision = share of cited pairs judged yes. "
-         "The verifier's own accuracy is not established until the checkpoint-4 hand labels.", "",
-         "| config | answered / refused / invalid | correct refusals (of 4) | answered unanswerable | false refusals (of 26) | faithfulness strict | lenient | citation precision | sentences |", "|---|---|---|---|---|---|---|---|---|"]
+    pct = lambda x: "-" if x is None else f"{x:.3f}"
+    fmt = lambda e: f"{pct(e['value'])} ({e['ci95'][0]:.2f}-{e['ci95'][1]:.2f})" if e["ci95"] else "-"
+    L = ["# Answer eval", "", f"Git `{doc['meta']['git']['sha'][:7]}` | {doc['meta']['timestamp']} | answers `{model_a}` (effort {G.EFFORT}), verifier `{model_v}` ({V.RUBRIC}, effort {V.EFFORT}) | "
+         "run cost $0.7295 (spend guard; the logs sum to slightly less, see NOTES.md)", "",
+         "**Answer coverage** = answered share of the 26 answerable questions; **context coverage** = share whose 8-chunk context holds an expected doc. Faithfulness is only measured on answered questions, "
+         "so read it together with answer coverage. Strict = sentences with at least one cited excerpt judged yes; lenient = yes or partial; citation precision = share of cited pairs judged yes. "
+         "Intervals are 95% bootstrap (10,000 resamples of questions, seed 0); n is small. The verifier is unvalidated until the checkpoint-4 hand labels. Faithfulness is support by the cited excerpts, not correctness against the reference.", "",
+         "## Per config", "",
+         "| metric | heading/hybrid | heading/dense |", "|---|---|---|"]
+    rowsd = [("answer coverage (answered / 26)", "answer_coverage"), ("false-refusal rate (of 26)", "false_refusal_rate"), ("context coverage (expected doc in context, of 26)", "context_coverage"),
+             ("faithfulness strict", "faithfulness_strict"), ("faithfulness lenient", "faithfulness_lenient"), ("citation precision", "citation_precision")]
+    for label, k in rowsd:
+        L.append(f"| {label} | " + " | ".join(fmt(configs[c]["ci"][k]) for c in configs) + " |")
+    L.append("| sentences scored / verified answers | " + " | ".join(f"{configs[c]['summary']['faithfulness_all_answered']['sentences']} / {configs[c]['summary']['faithfulness_all_answered']['questions']}" for c in configs) + " |")
+    L.append("| correct refusals (of 4) / answered unanswerable | " + " | ".join(f"{configs[c]['summary']['correct_refusals']} / {configs[c]['summary']['answered_unanswerable']}" for c in configs) + " |")
+    L.append("| invalid answers / verification errors | " + " | ".join(f"{configs[c]['summary']['invalid_answers']} / {configs[c]['summary']['verification_errors']}" for c in configs) + " |")
+    L += ["", "## By type (answerable questions)", "", "| config | type | n | answer coverage | context coverage | false refusals | strict | lenient | citation precision |", "|---|---|---|---|---|---|---|---|---|"]
     for c, d in configs.items():
-        s = d["summary"]
-        f = s["faithfulness_all_answered"]
-        pct = lambda x: "-" if x is None else f"{x:.3f}"
-        L.append(f"| {c} | {sum(r['outcome'] == 'answered' for r in d['questions'])} / {sum(r['outcome'] == 'refused' for r in d['questions'])} / {s['invalid_answers']} | {s['correct_refusals']} | "
-                 f"{s['answered_unanswerable']} | {s['false_refusals']} | {pct(f['strict'])} | {pct(f['lenient'])} | {pct(f['citation_precision'])} | {f['sentences']} |")
-    L += ["", "Answerable questions only:", "", "| config | questions | strict | lenient | citation precision | context holds an expected doc |", "|---|---|---|---|---|---|"]
-    for c, d in configs.items():
-        f = d["summary"]["faithfulness_answerable_only"]
-        L.append(f"| {c} | {f['questions']} | {f['strict']:.3f} | {f['lenient']:.3f} | {f['citation_precision']:.3f} | {d['summary']['context_has_expected']} |")
-    L += ["", "By type:", "", "| config | type | n | false refusals | strict | lenient |", "|---|---|---|---|---|---|"]
-    for c, d in configs.items():
-        for t, b in d["summary"]["by_type"].items():
-            L.append(f"| {c} | {t} | {b['n']} | {b['false_refusals']} | {b['faithfulness']['strict'] if b['faithfulness']['strict'] is None else round(b['faithfulness']['strict'], 3)} | "
-                     f"{b['faithfulness']['lenient'] if b['faithfulness']['lenient'] is None else round(b['faithfulness']['lenient'], 3)} |")
+        for t in TYPES:
+            qs = [q for q in d["questions"] if q["type"] == t]
+            b = d["summary"]["by_type"][t]
+            fa = b["faithfulness"]
+            L.append(f"| {c} | {t} | {len(qs)} | {sum(q['outcome'] == 'answered' for q in qs)} of {len(qs)} | {sum(bool(q['context_has_expected']) for q in qs)} of {len(qs)} | {b['false_refusals']} | "
+                     f"{pct(fa['strict'])} | {pct(fa['lenient'])} | {pct(fa['citation_precision'])} |")
+    L += ["", "## Paired comparison, hybrid vs dense (per question)", "", "Outcomes (all 30 / the 26 answerable):", "", "| both answered | only hybrid answered | only dense answered | both refused | other |", "|---|---|---|---|---|"]
+    o30, o26 = paired["all_30"]["outcomes"], paired["answerable_26"]["outcomes"]
+    L.append("| " + " | ".join(f"{o30[k]} / {o26[k]}" for k in ("both_answered", "only_hybrid_answered", "only_dense_answered", "both_refused", "other")) + " |")
+    f = paired["all_30"]["faithfulness_both_verified"]
+    L += ["", f"Where both configs answered and were verified (n = {sum(f.values())}), comparing the per-question strict sentence share: hybrid higher in {f['win']}, equal in {f['tie']}, lower in {f['loss']}.", "",
+          "| id | type | hybrid | dense | hybrid strict share | dense strict share |", "|---|---|---|---|---|---|"]
+    for h, dd in zip(hy, de):
+        sh, sd = strict_share(h), strict_share(dd)
+        L.append(f"| {h['id']} | {h['type']} | {h['outcome']} | {dd['outcome']} | {'-' if sh is None else f'{sh:.2f}'} | {'-' if sd is None else f'{sd:.2f}'} |")
     Path(OUT + ".md").write_text("\n".join(L) + "\n", encoding="utf8")
     print(f"saved {OUT}.json and {OUT}.md")
 

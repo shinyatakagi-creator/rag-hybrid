@@ -35,3 +35,20 @@ def test_summary_counts_refusals_invalid_and_verification_errors_separately():
     assert s["faithfulness_all_answered"]["questions"] == 2  # e1 and u2 (m2 had no verification, not silently counted)
     assert s["faithfulness_answerable_only"]["questions"] == 1
     assert s["by_type"]["conceptual"]["false_refusals"] == 1 and s["by_type"]["mixed"]["invalid"] == 1
+
+
+def test_bootstrap_ratio_is_deterministic_and_degenerate_cases():
+    from eval.answer_eval import bootstrap_ratio, ci_summary, paired_hybrid_vs_dense
+    items = [(3, 4), (4, 4), (2, 4), (4, 4)]
+    lo, hi = bootstrap_ratio(items, n_boot=2000)
+    assert (lo, hi) == bootstrap_ratio(items, n_boot=2000) and lo <= 13 / 16 <= hi
+    assert bootstrap_ratio([]) is None and bootstrap_ratio([(1, 1)] * 5, n_boot=100) == (1.0, 1.0)
+    rows = [row("a", "exact_term", True, "answered", [J(1, 1, "yes")]), row("b", "conceptual", True, "refused", ctx=False)]
+    c = ci_summary(rows)
+    assert c["answer_coverage"]["value"] == 0.5 and c["false_refusal_rate"]["value"] == 0.5 and c["context_coverage"]["value"] == 0.5
+    assert c["faithfulness_strict"]["value"] == 1.0 and c["faithfulness_strict"]["units"] == 1
+    hy = [row("a", "t", True, "answered", [J(1, 1, "yes"), J(2, 1, "no")]), row("b", "t", True, "refused"), row("c", "t", True, "answered", [J(1, 1, "yes")])]
+    de = [row("a", "t", True, "answered", [J(1, 1, "yes"), J(2, 1, "yes")]), row("b", "t", True, "answered", [J(1, 1, "yes")]), row("c", "t", True, "refused")]
+    p = paired_hybrid_vs_dense(hy, de)
+    assert p["outcomes"] == {"both_answered": 1, "only_hybrid_answered": 1, "only_dense_answered": 1, "both_refused": 0, "other": 0}
+    assert p["faithfulness_both_verified"] == {"win": 0, "tie": 0, "loss": 1}
