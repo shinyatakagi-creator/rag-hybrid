@@ -21,7 +21,7 @@ from rag.retrieve import QueryEmbedder, hybrid
 
 # USD per 1M tokens (input, output), standard pricing. Source: platform.claude.com/docs/en/about-claude/pricing,
 # checked 2026-10-23. A model not listed is refused rather than guessed. Thinking tokens are part of output_tokens.
-PRICES = {"claude-sonnet-5-5": (2.00, 10.00)}
+PRICES = {"claude-sonnet-5-5": (2.00, 10.00), "claude-haiku-5-5": (0.10, 0.50)}  # Haiku 5.5: prompts up to 100K tokens ($0.50 / $2.50 above)
 MAX_CHUNKS, PER_DOC = 8, 2
 RETRIEVE_K = 40  # fused candidates considered before the per-doc context cap
 MAX_TOKENS = 4000  # ceiling for thinking + answer; also the worst case used for the spend guard
@@ -127,7 +127,8 @@ def generate(client, guard: SpendGuard, model: str, question: str, chunks: list[
     user = build_user_message(question, chunks)
     est = estimate(SYSTEM, user, model)
     result = {"question": question, "model": model, "effort": EFFORT, "estimate": est,
-              "chunks": [{"n": i, "chunk_id": c["chunk_id"], "doc_id": c["doc_id"], "heading_path": c["heading_path"], "url": c["url"]}
+              "chunks": [{"n": i, "chunk_id": c["chunk_id"], "doc_id": c["doc_id"], "heading_path": c["heading_path"], "url": c["url"],
+                          "content": c["content"]}  # stored so a logged answer can be verified without the index
                          for i, c in enumerate(chunks, 1)]}
     if dry_run:
         return result
