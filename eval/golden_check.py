@@ -20,7 +20,7 @@ from eval.docids import LIST_PATH, read_list
 from eval.overlap import FLAG_DISTINCTIVE, FLAG_RATIO, detect_exact_terms, doc_frequency, flags_for, page_texts, question_metrics
 
 TYPES = ("exact_term", "conceptual", "mixed", "unanswerable")
-TARGETS = {"exact_term": 10, "conceptual": 20, "mixed": 15, "unanswerable": 5}  # the 50-question plan
+TARGETS = {"exact_term": 8, "conceptual": 10, "mixed": 8, "unanswerable": 4}  # the 30-question plan (owner, 2026-10-23)
 KEYS = {"id", "type", "question", "expected_doc_ids", "reference_answer", "answerable"}
 OPTIONAL = {"note"}  # free text; a non-empty note on a question with more than 3 expected docs silences that warning
 MAX_EXPECTED = 3

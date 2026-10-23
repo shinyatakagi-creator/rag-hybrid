@@ -138,7 +138,7 @@ def test_file_check_counts_types_flags_duplicates_and_bad_json(tmp_path):
     p.write_text("\n".join([json.dumps(good()), json.dumps(good()), "{not json", json.dumps(good(id="m1", type="mixed"))]), encoding="utf8")
     errors, counts, summary, warnings = check_file(str(p), ROWS)
     assert any("duplicate id" in e for e in errors[2]) and "invalid JSON" in errors[3][0] and 4 not in errors
-    assert counts["exact_term"] == 2 and counts["mixed"] == 1 and "exact_term: 2 (plan 10)" in summary and warnings == {}
+    assert counts["exact_term"] == 2 and counts["mixed"] == 1 and "exact_term: 2 (plan 8)" in summary and warnings == {}
 
 
 def test_warnings_do_not_fail_the_check_command(tmp_path, capsys):

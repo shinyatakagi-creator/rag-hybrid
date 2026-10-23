@@ -1,4 +1,6 @@
-# Status (2026-10-24, written for a context handoff)
+# Status (2026-10-23, written for a context handoff)
+
+The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
 **Current phase: Phase 7, golden set (checkpoint 2).** Phases 0-6 are built and committed. No retrieval eval and no answer generation until the golden set is final. `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last commit: `8985644` (224 tests passed there).
 
@@ -20,27 +22,15 @@
 - **Overlap tools** (`8985644`): `python -m eval.overlap_check --question "..." --doc-id <id>` (no API calls) and a per-type overlap summary in `golden_check` (`--json-out eval/results/golden_overlap.json` for README figures). One implementation in `eval/overlap.py`; fixed a bug where an exact term's words were hidden from the rare-term count even when used in plain prose. Under the shared tools 33 of 38 drafts would be flagged (d002 flips); the drafts files were not regenerated.
 - **Checkpoint-4 sampler design recorded, not built** (it needs real golden-set answers, so it comes after `answer_eval`): blind labelling (the labeller never sees the verifier's verdict, reason or claim statuses) and a stratified sample with every `partial` and `no` plus random `yes` to make 25.
 
-## Current plan: a question kit for Gemini, target counts 8 / 10 / 8 / 4
-Per the owner's latest message: build `eval/question_kit.md` (no API calls) as raw material for writing questions with Gemini, with target counts **8 / 10 / 8 / 4**. The message did not say which types the four numbers are. **Unconfirmed reading:** the kit's sections in order, A exact-term 8 (of 12 candidates), B mixed 10, C conceptual 8 (of 12 passages), D unanswerable 4 = 30 questions. `golden_check` and the README still assume the earlier 10 / 20 / 15 / 5 = 50 plan and need updating once the counts are confirmed.
+## Current plan: 30-question golden set via a question kit for Gemini
+**Owner decisions (2026-10-23):** target counts are **8 exact_term / 8 mixed / 10 conceptual / 4 unanswerable = 30** (`golden_check` `TARGETS` and `GOLDEN_README.md` updated). The Gemini route replaces the 38 model drafts; `eval/golden_drafts.*` stay committed as a record, no further review. The owner produces `eval/golden_owner.jsonl` from Gemini using the kit and verifies the pages himself. Checkpoint 3 (trial licence) waits until the retrieval eval.
 
-**State of the kit (UNCOMMITTED, three untracked files):**
-- `eval/build_question_kit.py`: deterministic generator (seed 11, no API calls). Builds A (12 rare terms in 1-5 docs: flags, fields, annotation keys, event reasons, error strings, each with a 3-6 line excerpt), B (10 more, each with a verbatim fact about the term), C (12 passages from different pages with each excerpt's 5 rarest tokens), D (4 real facts that live only in `command-line-tools-reference`, `reference/kubectl`, `kubernetes-api`, with `term_stats` proof the answer string appears in 0 indexed chunks, plus 2 off-topic questions). It checks its own constraints and fails the build if one does not hold.
-- `eval/question_kit.md`: its generated output (A=12, B=10, C=12, D=4 + 2 off-topic). Excerpt blocks use 4-backtick fences so they cannot break the markdown.
-- `tests/test_question_kit.py`: 13 tests, **12 pass, 1 fails** (`test_fact_must_mention_the_term_in_prose_and_say_something_about_it`).
-- **Known bug found by that failing test, not yet fixed:** `extract_fact` rejects any sentence made only of letters, digits, spaces and ``.-/` ``-characters (a `re.fullmatch` meant to drop bare identifiers), so section B's facts are biased toward sentences containing commas, colons or parentheses. Fix: replace that check with a minimum word count, regenerate the kit (`python -m eval.build_question_kit`), re-read section B, rerun the tests (one test compares the committed kit file with the generator output), then commit the three files.
-- Handing the kit to Gemini is the owner's action; nothing here sends anything anywhere.
-
-## Open decisions (owner)
-1. Confirm the 8 / 10 / 8 / 4 mapping (and so the total of 30 vs the earlier 50); then I update `golden_check` targets and the README.
-2. Do the 38 model drafts still get reviewed (keep / cut / choose `expected_doc_ids`), or does the Gemini route replace them?
-3. Write the `exact_term` and `unanswerable` questions into `eval/golden_owner.jsonl` (check with `python -m eval.golden_check`; overlap with `python -m eval.overlap_check`).
-4. Checkpoint 3: start the native-RRF trial licence yourself (`POST _license/start_trial?acknowledge=true`); the cluster is on the basic licence. Needed only for the native vs Python cross-check.
-5. Checkpoint 4 (later): hand-label 25 verifier judgements; checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
+**The kit (committed):** `eval/build_question_kit.py` (deterministic, seed 11, no API calls) generates `eval/question_kit.md`: A exact-term 12 candidates, B mixed 10 (each with a verbatim fact), C conceptual 12 passages, D unanswerable 4 (+2 off-topic). `extract_fact` now requires at least `MIN_FACT_WORDS` (6) words instead of rejecting letters-only sentences; the regenerated kit is byte-identical to the old one (the bug did not change this seed's picks), and the 13 kit tests pass. Handing the kit to Gemini is the owner's action.
 
 ## Next steps
-1. Me: fix `extract_fact`, regenerate and re-read the kit, run the full suite, commit the kit.
-2. You: answer the decisions above; produce the final `eval/golden.jsonl` (I renumber ids to `q001`...).
-3. Then Phase 7: `eval/retrieval_eval.py` (exhausted-list rule from `eval/metrics.py`, pool sweep 50/100/200, six chunker x mode rows split by question type), `eval/answer_eval.py`, the checkpoint-4 sampler, then Phase 8 (API, Docker, separate small query-embedding cache because a cache miss streams the 273 MB file).
+1. You: produce `eval/golden_owner.jsonl`, check with `python -m eval.golden_check` and `python -m eval.overlap_check`; I merge and renumber to `eval/golden.jsonl` (`q001`...).
+2. Then Phase 7: `eval/retrieval_eval.py` (exhausted-list rule from `eval/metrics.py`, pool sweep 50/100/200, six chunker x mode rows split by question type), `eval/answer_eval.py`, the checkpoint-4 sampler; checkpoint 3 (trial licence, native vs Python cross-check) happens at the retrieval eval; then Phase 8 (API, Docker, small query-embedding cache).
+3. Checkpoint 4 (hand-label 25 verifier judgements) and checkpoint 5 (README results, CV bullet) come later.
 
 ## Spend so far: about $0.2895 of the $5 limit (no API calls since the drafting run)
 | Item | Cost |
@@ -57,4 +47,4 @@ Embedding and generation figures are API-reported usage; the ~652 query-embeddin
 ## Resuming
 - ES container `rag-hybrid-es-1`; `rag-docs` lives in a Docker volume (`docker compose up -d` if Docker was restarted).
 - Local only, not in git: `.env` (both API keys), `data/` (corpus checkout, chunks, the 273+ MB embedding cache). Activate with `source .venv/bin/activate`.
-- Run `pytest -q` first: expect 1 failure until `extract_fact` is fixed (see above).
+- Run `pytest -q` first: expect all tests to pass.

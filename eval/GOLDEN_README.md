@@ -1,9 +1,10 @@
 # Golden set: fields, doc_ids, helpers
 
-The final set is `eval/golden.jsonl` (one JSON object per line, 50 questions). You write the 10 `exact_term` and 5
-`unanswerable` questions into **`eval/golden_owner.jsonl`**; `python -m eval.draft_questions` drafts the `conceptual`
-(about 20) and `mixed` (about 15) candidates into `eval/golden_drafts.jsonl`, and you choose the final
-`expected_doc_ids`. `eval/golden_template.jsonl` shows one example line per type (its REPLACE placeholders make it fail
+The final set is `eval/golden.jsonl` (one JSON object per line, 30 questions: 8 `exact_term`, 8 `mixed`,
+10 `conceptual`, 4 `unanswerable`). The owner writes them into **`eval/golden_owner.jsonl`** using `eval/question_kit.md`
+(raw material for Gemini, built by `python -m eval.build_question_kit`, no API calls) and chooses the final
+`expected_doc_ids`. `eval/golden_drafts.jsonl` (38 model drafts from `eval.draft_questions`) is kept only as a record of
+that earlier route and is not reviewed further. `eval/golden_template.jsonl` shows one example line per type (its REPLACE placeholders make it fail
 the checker on purpose).
 
 ## Fields
@@ -45,7 +46,7 @@ the interesting ones sit next to the corpus (for example a kubelet flag default,
 python -m eval.term_stats --term=--max-requests-inflight --term=maxUnavailable --show 10
 python -m eval.term_stats -- --max-requests-inflight
 
-# validate your file: format, known doc_ids with chunks, at least 1 expected doc (warning above 3), counts against the 10/20/15/5 plan
+# validate your file: format, known doc_ids with chunks, at least 1 expected doc (warning above 3), counts against the 8/10/8/4 plan (exact_term / conceptual / mixed / unanswerable)
 python -m eval.golden_check eval/golden_owner.jsonl
 ```
 
