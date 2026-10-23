@@ -113,6 +113,45 @@ def judge(client, guard, model, question, reference, sentences) -> dict:
     return {**j, "usage": usage, "cost_usd": actual, "latency_s": round(time.time() - t0, 2)}
 
 
+# -- judge controls (pre-registered: 8 controls built from existing heading/dense answers) ----------------------------------------
+# swap: the answer of `answer_of` graded against the question and reference of the unrelated question `question_of`;
+# edit: the answer with exact text replacements (a changed number or an inverted claim); reword: a hand-written faithful rewording.
+CONTROLS = [
+    {"id": "S1", "kind": "swapped", "answer_of": "e002", "question_of": "c010"},
+    {"id": "S2", "kind": "swapped", "answer_of": "m001", "question_of": "c005"},
+    {"id": "S3", "kind": "swapped", "answer_of": "e005", "question_of": "e004"},
+    {"id": "A1", "kind": "inverted claim", "answer_of": "m002", "edits": [("disables the API Priority and Fairness feature", "enables the API Priority and Fairness feature"),
+                                                                        ("is disabled", "is enabled")]},
+    {"id": "A2", "kind": "changed number", "answer_of": "m003", "edits": [("Cosign 2.0 requires", "Cosign 1.0 requires")]},
+    {"id": "A3", "kind": "inverted claim", "answer_of": "m006", "edits": [("the kubelet rejects Pods that use `bindMountOptions`.", "the kubelet accepts Pods that use `bindMountOptions` and ignores the option.")]},
+    {"id": "R1", "kind": "faithful rewording", "answer_of": "e004", "reword": "In coordinated leader election, the Lease's `acquireTime` field stores the time at which leadership was obtained."},
+    {"id": "R2", "kind": "faithful rewording", "answer_of": "e008", "reword": "Webhook authentication tokens bound to a MutatingWebhookConfiguration get the key `authentication.kubernetes.io/mutatingwebhookconfiguration-uid` "
+                                                                  "added to `.status.user.extra` once the token has been verified through TokenReview."},
+]
+
+
+def control_targets(golden, gens) -> list[dict]:
+    gold = {q["id"]: q for q in golden}
+    out = []
+    for c in CONTROLS:
+        base = " ".join(x["sentence"] for x in gens[("heading/dense", c["answer_of"])]["answer"]["sentences"])
+        text = base
+        for old, new in c.get("edits", []):
+            assert old in text, f"control {c['id']}: {old!r} not in the answer"
+            text = text.replace(old, new)
+        if "reword" in c:
+            text = c["reword"]
+        q = gold[c.get("question_of", c["answer_of"])]
+        out.append({"config": "control", "qid": c["id"], "type": c["kind"], "question": q["question"], "reference": q["reference_answer"], "sentences": [{"sentence": text}],
+                    "expected": "correct" if c["kind"] == "faithful rewording" else "wrong", "answer_of": c["answer_of"]})
+    return out
+
+
+def caught(j: dict) -> bool:
+    """A wrong control counts as caught when the judge says the key facts are not covered or that it contradicts the reference."""
+    return j["key_facts_covered"] == "no" or j["contradicts_reference"] == "yes"
+
+
 def targets(golden, gens) -> list[dict]:
     out = []
     for config in CONFIGS:
@@ -134,9 +173,10 @@ def main(argv=None) -> int:
     golden = load_golden("eval/golden.jsonl")
     gens = read_log(GEN_LOG, lambda r: (r["config"], r["qid"]))
     ts = targets(golden, gens)
+    ctl = control_targets(golden, gens)
     done = read_log(LOG, lambda r: (r["config"], r["qid"]))
     if a.dry_run:
-        todo = [t for t in ts if (t["config"], t["qid"]) not in done]
+        todo = [t for t in ts + ctl if (t["config"], t["qid"]) not in done]
         tin = [int((len(SYSTEM) + len(build_message(t["question"], t["reference"], t["sentences"]))) / CHARS_PER_TOKEN) for t in todo]
         typ_out = 90  # assumption: two enums + a one-line reason; the real figure comes from usage
         print(f"correctness check: {len(todo)} answered answerable (config, question) pairs ({', '.join(f'{c} {sum(t['config'] == c for t in todo)}' for c in CONFIGS)}), model {model}, effort {EFFORT}\n"
@@ -150,7 +190,7 @@ def main(argv=None) -> int:
             return 2
         import anthropic
         client, guard = anthropic.Anthropic(), SpendGuard(float(os.environ.get("MAX_SPEND_USD", "5")))
-        for t in ts:
+        for t in ts + ctl:
             if (t["config"], t["qid"]) in done:
                 continue
             rec = {"ts": datetime.now(timezone.utc).isoformat(), "config": t["config"], "qid": t["qid"], "type": t["type"], "model": model, "effort": EFFORT}
@@ -162,12 +202,15 @@ def main(argv=None) -> int:
                 f.write(json.dumps(rec, ensure_ascii=False) + "\n")
             print(f"{t['config']} {t['qid']}: " + (rec.get("error") or f"covered={rec['key_facts_covered']} contradicts={rec['contradicts_reference']}") + f" (spent ${guard.spent:.5f})")
         done = read_log(LOG, lambda r: (r["config"], r["qid"]))
-    report(ts, done, model)
+    report(ts, ctl, done, model)
     return 0
 
 
-def report(ts, done, model) -> None:
+def report(ts, ctl, done, model) -> None:
     by = {(t["config"], t["qid"]): t for t in ts}
+    cby = {(t["config"], t["qid"]): t for t in ctl}
+    controls = [{**cby[k], **v} for k, v in done.items() if k in cby and "error" not in v]
+    ctl_errors = [k[1] for k, v in done.items() if k in cby and "error" in v]
     judged = [{**by[k], **v} for k, v in done.items() if k in by and "error" not in v]
     errors = [k for k, v in done.items() if "error" in v]
     summ = {}
@@ -181,19 +224,34 @@ def report(ts, done, model) -> None:
     cost = sum(v.get("cost_usd") or 0 for v in done.values())
     doc = {"meta": {"timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"), "git": git_info(), "judge_model": model, "effort": EFFORT, "max_tokens": MAX_TOKENS,
                     "prompt": SYSTEM, "schema": SCHEMA, "cost_usd": round(cost, 6), "review_sample": {"clean_sampled": SAMPLE_OK, "seed": SEED}}, "summary": summ,
-           "judgements": [{k: r[k] for k in ("config", "qid", "type", "key_facts_covered", "contradicts_reference", "reason")} for r in judged], "errors": [list(k) for k in errors]}
+           "judgements": [{k: r[k] for k in ("config", "qid", "type", "key_facts_covered", "contradicts_reference", "reason")} for r in judged], "errors": [list(k) for k in errors],
+           "controls": [{k: r[k] for k in ("qid", "type", "expected", "answer_of", "key_facts_covered", "contradicts_reference", "reason")} | {"caught": caught(r), "clean": is_clean(r)} for r in controls],
+           "control_errors": ctl_errors}
     Path(OUT + ".json").write_text(json.dumps(doc, indent=1))
     L = ["# Correctness check", "", f"Judge `{model}` (effort {EFFORT}); cost ${cost:.4f}. Pre-registered; the judge sees the question, the reference answer and the answer text only. "
          "It measures agreement with the reference answers, which were written from the expected pages; it is not an independent truth check, and the judge itself is unvalidated.", "",
          "| config | answers judged | covered yes | partial | no | contradicts reference | clean (yes and no contradiction) | errors |", "|---|---|---|---|---|---|---|---|"]
     for c, s in summ.items():
         L.append(f"| {c} | {s['answered_judged']} | {s['covered_yes']} | {s['covered_partial']} | {s['covered_no']} | {s['contradicts']} | {s['clean']} | {s['errors']} |")
+    wrong = [r for r in controls if r["expected"] == "wrong"]
+    right = [r for r in controls if r["expected"] == "correct"]
+    L += ["", "## Judge controls (pre-registered: 3 swapped to an unrelated question, 3 with an inverted claim or changed number, 2 faithful rewordings; built from heading/dense answers)", "",
+          f"Wrong controls caught (key facts `no` or contradicts `yes`): **{sum(caught(r) for r in wrong)} of {len(wrong)}**. Correct controls wrongly failed (not clean): **{sum(not is_clean(r) for r in right)} of {len(right)}**. "
+          f"Control errors (invalid judge output): {len(ctl_errors)}. Controls are excluded from the table above.", "",
+          "| control | kind | built from | expected | covered | contradicts | caught / clean | reason |", "|---|---|---|---|---|---|---|---|"]
+    for r in controls:
+        L.append(f"| {r['qid']} | {r['type']} | {r['answer_of']} | {r['expected']} | {r['key_facts_covered']} | {r['contradicts_reference']} | "
+                 f"{'caught' if caught(r) else 'missed'} / {'clean' if is_clean(r) else 'not clean'} | {r['reason']} |")
     Path(OUT + ".md").write_text("\n".join(L) + "\n", encoding="utf8")
-    R = ["# Correctness review table", "", f"Every answer that is not clean plus {SAMPLE_OK} random clean ones (seed {SEED}), for the owner's spot-check. Verdict = key facts covered / contradicts reference. Marked `random clean` rows are the sampled ones.", ""]
-    for r in sel:
+    cell = lambda x: x.replace("|", "\\|").replace("\n", " ")
+    R = ["# Correctness review table", "", f"Every answer that is not clean (key facts partial/no, or contradicts the reference) plus {SAMPLE_OK} random clean ones (seed {SEED}, marked `random clean`), for your spot-check of about 10. "
+         "Fill the last column with one of: answer wrong / reference too narrow / judge wrong. Judge controls are in `correctness_check.md`, not here.", "",
+         "| # | id / config | question | reference | answer | verdict (covered / contradicts) | reason | your mark |", "|---|---|---|---|---|---|---|---|"]
+    for n, r in enumerate(sel, 1):
         tag = "random clean" if is_clean(r) else "not clean"
-        R += [f"## {r['qid']} / {r['config']} ({r['type']}) [{tag}]", "", f"**Question:** {r['question']}", "", f"**Reference:** {r['reference']}", "",
-              f"**Answer:** {' '.join(s['sentence'] for s in r['sentences'])}", "", f"**Verdict:** covered = {r['key_facts_covered']}, contradicts = {r['contradicts_reference']}", "", f"**Reason:** {r['reason']}", ""]
+        R.append(f"| {n} | {r['qid']} / {r['config']} ({tag}) | {cell(r['question'])} | {cell(r['reference'])} | {cell(' '.join(x['sentence'] for x in r['sentences']))} | "
+                 f"{r['key_facts_covered']} / {r['contradicts_reference']} | {cell(r['reason'])} | |")
+    R.append("")
     Path(REVIEW).write_text("\n".join(R), encoding="utf8")
     print(f"saved {OUT}.json/.md and {REVIEW} ({len(sel)} rows to review)")
 

@@ -1,0 +1,517 @@
+{
+ "meta": {
+  "timestamp": "2026-10-23T10:48:16+00:00",
+  "git": {
+   "sha": "72a224a3ace87f5a21f63b67fc3c762c82293a1a",
+   "dirty_files": [
+    "M eval/correctness_check.py",
+    " M tests/test_correctness_check.py",
+    "?? eval/golden_owner.v1.jsonl"
+   ]
+  },
+  "judge_model": "claude-haiku-5-5",
+  "effort": "low",
+  "max_tokens": 1500,
+  "prompt": "You grade an answer to a Kubernetes documentation question against a reference answer. The reference answer was written by a person from the documentation page(s) and states the key facts the answer should contain.\n\nReturn two judgements:\n1. key_facts_covered:\n   - yes: the answer states all the key facts of the reference answer. Paraphrase, different wording and equivalent numbers or names count as stating them. Extra correct detail not in the reference is fine.\n   - partial: the answer states some but not all of the key facts.\n   - no: the answer states none of the key facts, or answers a different question.\n2. contradicts_reference:\n   - yes: some statement in the answer is incompatible with the reference answer (a different value, a different component, the opposite behaviour).\n   - no: nothing in the answer conflicts with the reference. Detail the reference does not mention is not a contradiction.\n\nJudge ONLY against the reference answer. Do not use your own knowledge of Kubernetes and do not give credit or blame because something is true or false in general. Add a one-line reason (under 30 words) naming the decisive point.",
+  "schema": {
+   "type": "object",
+   "properties": {
+    "key_facts_covered": {
+     "type": "string",
+     "enum": [
+      "yes",
+      "partial",
+      "no"
+     ]
+    },
+    "contradicts_reference": {
+     "type": "string",
+     "enum": [
+      "yes",
+      "no"
+     ]
+    },
+    "reason": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "key_facts_covered",
+    "contradicts_reference",
+    "reason"
+   ],
+   "additionalProperties": false
+  },
+  "cost_usd": 0.007336,
+  "review_sample": {
+   "clean_sampled": 6,
+   "seed": 4
+  }
+ },
+ "summary": {
+  "heading/hybrid": {
+   "answered_judged": 21,
+   "errors": 0,
+   "covered_yes": 18,
+   "covered_partial": 3,
+   "covered_no": 0,
+   "contradicts": 2,
+   "clean": 18
+  },
+  "heading/dense": {
+   "answered_judged": 23,
+   "errors": 0,
+   "covered_yes": 18,
+   "covered_partial": 5,
+   "covered_no": 0,
+   "contradicts": 2,
+   "clean": 18
+  }
+ },
+ "judgements": [
+  {
+   "config": "heading/hybrid",
+   "qid": "e001",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states bindings are updated to include input subjects and extra subjects are removed with the flag, matching the reference; extra details are consistent."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "e002",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states the same core fact: maximum validity duration of tokens from the service account token issuer; extra details are not in the reference but do not conflict."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "e003",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states that when advertise and bind addresses are unset, the host's default interface is used, matching the reference; extra detail about peer flags is not contradictory."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "e004",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "The answer states acquireTime records when leadership was acquired, matching the reference exactly with extra context about the Lease API."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "e005",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states preBind performs work required before binding, matching the reference; extra details about volumes and error handling are not in the reference but do not conflict."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "e006",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states spec.compositePodGroupTemplates defines templates that controllers use at runtime to create CompositePodGroup and PodGroup objects maintaining scheduling state, matching the reference; extra details are not contradictory."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "e007",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer covers NoSchedule taint, need for second initialization by external controller, unusable until cloud-controller-manager initializes and removes taint; consistent with reference."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "e008",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states tokens bound to MutatingWebhookConfiguration carry the uid key, populated in .status.user.extra via TokenReview, matching the reference; extra detail about TokenRequest is not contradictory."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "m001",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states that newly created ServiceAccounts get Secrets containing both old and new CAs, matching the reference fully."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "m002",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states that the flag disables API Priority and Fairness, matching the reference; extra detail about inflight limits is not in the reference but doesn't conflict."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "m003",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer names --certificate-oidc-issuer as the required additional option, matching the reference; extra details about issuer value and signature files are not in the reference and do not conflict."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "m004",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states that gated pods are not considered ready for scheduling until all gates are removed, matching the reference; extra details are consistent with it."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "m005",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states nodes missing the topology key are bypassed and their pods excluded from maxSkew calculation, matching the reference."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "m006",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states the same key fact: runtime not advertising support leads kubelet to reject Pods using bindMountOptions; extra CRI detail is consistent."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "m007",
+   "type": "mixed",
+   "key_facts_covered": "partial",
+   "contradicts_reference": "yes",
+   "reason": "Answer says extra user-added permissions survive reconciliation, contradicting reference's implication that accidental modifications are repaired at start-up; it also frames the outcome as depending on annotation rather than a plain 'No' by default."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "m008",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states the OOMKilled container leaves custom packet filtering rules behind, redirecting DNS to an unhealthy local endpoint until restart, matching the reference."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "c003",
+   "type": "conceptual",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states Server-Side Apply tracks field management via metadata.managedFields recording which field manager owns each field, matching the reference; extra details are not contradictory."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "c004",
+   "type": "conceptual",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer covers arbitrary Pods mounting any Secret including a privileged ServiceAccount's token, and using arbitrary ServiceAccounts for API actions, matching the reference; extra detail is not contradictory."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "c006",
+   "type": "conceptual",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states fleet-wide unique naming, flexibility to switch between dedicated and shared clusters, and multi-cluster tooling like service meshes, matching the reference."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "c007",
+   "type": "conceptual",
+   "key_facts_covered": "partial",
+   "contradicts_reference": "yes",
+   "reason": "Correctly says LimitRange defaults are applied, but gives 1 GiB request and limit instead of the reference's 256MiB request and 512MiB limit, and omits the request-matches-limit rule."
+  },
+  {
+   "config": "heading/hybrid",
+   "qid": "c008",
+   "type": "conceptual",
+   "key_facts_covered": "partial",
+   "contradicts_reference": "no",
+   "reason": "Answer correctly identifies ownerReferences and garbage cleanup on owner deletion, but omits the ReplicaSet example, owner name/UID detail, and cascading deletion modes (background, foreground, orphan)."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "e001",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states the flag removes extra subjects while bindings include input subjects, matching the reference; extra detail about role permissions is not contradictory."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "e002",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states the reference's key fact (maximum validity duration of tokens from the service account token issuer) and adds correct extra detail not in the reference."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "e003",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states that when advertise and bind addresses are unset, the host's default interface is used, matching the reference; extra detail about peer-advertise flags is not contradictory."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "e004",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "The answer states acquireTime records the timestamp when leadership was acquired, matching the reference exactly."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "e005",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states preBind performs any work required before binding, matching the reference; extra details about volumes and error handling are consistent with it."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "e006",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer covers that compositePodGroupTemplates are templates in the Workload that controllers use to create CompositePodGroup and PodGroup runtime objects maintaining scheduling state, matching the reference."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "e007",
+   "type": "exact_term",
+   "key_facts_covered": "partial",
+   "contradicts_reference": "no",
+   "reason": "Answer covers marking as unusable until cloud-controller-manager initializes and taint removal, but omits the second-initialization requirement and NoSchedule effect."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "e008",
+   "type": "exact_term",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states the same key facts: tokens bound to MutatingWebhookConfiguration, verified via TokenReview, key populated in .status.user.extra; no conflicts."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "m001",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states newly created ServiceAccounts get Secrets with both old and new CAs after the flag update and restart, matching the reference."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "m002",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states the flag disables API Priority and Fairness, matching the reference; the extra detail about watch requests and max-requests-inflight is not in the reference and does not conflict."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "m003",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states the required --certificate-oidc-issuer alongside --certificate-identity, matching the reference; extra details are not contradictory."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "m004",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states gates keep the pod from being considered for scheduling until removed; extra details about creation-time initialization and removal order are consistent with the reference."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "m005",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states nodes missing the topology key are bypassed and their pods excluded from maxSkew, matching the reference; the extra example is consistent."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "m006",
+   "type": "mixed",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer matches reference: runtime lacking support leads kubelet to reject pods using bindMountOptions; extra CRI field detail is compatible."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "m007",
+   "type": "mixed",
+   "key_facts_covered": "partial",
+   "contradicts_reference": "yes",
+   "reason": "Answer says manual additions survive restart when autoupdate is true, contradicting reference that start-up auto-reconciliation repairs accidental modifications; it misses that default is reset at each start."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "c001",
+   "type": "conceptual",
+   "key_facts_covered": "partial",
+   "contradicts_reference": "no",
+   "reason": "Answer mentions reclaiming node-level resources and removing unused images, but omits the garbage collection of dead pods and containers that the reference lists first."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "c002",
+   "type": "conceptual",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Names metrics-server, its kubelet querying, metrics.k8s.io API, and use by HPA and kubectl top, matching the reference fully."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "c003",
+   "type": "conceptual",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states Server-Side Apply tracks field management instead of last applied state and that field managers per field are recorded; it omits the metadata.managedFields name but conveys it."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "c004",
+   "type": "conceptual",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer covers mounting arbitrary Secrets (including higher-privilege ServiceAccount tokens) and using arbitrary ServiceAccounts to act as another workload, matching the reference; extra details don't conflict."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "c005",
+   "type": "conceptual",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Covers --runtime-config with batch/v1=false example, the api/<version> form, and the required restart of API server and controller manager; nothing conflicts with the reference."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "c006",
+   "type": "conceptual",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states the fleet-wide unique naming best practice and both reasons (switching dedicated/shared clusters, multi-cluster tooling like service meshes), matching the reference."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "c007",
+   "type": "conceptual",
+   "key_facts_covered": "partial",
+   "contradicts_reference": "yes",
+   "reason": "Answer says the default request and limit were 1 GiB each, contradicting the reference's 256MiB request and 512MiB limit; it omits the request-matches-limit rule for limit-only containers."
+  },
+  {
+   "config": "heading/dense",
+   "qid": "c008",
+   "type": "conceptual",
+   "key_facts_covered": "partial",
+   "contradicts_reference": "no",
+   "reason": "Correctly names ownerReferences and deletion cleanup via owner references, but uses a Job example rather than ReplicaSet and omits garbage collection cascading/orphan details."
+  }
+ ],
+ "errors": [],
+ "controls": [
+  {
+   "qid": "S1",
+   "type": "swapped",
+   "expected": "wrong",
+   "answer_of": "e002",
+   "key_facts_covered": "no",
+   "contradicts_reference": "no",
+   "reason": "Answer describes the kube-apiserver --service-account-max-token-expiration flag, which is unrelated to freeing node capacity for DaemonSet pods; it does not address the question at all.",
+   "caught": true,
+   "clean": false
+  },
+  {
+   "qid": "S2",
+   "type": "swapped",
+   "expected": "wrong",
+   "answer_of": "m001",
+   "key_facts_covered": "no",
+   "contradicts_reference": "no",
+   "reason": "Answer discusses --root-ca-file and ServiceAccount CA bundles, not --runtime-config for disabling API groups; it answers a different question.",
+   "caught": true,
+   "clean": false
+  },
+  {
+   "qid": "S3",
+   "type": "swapped",
+   "expected": "wrong",
+   "answer_of": "e005",
+   "key_facts_covered": "no",
+   "contradicts_reference": "no",
+   "reason": "The answer discusses scheduler preBind plugins and never addresses the acquireTime field or when leadership was acquired.",
+   "caught": true,
+   "clean": false
+  },
+  {
+   "qid": "A1",
+   "type": "inverted claim",
+   "expected": "wrong",
+   "answer_of": "m002",
+   "key_facts_covered": "no",
+   "contradicts_reference": "yes",
+   "reason": "The answer claims setting the flag to false enables Priority and Fairness, directly opposite to the reference stating it disables the feature.",
+   "caught": true,
+   "clean": false
+  },
+  {
+   "qid": "A2",
+   "type": "changed number",
+   "expected": "wrong",
+   "answer_of": "m003",
+   "key_facts_covered": "partial",
+   "contradicts_reference": "yes",
+   "reason": "Answer names both required options but attributes them to Cosign 1.0, while the reference says Cosign 2.0.",
+   "caught": true,
+   "clean": false
+  },
+  {
+   "qid": "A3",
+   "type": "inverted claim",
+   "expected": "wrong",
+   "answer_of": "m006",
+   "key_facts_covered": "no",
+   "contradicts_reference": "yes",
+   "reason": "Answer says kubelet accepts the pod and ignores the option, while reference says kubelet rejects Pods using bindMountOptions when runtime lacks support.",
+   "caught": true,
+   "clean": false
+  },
+  {
+   "qid": "R1",
+   "type": "faithful rewording",
+   "expected": "correct",
+   "answer_of": "e004",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states acquireTime records the time leadership was obtained, matching the reference's timestamp of leadership acquisition.",
+   "caught": false,
+   "clean": true
+  },
+  {
+   "qid": "R2",
+   "type": "faithful rewording",
+   "expected": "correct",
+   "answer_of": "e008",
+   "key_facts_covered": "yes",
+   "contradicts_reference": "no",
+   "reason": "Answer states tokens bound to MutatingWebhookConfiguration get the uid key in .status.user.extra after TokenReview verification, matching the reference; it omits the name key and validating counterpart but that is not required here.",
+   "caught": false,
+   "clean": true
+  }
+ ],
+ "control_errors": []
+}

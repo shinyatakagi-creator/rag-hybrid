@@ -24,3 +24,18 @@ def test_review_selection_has_every_not_clean_row_plus_seeded_clean_sample():
     sel = review_selection(rows, n_ok=3, seed=1)
     assert {"p1", "x1"} <= {r["qid"] for r in sel} and len(sel) == 5 and sum(is_clean(r) for r in sel) == 3
     assert [r["qid"] for r in sel] == [r["qid"] for r in review_selection(rows, n_ok=3, seed=1)]  # deterministic
+
+
+def test_controls_apply_to_the_saved_answers_and_are_balanced():
+    from pathlib import Path
+
+    from eval.answer_eval import GEN_LOG, read_log
+    from eval.correctness_check import CONTROLS, caught, control_targets
+    from eval.retrieval_eval import load_golden
+    if not Path(GEN_LOG).exists():
+        pytest.skip("answer_eval logs not present")
+    ts = control_targets(load_golden("eval/golden.jsonl"), read_log(GEN_LOG, lambda r: (r["config"], r["qid"])))
+    assert [t["expected"] for t in ts].count("wrong") == 6 and [t["expected"] for t in ts].count("correct") == 2 and len(ts) == len(CONTROLS) == 8
+    swapped = [t for t in ts if t["type"] == "swapped"]
+    assert len(swapped) == 3 and all(t["question"] and t["sentences"][0]["sentence"] for t in swapped)
+    assert caught(J(cov="no")) and caught(J(con="yes")) and not caught(J(cov="partial"))
