@@ -209,26 +209,26 @@ reference/access-authn-authz/webhook	https://kubernetes.io/docs/reference/access
 reference/config-api/_index	https://kubernetes.io/docs/reference/config-api/	Configuration APIs	0	0
 reference/config-api/apiserver-admission.v1	https://kubernetes.io/docs/reference/config-api/apiserver-admission.v1/	kube-apiserver Admission (v1)	6	8
 reference/config-api/apiserver-audit.v1	https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/	kube-apiserver Audit Configuration (v1)	8	12
-reference/config-api/apiserver-config.v1	https://kubernetes.io/docs/reference/config-api/apiserver-config.v1/	kube-apiserver Configuration (v1)	25	34
-reference/config-api/apiserver-config.v1alpha1	https://kubernetes.io/docs/reference/config-api/apiserver-config.v1alpha1/	kube-apiserver Configuration (v1alpha1)	23	34
-reference/config-api/apiserver-config.v1beta1	https://kubernetes.io/docs/reference/config-api/apiserver-config.v1beta1/	kube-apiserver Configuration (v1beta1)	22	32
+reference/config-api/apiserver-config.v1	https://kubernetes.io/docs/reference/config-api/apiserver-config.v1/	kube-apiserver Configuration (v1)	23	34
+reference/config-api/apiserver-config.v1alpha1	https://kubernetes.io/docs/reference/config-api/apiserver-config.v1alpha1/	kube-apiserver Configuration (v1alpha1)	22	34
+reference/config-api/apiserver-config.v1beta1	https://kubernetes.io/docs/reference/config-api/apiserver-config.v1beta1/	kube-apiserver Configuration (v1beta1)	21	32
 reference/config-api/apiserver-eventratelimit.v1alpha1	https://kubernetes.io/docs/reference/config-api/apiserver-eventratelimit.v1alpha1/	Event Rate Limit Configuration (v1alpha1)	2	4
 reference/config-api/apiserver-webhookadmission.v1	https://kubernetes.io/docs/reference/config-api/apiserver-webhookadmission.v1/	WebhookAdmission Configuration (v1)	1	2
 reference/config-api/client-authentication.v1	https://kubernetes.io/docs/reference/config-api/client-authentication.v1/	Client Authentication (v1)	4	5
 reference/config-api/client-authentication.v1beta1	https://kubernetes.io/docs/reference/config-api/client-authentication.v1beta1/	Client Authentication (v1beta1)	4	5
 reference/config-api/imagepolicy.v1alpha1	https://kubernetes.io/docs/reference/config-api/imagepolicy.v1alpha1/	Image Policy API (v1alpha1)	2	5
-reference/config-api/kube-controller-manager-config.v1alpha1	https://kubernetes.io/docs/reference/config-api/kube-controller-manager-config.v1alpha1/	kube-controller-manager Configuration (v1alpha1)	34	49
-reference/config-api/kube-proxy-config.v1alpha1	https://kubernetes.io/docs/reference/config-api/kube-proxy-config.v1alpha1/	kube-proxy Configuration (v1alpha1)	18	25
-reference/config-api/kube-scheduler-config.v1	https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1/	kube-scheduler Configuration (v1)	24	31
-reference/config-api/kubeadm-config.v1beta3	https://kubernetes.io/docs/reference/config-api/kubeadm-config.v1beta3/	kubeadm Configuration (v1beta3)	27	31
-reference/config-api/kubeadm-config.v1beta4	https://kubernetes.io/docs/reference/config-api/kubeadm-config.v1beta4/	kubeadm Configuration (v1beta4)	43	45
+reference/config-api/kube-controller-manager-config.v1alpha1	https://kubernetes.io/docs/reference/config-api/kube-controller-manager-config.v1alpha1/	kube-controller-manager Configuration (v1alpha1)	32	49
+reference/config-api/kube-proxy-config.v1alpha1	https://kubernetes.io/docs/reference/config-api/kube-proxy-config.v1alpha1/	kube-proxy Configuration (v1alpha1)	17	25
+reference/config-api/kube-scheduler-config.v1	https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1/	kube-scheduler Configuration (v1)	23	31
+reference/config-api/kubeadm-config.v1beta3	https://kubernetes.io/docs/reference/config-api/kubeadm-config.v1beta3/	kubeadm Configuration (v1beta3)	27	30
+reference/config-api/kubeadm-config.v1beta4	https://kubernetes.io/docs/reference/config-api/kubeadm-config.v1beta4/	kubeadm Configuration (v1beta4)	41	45
 reference/config-api/kubeconfig.v1	https://kubernetes.io/docs/reference/config-api/kubeconfig.v1/	kubeconfig (v1)	8	14
-reference/config-api/kubelet-config.v1	https://kubernetes.io/docs/reference/config-api/kubelet-config.v1/	Kubelet Configuration (v1)	7	8
+reference/config-api/kubelet-config.v1	https://kubernetes.io/docs/reference/config-api/kubelet-config.v1/	Kubelet Configuration (v1)	6	8
 reference/config-api/kubelet-config.v1alpha1	https://kubernetes.io/docs/reference/config-api/kubelet-config.v1alpha1/	Kubelet Configuration (v1alpha1)	7	10
-reference/config-api/kubelet-config.v1beta1	https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/	Kubelet Configuration (v1beta1)	43	54
+reference/config-api/kubelet-config.v1beta1	https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/	Kubelet Configuration (v1beta1)	41	54
 reference/config-api/kubelet-credentialprovider.v1	https://kubernetes.io/docs/reference/config-api/kubelet-credentialprovider.v1/	Kubelet CredentialProvider (v1)	4	6
 reference/config-api/kuberc.v1alpha1	https://kubernetes.io/docs/reference/config-api/kuberc.v1alpha1/	kuberc (v1alpha1)	3	5
-reference/config-api/kuberc.v1beta1	https://kubernetes.io/docs/reference/config-api/kuberc.v1beta1/	kuberc (v1beta1)	6	8
+reference/config-api/kuberc.v1beta1	https://kubernetes.io/docs/reference/config-api/kuberc.v1beta1/	kuberc (v1beta1)	5	8
 reference/debug-cluster/_index	https://kubernetes.io/docs/reference/debug-cluster/	Debug cluster	0	0
 reference/debug-cluster/flow-control	https://kubernetes.io/docs/reference/debug-cluster/flow-control/	Flow control	11	7
 reference/deprecation-policy	https://kubernetes.io/docs/reference/deprecation-policy/	Kubernetes Deprecation Policy	13	11
@@ -252,7 +252,7 @@ reference/issues-security/issues	https://kubernetes.io/docs/reference/issues-sec
 reference/issues-security/official-cve-feed	https://kubernetes.io/docs/reference/issues-security/official-cve-feed/	Official CVE Feed	1	1
 reference/issues-security/security	https://kubernetes.io/docs/reference/issues-security/security/	Kubernetes Security and Disclosure Information	2	4
 reference/kubelet-api/_index	https://kubernetes.io/docs/reference/kubelet-api/	Kubelet APIs	0	0
-reference/kubelet-api/stats.v1alpha1	https://kubernetes.io/docs/reference/kubelet-api/stats.v1alpha1/	Kubelet Summary API (v1alpha1)	12	23
+reference/kubelet-api/stats.v1alpha1	https://kubernetes.io/docs/reference/kubelet-api/stats.v1alpha1/	Kubelet Summary API (v1alpha1)	11	23
 reference/labels-annotations-taints/_index	https://kubernetes.io/docs/reference/labels-annotations-taints/	Well-Known Labels, Annotations and Taints	82	143
 reference/labels-annotations-taints/audit-annotations	https://kubernetes.io/docs/reference/labels-annotations-taints/audit-annotations/	Audit Annotations	5	12
 reference/networking/_index	https://kubernetes.io/docs/reference/networking/	Networking Reference	1	1

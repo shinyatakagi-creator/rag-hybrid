@@ -1,8 +1,8 @@
 {
- "calls": 3,
- "estimated_tokens": 66058,
- "api_reported_tokens": 66058,
+ "calls": 8,
+ "estimated_tokens": 234612,
+ "api_reported_tokens": 234612,
  "diff": 0.0,
- "estimated_cost_usd": 0.00132116,
- "actual_cost_usd": 0.00132116
+ "estimated_cost_usd": 0.004692239999999999,
+ "actual_cost_usd": 0.004692239999999999
 }

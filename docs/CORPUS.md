@@ -20,8 +20,8 @@
 
 ## Counts (from the Phase 1 run, eval/results/phase1_stats.txt)
 - **502 pages** loaded; **477 produce chunks**; the other 25 are section `_index.md` pages with no body text (front matter only).
-- Chunks (after stripping "What's next" navigation sections and the headless pages): **4,087 fixed, 4,528 heading**. 281 "What's next" sections / 30,606 tokens are removed in the loader before chunking (see NOTES.md). Earlier states: 4,211 / 4,824 (no rule), 4,103 / 4,544 (What's next stripped, 511 pages).
-- Index `rag-docs`: **8,615 docs** (4,087 fixed + 4,528 heading) from 8,593 unique embedded texts.
+- Chunks (after stripping "What's next" navigation sections and the headless pages, and decoding HTML entities outside code): **4,072 fixed, 4,527 heading**. 281 "What's next" sections / 30,606 tokens are removed in the loader before chunking; 1,281 HTML entities are decoded in prose and 109 are left inside code (see NOTES.md). Earlier states: 4,211 / 4,824 (no rule), 4,103 / 4,544 (What's next stripped, 511 pages), 4,087 / 4,528 (502 pages, entities not yet decoded).
+- Index `rag-docs`: **8,599 docs** (4,072 fixed + 4,527 heading) from 8,577 unique embedded texts. `eval/doc_ids.tsv` lists the same 502 pages (13 rows changed chunk counts, all in `reference/config-api`).
 - Front-matter bug fixed on the same date: 4 `_index.md` pages whose closing `---` is the last bytes of the file used to keep their front matter as page text (junk chunks); they are now body-less like the others.
 
 `doc_id` = page path relative to `content/en/docs/`, without extension.
