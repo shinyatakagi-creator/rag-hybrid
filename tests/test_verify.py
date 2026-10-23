@@ -205,3 +205,17 @@ def test_paraphrased_controls_are_really_paraphrases_not_copies():
     for pid, ri, text, cites in PARAPHRASES:
         chunk = snap[rows[ri]["chunks"][cites[0] - 1]["chunk_id"]]["content"]
         assert norm(text) not in norm(chunk), f"{pid} is a verbatim copy, not a paraphrase"
+
+
+def test_invalid_verdicts_carry_the_usage_of_the_billed_call():
+    from types import SimpleNamespace
+
+    from ingest.embed_cache import SpendGuard
+    from rag.verify import InvalidVerdicts, verify_answer
+
+    bad = json.dumps({"judgements": []})  # pair missing
+    resp = SimpleNamespace(usage=SimpleNamespace(input_tokens=1000, output_tokens=100), stop_reason="end_turn", content=[SimpleNamespace(type="text", text=bad)])
+    client = SimpleNamespace(messages=SimpleNamespace(create=lambda **kw: resp))
+    with pytest.raises(InvalidVerdicts) as ei:
+        verify_answer(client, SpendGuard(1.0), "claude-haiku-5-5", [{"sentence": "x", "citations": [1]}], {1: "text"})
+    assert ei.value.usage == {"input_tokens": 1000, "output_tokens": 100} and ei.value.cost_usd == pytest.approx(0.00015)

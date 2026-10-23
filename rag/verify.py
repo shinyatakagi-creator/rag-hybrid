@@ -79,7 +79,9 @@ def derive_verdict(claims: list[dict]) -> str:
 
 
 class InvalidVerdicts(ValueError):
-    pass
+    """Bad verifier output. The call was still billed: `usage` and `cost_usd` are attached when the response arrived."""
+    usage: dict | None = None
+    cost_usd: float | None = None
 
 
 def pairs_of(sentences: list[dict]) -> list[tuple[int, int]]:
@@ -175,13 +177,17 @@ def verify_answer(client, guard: SpendGuard, model: str, sentences: list[dict], 
     actual = cost_usd(model, **usage)
     guard.settle(est["worst_case_cost"], actual)
     out.update(usage=usage, cost_usd=actual, latency_s=round(time.time() - t0, 2), stop_reason=resp.stop_reason)
-    if resp.stop_reason != "end_turn":
-        raise InvalidVerdicts(f"stop_reason={resp.stop_reason!r}; cost ${actual:.6f} was spent")
-    text = next((b.text for b in resp.content if b.type == "text"), None)
     try:
-        out["judgements"] = validate_verdicts(json.loads(text), expected)
-    except (json.JSONDecodeError, TypeError) as e:
-        raise InvalidVerdicts(f"verifier output is not valid JSON: {e}") from e
+        if resp.stop_reason != "end_turn":
+            raise InvalidVerdicts(f"stop_reason={resp.stop_reason!r}; cost ${actual:.6f} was spent")
+        text = next((b.text for b in resp.content if b.type == "text"), None)
+        try:
+            out["judgements"] = validate_verdicts(json.loads(text), expected)
+        except (json.JSONDecodeError, TypeError) as e:
+            raise InvalidVerdicts(f"verifier output is not valid JSON: {e}") from e
+    except InvalidVerdicts as e:
+        e.usage, e.cost_usd = usage, actual  # so a caller can log what the failed call cost
+        raise
     out["summary"] = summarize(sentences, out["judgements"])
     return out
 

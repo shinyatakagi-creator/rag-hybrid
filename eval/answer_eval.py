@@ -183,7 +183,7 @@ def main(argv=None) -> int:
                     r = V.verify_answer(client, guard, model_v, row["answer"]["sentences"], {c["n"]: c["content"] for c in row["chunks"]})
                     rec.update({k: v for k, v in r.items() if k != "estimate"})
                 except V.InvalidVerdicts as e:
-                    rec["error"] = str(e)
+                    rec.update(error=str(e), usage=e.usage, cost_usd=e.cost_usd)
                 with open(VER_LOG, "a", encoding="utf8") as f:
                     f.write(json.dumps(rec, ensure_ascii=False) + "\n")
                 vers = read_log(VER_LOG, lambda r: (r["config"], r["qid"]))
