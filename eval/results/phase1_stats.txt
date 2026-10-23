@@ -1,21 +1,21 @@
 What's-next sections removed in the loader: 281 (30,606 tokens)
-pages=511  tokens raw=1,484,310 cleaned=1,273,400
+pages=502  tokens raw=1,481,756 cleaned=1,270,948
 unknown shortcodes stripped: {'api-reference': 13, 'example': 4, 'link': 1, 'page-api-reference': 1, 'cve-feed': 1, 'pageinfo': 1, 'legacy-repos-deprecation': 3}  missing refs: []
 
 [fixed] -> data/chunks/fixed.jsonl
 {
- "chunks": 4103,
- "docs": 489,
+ "chunks": 4087,
+ "docs": 477,
  "tokens_min": 3,
  "tokens_median": 367,
  "tokens_max": 408,
- "tokens_total": 1374428,
+ "tokens_total": 1371872,
  "over_800": 0,
- "under_100": 132,
+ "under_100": 125,
  "unbalanced_fence": 206,
  "table_without_header": 15,
- "title_only_heading_path": 4103,
- "under_100_share": 0.0322,
+ "title_only_heading_path": 4087,
+ "under_100_share": 0.0306,
  "table_split_across_chunks": 16,
  "shortcode_shaped_fragments_anywhere": 2,
  "strict_fragments_total": 55,
@@ -47,18 +47,18 @@ unknown shortcodes stripped: {'api-reference': 13, 'example': 4, 'link': 1, 'pag
 
 [heading] -> data/chunks/heading.jsonl
 {
- "chunks": 4544,
- "docs": 489,
- "tokens_min": 15,
+ "chunks": 4528,
+ "docs": 477,
+ "tokens_min": 17,
  "tokens_median": 245.0,
  "tokens_max": 649,
- "tokens_total": 1313453,
+ "tokens_total": 1310904,
  "over_800": 0,
- "under_100": 414,
+ "under_100": 409,
  "unbalanced_fence": 0,
  "table_without_header": 0,
- "title_only_heading_path": 231,
- "under_100_share": 0.0911,
+ "title_only_heading_path": 221,
+ "under_100_share": 0.0903,
  "table_split_across_chunks": 6,
  "shortcode_shaped_fragments_anywhere": 2,
  "strict_fragments_total": 55,
@@ -83,6 +83,6 @@ unknown shortcodes stripped: {'api-reference': 13, 'example': 4, 'link': 1, 'pag
       45  reference/config-api/kubeadm-config.v1beta4
       41  concepts/workloads/controllers/deployment
 
-cleaned docs with shortcode-shaped fragments (anywhere): 2/511 ['tasks/job/parallel-processing-expansion', 'tasks/run-application/scale-stateful-set']
-pages loaded: 511; failed to load: 0 (load errors would raise); pages with no body text after front matter/shortcode cleanup, so no chunks: 22
-  concepts/storage/_index, reference/config-api/_index, reference/debug-cluster/_index, reference/encodings/_index, reference/external-api/_index, reference/kubelet-api/_index, reference/scheduling/_index, tasks/access-application-cluster/_index, tasks/administer-cluster/_index, tasks/administer-cluster/manage-resources/_index, tasks/administer-cluster/network-policy-provider/_index, tasks/configmap-secret/_index, tasks/configure-pod-container/_index, tasks/configure-pod-container/assign-resources/_index, tasks/extend-kubernetes/_index, tasks/extend-kubernetes/custom-resources/_index, tasks/inject-data-application/_index, tasks/job/_index, tasks/manage-daemon/_index, tasks/network/_index, tasks/run-application/_index, tasks/tls/_index
+cleaned docs with shortcode-shaped fragments (anywhere): 2/502 ['tasks/job/parallel-processing-expansion', 'tasks/run-application/scale-stateful-set']
+pages loaded: 502; failed to load: 0 (load errors would raise); pages with no body text after front matter/shortcode cleanup, so no chunks: 25
+  concepts/storage/_index, reference/config-api/_index, reference/debug-cluster/_index, reference/encodings/_index, reference/external-api/_index, reference/instrumentation/_index, reference/issues-security/_index, reference/kubelet-api/_index, reference/scheduling/_index, tasks/access-application-cluster/_index, tasks/administer-cluster/_index, tasks/administer-cluster/manage-resources/_index, tasks/administer-cluster/network-policy-provider/_index, tasks/configmap-secret/_index, tasks/configure-pod-container/_index, tasks/configure-pod-container/assign-resources/_index, tasks/extend-kubernetes/_index, tasks/extend-kubernetes/custom-resources/_index, tasks/inject-data-application/_index, tasks/job/_index, tasks/manage-daemon/_index, tasks/manage-kubernetes-objects/_index, tasks/network/_index, tasks/run-application/_index, tasks/tls/_index

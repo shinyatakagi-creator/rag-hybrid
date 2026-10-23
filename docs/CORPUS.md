@@ -4,11 +4,11 @@
 - Commit SHA: `6c42e266fcc1f0e0edd4805baea904e1b3cbaf9c` (main tip, 2026-10-22T23:07:34Z)
 - Local checkout: `data/k8s-src/` (shallow, sparse); `data/k8s` is a symlink to `data/k8s-src/content/en`
 - Sparse paths: `content/en/docs/{concepts,tasks,reference}` plus `content/en/examples` and `content/en/includes` (added after scoping; used only to resolve `code_sample` / `include`, never indexed). HEAD SHA verified unchanged (`6c42e266...`) after adding them.
-- Chosen scope: **B**, 511 markdown pages (the 1,606 in the three folders minus the excluded directories below)
+- Chosen scope: **B**, 502 indexed pages: the 1,606 markdown files in the three folders, minus the excluded directories below (511), minus the 9 headless include partials under `tasks/tools/included/` (`headless: true` / `render: never`, not public pages; excluded 2026-10-24).
 
 ## Included (under `content/en/docs/`)
 - `concepts/`: 187 pages
-- `tasks/`: 221 pages
+- `tasks/`: 212 pages (221 minus the 9 headless partials)
 - `reference/`: 103 pages, all subdirectories except the excluded ones
 
 ## Excluded (generated or stub-heavy; guide allows skipping when count > ~500)
@@ -19,10 +19,10 @@
 - `reference/kubectl/` (120)
 
 ## Counts (from the Phase 1 run, eval/results/phase1_stats.txt)
-- 511 pages loaded; 489 produce chunks; the other 22 are section `_index.md` pages with front matter only (no body text).
-- Chunks (after stripping "What's next" navigation sections, final rule): 4,103 fixed, 4,544 heading. 281 sections / 30,606 tokens were removed in the loader before chunking (see NOTES.md). Before that rule: 4,211 fixed, 4,824 heading.
-- Index `rag-docs`: 8,647 docs (4,103 fixed + 4,544 heading), 8,621 unique embedded texts.
-- Known scope wart: 9 of the 511 pages are headless include partials under `tasks/tools/included/` (`headless: true`, not public pages); see NOTES.md.
+- **502 pages** loaded; **477 produce chunks**; the other 25 are section `_index.md` pages with no body text (front matter only).
+- Chunks (after stripping "What's next" navigation sections and the headless pages): **4,087 fixed, 4,528 heading**. 281 "What's next" sections / 30,606 tokens are removed in the loader before chunking (see NOTES.md). Earlier states: 4,211 / 4,824 (no rule), 4,103 / 4,544 (What's next stripped, 511 pages).
+- Index `rag-docs`: **8,615 docs** (4,087 fixed + 4,528 heading) from 8,593 unique embedded texts.
+- Front-matter bug fixed on the same date: 4 `_index.md` pages whose closing `---` is the last bytes of the file used to keep their front matter as page text (junk chunks); they are now body-less like the others.
 
 `doc_id` = page path relative to `content/en/docs/`, without extension.
 The golden set depends on this staying fixed; do not update the checkout.

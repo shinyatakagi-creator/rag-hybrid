@@ -22,7 +22,8 @@ HEADING_I18N = {
     "seealso": "See also",
 }
 
-_FM = re.compile(r"\A---\n(.*?)\n---\n", re.S)
+# closing --- may be the last bytes of the file (4 section _index pages end without a newline)
+_FM = re.compile(r"\A---\n(.*?)\n---[ \t]*(?:\n|\Z)", re.S)
 _ATTR = re.compile(r'(\w+)="([^"]*)"')
 def _sc(inner: str) -> str:
     return r"\{\{[<%]\s*" + inner + r"\s*[>%]\}\}"
@@ -203,6 +204,11 @@ def doc_id_and_url(rel: Path) -> tuple[str, str]:
     return doc_id, f"https://kubernetes.io/docs/{url_path}/"
 
 
+def is_headless(fm: str) -> bool:
+    """Hugo include partials: not public pages (`headless: true`, or `_build: render: never`), so never indexed."""
+    return bool(re.search(r"^headless:\s*true\s*$", fm, re.M) or re.search(r"^[ \t]+render:\s*never\s*$", fm, re.M))
+
+
 def parse_title(fm: str, fallback: str) -> str:
     m = re.search(r"^title:\s*(.+)$", fm, re.M)
     return m.group(1).strip().strip("\"'") if m else fallback
@@ -221,6 +227,8 @@ def load_corpus(root: Path, cleaner: Cleaner | None = None, raw: bool = False) -
         t = p.read_text(encoding="utf8")
         m = _FM.match(t)
         fm, body = (m.group(1), t[m.end():]) if m else ("", t)
+        if is_headless(fm):
+            continue  # include partials are read by Cleaner._include, they are not documents
         doc_id, url = doc_id_and_url(rel)
         title = parse_title(fm, rel.parent.name if rel.name == "_index.md" else rel.stem)
         if raw:

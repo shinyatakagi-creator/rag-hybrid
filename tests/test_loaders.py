@@ -32,6 +32,25 @@ def make_corpus(root: Path) -> Path:
     return root
 
 
+def test_headless_and_render_never_pages_are_not_documents_but_still_resolve_as_includes(tmp_path):
+    root = make_corpus(tmp_path)
+    inc = root / "docs/tasks/included"
+    inc.mkdir(parents=True)
+    (inc / "snippet.md").write_text("---\ntitle: Snippet\nheadless: true\n---\nSNIPPET BODY", encoding="utf8")
+    (inc / "hidden.md").write_text("---\ntitle: Hidden\n_build:\n  render: never\n---\nHIDDEN", encoding="utf8")
+    (root / "docs/tasks/uses.md").write_text('---\ntitle: Uses\n---\n{{< include "included/snippet.md" >}}\nafter', encoding="utf8")
+    docs = {d.doc_id: d for d in load_corpus(root)}
+    assert "tasks/included/snippet" not in docs and "tasks/included/hidden" not in docs
+    assert "SNIPPET BODY" in docs["tasks/uses"].text  # the partial's content still reaches the page that includes it
+
+
+def test_front_matter_closing_marker_at_end_of_file_is_stripped(tmp_path):
+    root = make_corpus(tmp_path)
+    (root / "docs/concepts/bare.md").write_text("---\ntitle: Bare\nweight: 5\n---", encoding="utf8")  # no trailing newline
+    d = {x.doc_id: x for x in load_corpus(root)}["concepts/bare"]
+    assert d.title == "Bare" and d.text == ""
+
+
 def test_doc_id_and_url_mapping():
     assert doc_id_and_url(Path("concepts/_index.md")) == ("concepts/_index", "https://kubernetes.io/docs/concepts/")
     assert doc_id_and_url(Path("reference/instrumentation/slis.md"))[1] == "https://kubernetes.io/docs/reference/instrumentation/slis/"
@@ -113,7 +132,9 @@ def test_missing_code_sample_is_reported_not_silent(tmp_path):
 
 
 @pytest.mark.skipif(not Path("data/k8s/docs").exists(), reason="corpus checkout not present")
-def test_real_corpus_is_scope_b_511_pages():
+def test_real_corpus_is_scope_b_502_pages_without_headless_partials():
     docs = load_corpus(Path("data/k8s"), raw=True)
-    assert len(docs) == 511
+    assert len(docs) == 502  # scope B was 511; minus the 9 headless pages under tasks/tools/included/
+    assert not any("/included/" in d.doc_id for d in docs)
+    assert all(not d.text.startswith("---") for d in docs)  # no page keeps its front matter as text
     assert not any(d.doc_id.startswith(("docs/", "examples/", "includes/")) for d in docs)
