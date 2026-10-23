@@ -1,0 +1,46 @@
+{
+ "controls": {
+  "n": 6,
+  "mislabelled": 5,
+  "valid_round": false,
+  "detail": {
+   "r3-268e2d8f": {
+    "source": "K2",
+    "kind": "control_wrong",
+    "expected": "unsupported",
+    "owner": "partial"
+   },
+   "r3-3c231992": {
+    "source": "K1",
+    "kind": "control_wrong",
+    "expected": "unsupported",
+    "owner": "supported"
+   },
+   "r3-5e4c8842": {
+    "source": "K3",
+    "kind": "control_wrong",
+    "expected": "unsupported",
+    "owner": "partial"
+   },
+   "r3-789f81da": {
+    "source": "K4",
+    "kind": "control_correct",
+    "expected": "supported",
+    "owner": "partial"
+   },
+   "r3-78a19d95": {
+    "source": "K5",
+    "kind": "control_correct",
+    "expected": "supported",
+    "owner": "partial"
+   },
+   "r3-f1a1975b": {
+    "source": "K6",
+    "kind": "control_correct",
+    "expected": "supported",
+    "owner": "supported"
+   }
+  }
+ },
+ "note": "5 of 6 controls mislabelled (more than 1): round INVALID for judging the verifier; redo. No verifier statistics reported."
+}
