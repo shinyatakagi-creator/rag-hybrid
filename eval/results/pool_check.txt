@@ -1,0 +1,24 @@
+Embed 100 queries (562 tokens, est. $0.00001124)? [y/N] 100 proxy queries (titles + leaf headings, seed 0); embedding calls: 1
+threshold: fewer than 10 distinct docs.  Cells: queries below threshold / min / median distinct docs
+  fixed    pool=  50  bm25:  29/  1/ 13.5  dense:  13/  4/ 17.0  hybrid:   6/  6/ 23.5
+  fixed    pool= 100  bm25:  11/  1/ 28.0  dense:   1/  8/ 31.5  hybrid:   0/ 14/ 45.5
+  fixed    pool= 200  bm25:   7/  1/ 53.0  dense:   0/ 31/ 61.5  hybrid:   0/ 35/ 86.5
+  heading  pool=  50  bm25:  30/  1/ 13.0  dense:   6/  5/ 19.5  hybrid:   1/  9/ 25.5
+  heading  pool= 100  bm25:  11/  1/ 26.0  dense:   0/ 15/ 35.0  hybrid:   0/ 18/ 48.0
+  heading  pool= 200  bm25:   7/  1/ 59.0  dense:   0/ 36/ 69.0  hybrid:   0/ 47/ 95.5
+
+--- BM25 shortfall at pool=200: is the window the limit, or did the query simply match few chunks? (chunk hits returned vs 200 asked)
+  fixed    distinct_docs= 3 chunk_hits=  6  query='AnonymousAuthCondition'
+  fixed    distinct_docs= 1 chunk_hits=  2  query='UserDefinedMetricDescriptor'
+  fixed    distinct_docs= 1 chunk_hits=  3  query='ResourceSpec'
+  fixed    distinct_docs= 4 chunk_hits=  9  query='ExecEnvVar'
+  fixed    distinct_docs= 7 chunk_hits= 14  query='resource.kubernetes.io/numaNode'
+  fixed    distinct_docs= 1 chunk_hits=  1  query='PodReference'
+  fixed    distinct_docs= 3 chunk_hits= 11  query='PrefixedClaimOrExpression'
+  heading  distinct_docs= 3 chunk_hits=  6  query='AnonymousAuthCondition'
+  heading  distinct_docs= 1 chunk_hits=  3  query='UserDefinedMetricDescriptor'
+  heading  distinct_docs= 1 chunk_hits=  3  query='ResourceSpec'
+  heading  distinct_docs= 4 chunk_hits=  8  query='ExecEnvVar'
+  heading  distinct_docs= 7 chunk_hits= 14  query='resource.kubernetes.io/numaNode'
+  heading  distinct_docs= 1 chunk_hits=  2  query='PodReference'
+  heading  distinct_docs= 3 chunk_hits=  6  query='PrefixedClaimOrExpression'

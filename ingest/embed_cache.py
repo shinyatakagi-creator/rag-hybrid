@@ -38,6 +38,10 @@ class SpendGuard:
             )
         self.spent += usd
 
+    def settle(self, charged: float, actual: float) -> None:
+        """Replace a pre-call (worst-case) charge with the cost the API reported."""
+        self.spent += actual - charged
+
 
 def cost_usd(model: str, tokens: int) -> float:
     if model not in PRICE_PER_M:

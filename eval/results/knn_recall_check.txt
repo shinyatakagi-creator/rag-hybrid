@@ -1,0 +1,6 @@
+40 proxy queries, heading chunker. Mean overlap with exact brute-force cosine:
+  k=  50 num_candidates=  200   top-10: 0.992   top-50: 0.978
+  k=  50 num_candidates=  800   top-10: 1.000   top-50: 0.996
+  k= 100 num_candidates=  400   top-10: 0.992   top-50: 0.988
+  k= 200 num_candidates=  800   top-10: 1.000   top-50: 0.999
+  k= 200 num_candidates= 2000   top-10: 1.000   top-50: 0.999

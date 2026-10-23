@@ -9,7 +9,7 @@ from ingest.embed_cache import BudgetExceeded, EmbedCache, SpendGuard, cache_key
 from ingest.index import DIMS, bulk_index, create_index
 from ingest.loaders import Doc
 from rag.retrieve import (
-    NUM_CANDIDATES, POOL, QueryEmbedder, bm25_query, knn_clause, rrf, search,
+    NUM_CANDIDATES, POOL, QueryEmbedder, bm25_query, distinct_docs, knn_clause, rrf, search,
 )
 from tests.test_embed import FakeClient
 
@@ -76,8 +76,27 @@ def test_query_bodies_carry_chunker_filter_and_spec_parameters():
     assert q["bool"]["filter"] == {"term": {"chunker": "heading"}}
     assert q["bool"]["must"]["multi_match"]["fields"] == ["title^2", "heading_path^1.5", "content"]
     kn = knn_clause([0.0] * 3, "fixed")
-    assert (kn["k"], kn["num_candidates"], POOL, NUM_CANDIDATES) == (50, 200, 50, 200)
+    assert (kn["k"], kn["num_candidates"], POOL, NUM_CANDIDATES) == (200, 800, 200, 200)
+    assert knn_clause([0.0] * 3, "fixed", k=50)["num_candidates"] == 200  # the original 50 / 200 spec is the same ratio
     assert kn["filter"] == {"term": {"chunker": "fixed"}}
+
+
+def test_distinct_docs_keeps_best_chunk_per_doc_in_rank_order():
+    h = [{"_id": "1", "doc_id": "a"}, {"_id": "2", "doc_id": "a"}, {"_id": "3", "doc_id": "b"}, {"_id": "4", "doc_id": "a"}, {"_id": "5", "doc_id": "c"}]
+    assert [x["_id"] for x in distinct_docs(h)] == ["1", "3", "5"]
+    assert [x["doc_id"] for x in distinct_docs(h, 2)] == ["a", "b"]
+    assert distinct_docs([]) == []
+
+
+def test_prefetch_embeds_only_uncached_queries_in_one_call(tmp_path):
+    path = tmp_path / "c.jsonl"
+    EmbedCache(path).add_many({cache_key(MODEL, 4, "already"): [1.0] * 4})
+    client = FakeClient()
+    seen = []
+    e = QueryEmbedder(path, MODEL, lambda: client, SpendGuard(5), dims=4, confirm=lambda what, tok, usd: seen.append((what, tok)) or True)
+    assert e.prefetch(["already", "new one", "new two", "new one"]) == 1
+    assert client.calls == 1 and seen[0][0] == "2 queries"  # one confirmation, one batch, duplicates and cached skipped
+    assert e("new two") and e.prefetch(["already", "new one"]) == 0 and client.calls == 1
 
 
 # -- query-embedding cache -------------------------------------------------------------------

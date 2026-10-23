@@ -15,8 +15,8 @@ from elasticsearch import Elasticsearch
 from ingest.embed_cache import EmbedCache, SpendGuard, cache_key, cost_usd, count_tokens, embed_missing
 
 DIMS = 1536
-POOL = 50  # size of each inner list fed to RRF (and the kNN k)
-NUM_CANDIDATES = 200
+POOL = 200  # size of each inner list fed to RRF (and the kNN k); 50 left 6-30% of queries with <10 distinct docs, see eval/results/pool_check.txt
+NUM_CANDIDATES = 200  # floor; knn_clause uses max(this, 4 * k), i.e. 800 at k=200
 RRF_K = 60
 BM25_FIELDS = ["title^2", "heading_path^1.5", "content"]
 EXCLUDE = ["embedding"]  # never ship 1536 floats back
@@ -31,8 +31,9 @@ def bm25_query(q: str, chunker: str) -> dict:
     return {"bool": {"must": {"multi_match": {"query": q, "fields": BM25_FIELDS}}, "filter": chunker_filter(chunker)}}
 
 
-def knn_clause(vec: list[float], chunker: str) -> dict:
-    return {"field": "embedding", "query_vector": vec, "k": POOL, "num_candidates": NUM_CANDIDATES, "filter": chunker_filter(chunker)}
+def knn_clause(vec: list[float], chunker: str, k: int = POOL) -> dict:
+    # num_candidates keeps the 4x ratio of the original k=50 / 200 and never drops below it
+    return {"field": "embedding", "query_vector": vec, "k": k, "num_candidates": max(NUM_CANDIDATES, 4 * k), "filter": chunker_filter(chunker)}
 
 
 def _hit(h: dict) -> dict:
@@ -51,8 +52,20 @@ def bm25(es: Elasticsearch, index: str, q: str, chunker: str, size: int = POOL) 
 
 
 def dense(es: Elasticsearch, index: str, vec: list[float], chunker: str, size: int = POOL) -> list[dict]:
-    r = es.search(index=index, knn=knn_clause(vec, chunker), size=size, source_excludes=EXCLUDE)
+    r = es.search(index=index, knn=knn_clause(vec, chunker, k=max(size, POOL)), size=size, source_excludes=EXCLUDE)
     return [_hit(h) for h in r["hits"]["hits"]]
+
+
+def distinct_docs(hits: list[dict], n: int | None = None) -> list[dict]:
+    """Collapse a ranked chunk list to one hit per doc_id (first = best-ranked chunk), keeping rank order.
+
+    Recall@k / MRR are computed on this list, so a doc with several chunks in the window takes one slot."""
+    seen, out = set(), []
+    for h in hits:
+        if h["doc_id"] not in seen:
+            seen.add(h["doc_id"])
+            out.append(h)
+    return out[:n]
 
 
 def rrf(result_lists: list[list[dict]], k: int = RRF_K, top_n: int = 8, names: list[str] | None = None) -> list[dict]:
@@ -79,8 +92,8 @@ def rrf(result_lists: list[list[dict]], k: int = RRF_K, top_n: int = 8, names: l
     return [{**first[i], "score": float(scores[i]), "ranks": ranks[i]} for i in order[:top_n]]
 
 
-def hybrid(es: Elasticsearch, index: str, q: str, vec: list[float], chunker: str, k: int = 8) -> list[dict]:
-    lists = [bm25(es, index, q, chunker, POOL), dense(es, index, vec, chunker, POOL)]
+def hybrid(es: Elasticsearch, index: str, q: str, vec: list[float], chunker: str, k: int = 8, pool: int = POOL) -> list[dict]:
+    lists = [bm25(es, index, q, chunker, pool), dense(es, index, vec, chunker, pool)]
     return rrf(lists, RRF_K, k, names=["bm25", "dense"])
 
 
@@ -107,25 +120,42 @@ class QueryEmbedder:
         self.cache = EmbedCache(cache_path, load=False)
         self.calls = 0
 
-    def _scan(self, key: str) -> list[float] | None:
-        needle = f'{{"k": "{key}"'
+    def _scan_many(self, keys: set[str]) -> dict[str, list[float]]:
+        """One pass over the cache file; lines look like {"k": "<64 hex>", "v": [...]}."""
+        found, start = {}, len('{"k": "')
         try:
             with open(self.path, encoding="utf8") as f:
                 for line in f:
-                    if line.startswith(needle):
-                        return json.loads(line)["v"]
+                    k = line[start : start + 64]
+                    if k in keys:
+                        found[k] = json.loads(line)["v"]
+                        if len(found) == len(keys):
+                            break
         except FileNotFoundError:
             pass
-        return None
+        return found
 
     def is_cached(self, text: str) -> bool:
         key = cache_key(self.model, self.dims, text)
-        if key in self.cache.vectors:
-            return True
-        vec = self._scan(key)
-        if vec is not None:
-            self.cache.vectors[key] = vec
-        return vec is not None
+        if key not in self.cache.vectors:
+            self.cache.vectors.update(self._scan_many({key}))
+        return key in self.cache.vectors
+
+    def prefetch(self, texts: list[str]) -> int:
+        """Embed all uncached texts in batched calls after one confirmation; returns API calls made."""
+        uncached = list(dict.fromkeys(texts))
+        keys = {cache_key(self.model, self.dims, t): t for t in uncached}
+        self.cache.vectors.update(self._scan_many({k for k in keys if k not in self.cache.vectors}))
+        todo = [t for k, t in keys.items() if k not in self.cache.vectors]
+        if not todo:
+            return 0
+        tokens = sum(count_tokens(t) for t in todo)
+        if self.confirm and not self.confirm(f"{len(todo)} queries", tokens, cost_usd(self.model, tokens)):
+            raise SystemExit("cancelled")
+        self.client = self.client or self.client_factory()
+        calls = embed_missing(todo, self.cache, self.model, self.dims, self.client, self.guard)
+        self.calls += calls
+        return calls
 
     def estimate(self, text: str) -> tuple[int, float]:
         tokens = count_tokens(text)
