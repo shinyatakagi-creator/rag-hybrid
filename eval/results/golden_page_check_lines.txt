@@ -1,0 +1,176 @@
+
+##### e001 [exact_term] When reconciling roles with kubectl auth reconcile, what happens if I pass `--remove-extra-subjects`?
+REF: It updates existing bindings to include subjects from input objects and removes extra subjects.
+EXPECTED: ['reference/access-authn-authz/rbac']  TERM: '--remove-extra-subjects'
+  [rbac | `kubectl auth reconcile` {#kubectl-auth-] Existing bindings are updated to include the subjects in the input objects, and remove extra subjects if `--remove-extra-subjects` is specified.
+  [rbac | `kubectl auth reconcile` {#kubectl-auth-] ```shell kubectl auth reconcile -f my-rbac-rules.yaml ``` * Apply a manifest file of RBAC objects, removing any extra permissions (in roles) and any extra subjects (in bindings):
+  DOCS CONTAINING TERM (literal, case-sens): {'reference/access-authn-authz/rbac': 1} | NOT expected: []
+
+##### e002 [exact_term] What configuration setting does `--service-account-max-token-expiration` control on the API server?
+REF: It sets the maximum validity duration of a token created by the service account token issuer.
+EXPECTED: ['reference/access-authn-authz/authentication']  TERM: '--service-account-max-token-expiration'
+  [authentication | Configuration via command line arguments] The maximum validity duration of a token created by the service account token issuer, as a Kubernetes duration string.
+  [authentication | Configuration via command line arguments] Identifier of the service account token issuer.
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/storage/projected-volumes': 1, 'reference/access-authn-authz/authentication': 1, 'reference/access-authn-authz/service-accounts-admin': 1} | NOT expected: ['concepts/storage/projected-volumes', 'reference/access-authn-authz/service-accounts-admin']
+
+##### e003 [exact_term] What default value do API server peers fall back to if `--advertise-address` and `--bind-address` are both left unspecified?
+REF: Peers will fall back to using the host's default network interface.
+EXPECTED: ['concepts/architecture/mixed-version-proxy']  TERM: '--bind-address'
+  [mixed-version-proxy | Configuration for peer API server connec] If these flags are unspecified, peers will use the value from either `--advertise-address` or `--bind-address` command line argument to the kube-apiserver.
+  [mixed-version-proxy | Configuration for peer API server connec] To set the network location of a kube-apiserver that peers will use to proxy requests, use the `--peer-advertise-ip` and `--peer-advertise-port` command line arguments to kube-apiserver or specify these fields in the API server configuration file.
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/architecture/mixed-version-proxy': 1, 'concepts/cluster-administration/system-metrics': 1, 'concepts/security/controlling-access': 1} | NOT expected: ['concepts/cluster-administration/system-metrics', 'concepts/security/controlling-access']
+
+##### e004 [exact_term] In coordinated leader election, what information does the `acquireTime` field record?
+REF: It records the timestamp when leadership was acquired.
+EXPECTED: ['concepts/cluster-administration/coordinated-leader-election']  TERM: 'acquireTime'
+  [coordinated-leader-election | Leader selection for Kubernetes componen] timestamp when leadership was acquired.
+  [coordinated-leader-election | Component configuration] For Kubernetes , two control plane components (kube-controller-manager and kube-scheduler) automatically use coordinated leader election when the feature gate and API group are enabled.
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/cluster-administration/coordinated-leader-election': 1, 'reference/labels-annotations-taints/_index': 1} | NOT expected: ['reference/labels-annotations-taints/_index']
+
+##### e005 [exact_term] In the scheduler extension points pipeline, what role do `preBind` plugins perform?
+REF: They perform any work required before a Pod is bound to a Node.
+EXPECTED: ['reference/scheduling/config']  TERM: 'preBind'
+  [config | Extension points] These plugins perform any work required before a Pod is bound.
+  [config | Extension points] The plugins bind a Pod to a Node.
+  DOCS CONTAINING TERM (literal, case-sens): {'reference/config-api/kube-scheduler-config.v1': 1, 'reference/scheduling/config': 2} | NOT expected: ['reference/config-api/kube-scheduler-config.v1']
+
+##### e006 [exact_term] How does a controller use `compositePodGroupTemplates` in the Workload API?
+REF: It defines templates under spec.compositePodGroupTemplates which workload controllers use at runtime to create CompositePodGroup and PodGroup objects to maintain runtime scheduling state.
+EXPECTED: ['concepts/workloads/workload-api/_index']  TERM: 'compositePodGroupTemplates'
+  [_index | CompositePodGroupTemplates] At runtime, workload controllers create [CompositePodGroup](/docs/concepts/workloads/compositepodgroup-api/) and [PodGroup](/docs/concepts/workloads/podgroup-api/) objects from these templates to maintain the runtime scheduling state of the hierarchy.
+  [_index | What is a Workload?] Runtime scheduling state is maintained by [PodGroup](/docs/concepts/workloads/podgroup-api/) objects, which controllers create from the `Workload`'s `PodGroupTemplates`.
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/workloads/compositepodgroup-api/_index': 1, 'concepts/workloads/workload-api/_index': 2, 'concepts/workloads/workload-api/topology-aware-scheduling': 1} | NOT expected: ['concepts/workloads/compositepodgroup-api/_index', 'concepts/workloads/workload-api/topology-aware-scheduling']
+
+##### e007 [exact_term] When a component initializes with `--cloud-provider=external`, why is the taint `node.cloudprovider.kubernetes.io/uninitialized` added?
+REF: It marks the node as requiring a second initialization from an external controller before it can be scheduled work, keeping it unschedulable in the meantime with NoSchedule.
+EXPECTED: ['tasks/administer-cluster/running-cloud-controller']  TERM: 'node.cloudprovider.kubernetes.io/uninitialized'
+  [running-cloud-controller | Running cloud-controller-manager] This marks the node as needing a second initialization from an external controller before it can be scheduled work.
+  [running-cloud-controller | Running cloud-controller-manager] * Components that specify `--cloud-provider=external` will add a taint `node.cloudprovider.kubernetes.io/uninitialized` with an effect `NoSchedule` during initialization.
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/scheduling-eviction/taint-and-toleration': 1, 'reference/labels-annotations-taints/_index': 1, 'tasks/administer-cluster/running-cloud-controller': 2} | NOT expected: ['concepts/scheduling-eviction/taint-and-toleration', 'reference/labels-annotations-taints/_index']
+
+##### e008 [exact_term] Which tokens include the annotation key `authentication.kubernetes.io/mutatingwebhookconfiguration-uid`?
+REF: Webhook authentication tokens used when authenticating to admission webhooks.
+EXPECTED: ['reference/access-authn-authz/extensible-admission-controllers']  TERM: 'authentication.kubernetes.io/mutatingwebhookconfiguration-uid'
+  [extensible-admission-controllers | Authenticating to admission webhooks {#a] - `authentication.kubernetes.io/mutatingwebhookconfiguration-name` - `authentication.kubernetes.io/mutatingwebhookconfiguration-uid` For all webhook authentication tokens:
+  [extensible-admission-controllers | Authenticating to admission webhooks {#a] To request a webhook authentication token, a TokenRequest must include:
+  DOCS CONTAINING TERM (literal, case-sens): {'reference/access-authn-authz/extensible-admission-controllers': 1} | NOT expected: []
+
+##### m001 [mixed] I restarted kube-controller-manager after pointing --root-ca-file at a file holding the previous CA plus the replacement one. What do service accounts created from now on get?
+REF: Any ServiceAccount created after updating the flag will receive Secrets containing both the old and new CAs.
+EXPECTED: ['tasks/tls/manual-rotation-of-ca-certificates']  TERM: '--root-ca-file'
+  [manual-rotation-of-ca-certificates | Rotate the CA certificates manually] Any ServiceAccount created after this point will get Secrets that include both old and new CAs.
+  [manual-rotation-of-ca-certificates | Rotate the CA certificates manually] If any Pods are started before the new CA is used by API servers, the new Pods get this update and will trust both old and new CAs.
+  DOCS CONTAINING TERM (literal, case-sens): {'tasks/tls/manual-rotation-of-ca-certificates': 3} | NOT expected: []
+
+##### m002 [mixed] What is the result of setting `--enable-priority-and-fairness` to false when starting the API server?
+REF: It disables the API Priority and Fairness feature on the API server.
+EXPECTED: ['concepts/cluster-administration/flow-control']  TERM: '--enable-priority-and-fairness'
+  [flow-control | Recursive server scenarios] API Priority and Fairness must be used carefully in recursive server scenarios.
+  [flow-control | Metrics] When you enable the API Priority and Fairness feature, the kube-apiserver exports additional metrics.
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/cluster-administration/flow-control': 1} | NOT expected: []
+
+##### m003 [mixed] My Cosign 2.0 check of a downloaded Kubernetes binary only works when I give it --certificate-identity. What else must I supply?
+REF: Cosign 2.0 requires both the --certificate-identity and --certificate-oidc-issuer options.
+EXPECTED: ['tasks/administer-cluster/verify-signed-artifacts']  TERM: '--certificate-identity'
+  [verify-signed-artifacts | Verifying binary signatures] Cosign 2.0 requires the `--certificate-identity` and `--certificate-oidc-issuer` options.
+  [verify-signed-artifacts | Verifying binary signatures] ```shell cosign verify-blob "$BINARY" \ --signature "$BINARY".sig \ --certificate "$BINARY".cert \ --certificate-identity krel-staging@k8s-releng-prod.iam.gserviceaccount.com \ --certificate-oidc-issuer https://accounts.google.com ``` Note:
+  DOCS CONTAINING TERM (literal, case-sens): {'tasks/administer-cluster/verify-signed-artifacts': 4} | NOT expected: []
+
+##### m004 [mixed] What effect does adding string entries to `schedulingGates` in a pod manifest have on when it gets scheduled?
+REF: It prevents the pod from being considered for scheduling until all gate strings are removed from the list.
+EXPECTED: ['concepts/scheduling-eviction/pod-scheduling-readiness']  TERM: 'schedulingGates'
+  [pod-scheduling-readiness | Pod Scheduling Readiness] Configuring Pod schedulingGates The `schedulingGates` field contains a list of strings, and each string literal is perceived as a criteria that Pod should be satisfied before considered schedulable.
+  [pod-scheduling-readiness | Usage example] ```none [{"name":"example.com/foo"},{"name":"example.com/bar"}] ``` To inform scheduler this Pod is ready for scheduling, you can remove its `schedulingGates` entirely by reapplying a modified manifest:
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/scheduling-eviction/pod-scheduling-readiness': 2, 'concepts/workloads/pods/_index': 1} | NOT expected: ['concepts/workloads/pods/_index']
+
+##### m005 [mixed] One of my machines lacks a label named in topologySpreadConstraints. Do the pods already on it still matter when the scheduler checks how lopsided my layout is?
+REF: The scheduler bypasses nodes missing the topology key, excluding any pods on those nodes from maxSkew calculations.
+EXPECTED: ['concepts/scheduling-eviction/topology-spread-constraints']  TERM: 'topologySpreadConstraints'
+  [topology-spread-constraints | Implicit conventions] any Pods located on those bypassed nodes do not impact `maxSkew` calculation - in the above [example](#example-conflicting-topologyspreadconstraints), suppose the node `node1` does not have a label "zone", then the 2 Pods will be disregarded, hence the incoming Pod will be scheduled into zone `A`.
+  [topology-spread-constraints | Implicit conventions] Nodes missing any of these `topologyKeys` are bypassed.
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/scheduling-eviction/topology-spread-constraints': 8, 'reference/config-api/kube-scheduler-config.v1': 1} | NOT expected: ['reference/config-api/kube-scheduler-config.v1']
+
+##### m006 [mixed] If my container runtime can't apply the extra mount restrictions, what does the kubelet do with a pod that sets bindMountOptions?
+REF: If the runtime does not advertise support, the kubelet rejects Pods that use bindMountOptions.
+EXPECTED: ['concepts/storage/volumes']  TERM: 'bindMountOptions'
+  [volumes | Bind mount options] If the runtime does not advertise support, the kubelet rejects Pods that use `bindMountOptions`.
+  [volumes | Bind mount options] The container runtime (such as containerd or CRI-O) must support the `mount_options` field in the CRI `Mount` message.
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/storage/volumes': 1, 'tasks/configure-pod-container/configure-bind-mount-options': 1} | NOT expected: ['tasks/configure-pod-container/configure-bind-mount-options']
+
+##### m007 [mixed] Our built-in ClusterRoles are tagged kubernetes.io/bootstrapping=rbac-defaults. If I tweak one by hand, will my change survive the next API server restart?
+REF: No. At each start-up, auto-reconciliation repairs accidental modifications to default cluster roles, unless the rbac.authorization.kubernetes.io/autoupdate annotation is set to false.
+EXPECTED: ['reference/access-authn-authz/rbac']  TERM: 'kubernetes.io/bootstrapping'
+  [rbac | Auto-reconciliation] At each start-up, the API server updates default cluster roles with any missing permissions, and updates default cluster role bindings with any missing subjects.
+  [rbac | API discovery roles {#discovery-roles}] If you edit that ClusterRole, your changes will be overwritten on API server restart via [auto-reconciliation](#auto-reconciliation).
+  DOCS CONTAINING TERM (literal, case-sens): {'reference/access-authn-authz/rbac': 1, 'tasks/extend-kubernetes/configure-multiple-schedulers': 1} | NOT expected: ['tasks/extend-kubernetes/configure-multiple-schedulers']
+
+##### m008 [mixed] Our caching resolver container got OOMKilled and now name lookups from other workloads on that machine fail until it comes back. Why?
+REF: The stopped container leaves behind custom packet filtering rules, causing DNS queries to be redirected to an unhealthy local endpoint until restarted.
+EXPECTED: ['tasks/administer-cluster/nodelocaldns']  TERM: 'OOMKilled'
+  [nodelocaldns | Setting memory limits] the packet filtering rules direct DNS queries to a local Pod that is unhealthy.
+  [nodelocaldns | Setting memory limits] If this happens, the container that is terminated (“OOMKilled”) does not clean up the custom packet filtering rules that it previously added during startup.
+  DOCS CONTAINING TERM (literal, case-sens): {'concepts/configuration/manage-resources-containers': 1, 'tasks/administer-cluster/nodelocaldns': 1, 'tasks/configure-pod-container/assign-memory-resource': 2} | NOT expected: ['concepts/configuration/manage-resources-containers', 'tasks/configure-pod-container/assign-memory-resource']
+
+##### c001 [conceptual] My node's drive is almost full. Before the kubelet starts removing my pods, what does it clean up first?
+REF: Before evicting pods, the kubelet tries to reclaim node-level resources: it garbage collects dead pods and containers, then deletes unused images.
+EXPECTED: ['concepts/scheduling-eviction/node-pressure-eviction']  TERM: ''
+  [node-pressure-eviction | Reclaiming node level resources {#reclai] The kubelet tries to reclaim node-level resources before it evicts end-user pods.
+  [node-pressure-eviction | Reclaiming node level resources {#reclai] - If the `nodefs` filesystem meets the eviction thresholds, the kubelet garbage collects dead pods and containers.
+
+##### c002 [conceptual] kubectl top nodes errors out, and automatic replica adjustment stopped working too. What add-on supplies the CPU and memory numbers that both rely on?
+REF: The metrics-server: it queries each node's kubelet for CPU and memory usage and exposes it through the metrics.k8s.io API, which the Horizontal Pod Autoscaler and kubectl top use.
+EXPECTED: ['tasks/debug/debug-cluster/resource-usage-monitoring']  TERM: ''
+  [resource-usage-monitoring | Resource metrics pipeline] metrics-server discovers all nodes on the cluster and queries each node's [kubelet](/docs/reference/command-line-tools-reference/kubelet/) for CPU and memory usage.
+  [resource-usage-monitoring | Resource metrics pipeline] No matter how those statistics arrive, the kubelet then exposes the aggregated pod resource usage statistics through the metrics-server Resource Metrics API.
+
+##### c003 [conceptual] Two different tools change the same Deployment. With the newer way of sending changes to the server, how does Kubernetes remember which tool set which value?
+REF: Server-Side Apply tracks field management rather than a user's last applied state: the object's metadata.managedFields records which field manager manages each field.
+EXPECTED: ['reference/using-api/server-side-apply']  TERM: ''
+  [server-side-apply | Comparison with Client-Side Apply] Compared to the `last-applied` annotation managed by `kubectl`, Server-Side Apply uses a more declarative approach, which tracks an object's field management, rather than a user's last applied state.
+  [server-side-apply | Field management] [`kubectl.kubernetes.io/last-applied-configuration`](/docs/reference/labels-annotations-taints/#kubectl-kubernetes-io-last-applied-configuration) annotation managed by `kubectl`, Server-Side Apply uses a more declarative approach, that tracks a user's (or client's) field management, rather than a user's last applied state.
+
+##### c004 [conceptual] A contractor is only allowed to create Pods in one namespace. How could they still end up reading that namespace's Secrets or acting as its service accounts?
+REF: By running arbitrary Pods there they can mount arbitrary Secrets in that namespace (including a more privileged ServiceAccount's token) and use arbitrary ServiceAccounts to perform API actions as another workload.
+EXPECTED: ['reference/access-authn-authz/authorization']  TERM: ''
+  [authorization | Escalation paths {#escalation-paths}] There are different ways that an attacker or untrustworthy user could gain additional privilege within a namespace, if you allow them to run arbitrary Pods in that namespace:
+  [authorization | Checking API access] A review which returns the set of actions a user can perform within a namespace.
+
+##### c005 [conceptual] Our security team wants some built-in API groups unavailable on the cluster. How do we switch them off at the API server?
+REF: Set --runtime-config on the API server, for example --runtime-config=batch/v1=false to disable batch/v1; the API server and controller manager must be restarted to pick up the change.
+EXPECTED: ['reference/using-api/_index']  TERM: ''
+  [_index | Enabling or disabling API groups   {#ena] When you enable or disable groups or resources, you need to restart the API server and controller manager to pick up the `--runtime-config` changes.
+  [_index | Enabling or disabling API groups   {#ena] - to disable `batch/v1`, set `--runtime-config=batch/v1=false` - to enable `batch/v2alpha1`, set `--runtime-config=batch/v2alpha1` - to enable a specific version of an API, such as `storage.k8s.io/v1beta1/csistoragecapacities`, set `--runtime-config=storage.k8s.io/v1beta1/csistoragecapacities` Note:
+
+##### c006 [conceptual] We call our namespaces dev and prod in every cluster we run. Why should each one have a name that no other cluster uses?
+REF: It is a best practice to give namespaces names that are unique across the whole fleet, even across separate clusters, because that lets you switch between dedicated and shared clusters later or use multi-cluster tooling such as service meshes.
+EXPECTED: ['concepts/security/multi-tenancy']  TERM: ''
+  [multi-tenancy | Namespace per tenant] In addition, it is a best practice to give each namespace names that are unique across your entire fleet (that is, even if they are in separate clusters), as this gives you the flexibility to switch between dedicated and shared clusters in the future, or to use multi-cluster tooling such as service meshes.
+  [multi-tenancy | Quality-of-Service (QoS) {#qos}] If you have a use case where tenants have different service tiers in a shared cluster e.g.
+
+##### c007 [conceptual] What automatically happens when an application container is created without RAM request or ceiling settings in a constrained namespace?
+REF: The system control plane automatically assigns predefined standard RAM allocation levels configured for that logical namespace.
+EXPECTED: ['tasks/administer-cluster/manage-resources/memory-default-namespace']  TERM: ''
+  [memory-default-namespace | Configure Default Memory Requests and Li] Once you have a namespace that has a default memory [limit](/docs/concepts/configuration/manage-resources-containers/#requests-and-limits), and you then try to create a Pod with a container that does not specify its own memory limit, then the control plane assigns the default memory limit to that container.
+  [memory-default-namespace | Create a LimitRange and a Pod] ```shell kubectl apply -f https://k8s.io/examples/admin/resource/memory-defaults.yaml --namespace=default-mem-example ``` Now if you create a Pod in the default-mem-example namespace, and any container within that Pod does not specify its own values for memory request and memory limit, then the control plane applies default valu
+
+##### c008 [conceptual] Apart from labels, what links my Pods to the controller that created them, so that deleting the controller also removes them?
+REF: Each Pod carries a metadata.ownerReferences entry (owner name and UID) pointing at its ReplicaSet, which Kubernetes sets automatically ("A ReplicaSet is linked to its Pods via the Pods' metadata.ownerReferences field"). When the ReplicaSet is deleted, garbage collection removes the Pods: "By default, Kubernetes uses background cascading deletion unless you manually use foreground deletion or choose to orphan the dependent objects", i.e. the API server deletes the owner immediately and the garbage collector cleans up the dependents in the background. With foreground deletion the controller deletes dependents first; with an orphan policy they are left behind.
+EXPECTED: ['concepts/overview/working-with-objects/owners-dependents', 'concepts/architecture/garbage-collection', 'concepts/workloads/controllers/replicaset']  TERM: ''
+  [owners-dependents | Ownership and finalizers] Kubernetes also adds finalizers to an owner resource when you use either [foreground or orphan cascading deletion](/docs/concepts/architecture/garbage-collection/#cascading-deletion).
+  [owners-dependents | Owner references in object specification] Dependent objects also have an `ownerReferences.blockOwnerDeletion` field that takes a boolean value and controls whether specific dependents can block garbage collection from deleting their owner object.
+  [garbage-collection | Background cascading deletion {#backgrou] In background cascading deletion, the Kubernetes API server deletes the owner object immediately and the garbage collector controller (custom or default) cleans up the dependent objects in the background.
+  [garbage-collection | Background cascading deletion {#backgrou] By default, Kubernetes uses background cascading deletion unless you manually use foreground deletion or choose to orphan the dependent objects.
+  [replicaset | Deleting a ReplicaSet and its Pods] The [Garbage collector](/docs/concepts/architecture/garbage-collection/) automatically deletes all of the dependent Pods by default.
+  [replicaset | How a ReplicaSet works] A ReplicaSet is linked to its Pods via the Pods' [metadata.ownerReferences](/docs/concepts/architecture/garbage-collection/#owners-dependents) field, which specifies what resource the current object is owned by.
+
+##### c009 [conceptual] Our cluster grows and shrinks its node count by itself, but the count is often wrong for the load. How can bad CPU and memory requests on Pods cause that?
+REF: With Node autoscaling, if a Pod's requests are too low, provisioning a new Node for it might not help the Pod actually run; if they are too high, it might incorrectly prevent consolidating its Node.
+EXPECTED: ['concepts/cluster-administration/node-autoscaling']  TERM: ''
+  [node-autoscaling | Vertical workload autoscaling {#vertical] If the requests of a given Pod are too high, it might incorrectly prevent consolidating its Node.
+  [node-autoscaling | Vertical workload autoscaling {#vertical] If the requests of a given Pod are too low, provisioning a new Node for it might not help the Pod actually run.
+
+##### c010 [conceptual] We pushed a new version of an agent that runs on every node, but on some nodes the new Pods can't start because those nodes are full. What should I do?
+REF: Find the nodes that don't have the DaemonSet pods scheduled (compare kubectl get nodes with kubectl get pods -o wide for the DaemonSet) and delete some non-DaemonSet pods from those nodes to make room. This causes service disruption for pods not controlled by a controller or not replicated, and ignores PodDisruptionBudgets.
+EXPECTED: ['tasks/manage-daemon/update-daemon-set']  TERM: ''
+  [update-daemon-set | DaemonSet rolling update is stuck] ```shell kubectl get pods -l name=fluentd-elasticsearch -o wide -n kube-system ``` Once you've found those nodes, delete some non-DaemonSet pods from the node to make room for new DaemonSet pods.
+  [update-daemon-set | DaemonSet rolling update is stuck] When this happens, find the nodes that don't have the DaemonSet pods scheduled on by comparing the output of `kubectl get nodes` and the output of:

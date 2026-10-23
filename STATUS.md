@@ -2,7 +2,7 @@
 
 The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
-**Current phase: Phase 7, golden set (checkpoint 2).** Phases 0-6 are built and committed. No retrieval eval and no answer generation until the golden set is final. `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last commit: `8985644` (224 tests passed there).
+**Current phase: Phase 7, retrieval eval next. The golden set is FINAL (checkpoint 2 done).** Phases 0-6 are built and committed. No eval has been run yet. `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last commit: `8985644` (224 tests passed there).
 
 ## Phases done
 
@@ -22,15 +22,17 @@ The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 - **Overlap tools** (`8985644`): `python -m eval.overlap_check --question "..." --doc-id <id>` (no API calls) and a per-type overlap summary in `golden_check` (`--json-out eval/results/golden_overlap.json` for README figures). One implementation in `eval/overlap.py`; fixed a bug where an exact term's words were hidden from the rare-term count even when used in plain prose. Under the shared tools 33 of 38 drafts would be flagged (d002 flips); the drafts files were not regenerated.
 - **Checkpoint-4 sampler design recorded, not built** (it needs real golden-set answers, so it comes after `answer_eval`): blind labelling (the labeller never sees the verifier's verdict, reason or claim statuses) and a stratified sample with every `partial` and `no` plus random `yes` to make 25.
 
-## Current plan: 30-question golden set via a question kit for Gemini
-**Owner decisions (2026-10-23):** target counts are **8 exact_term / 8 mixed / 10 conceptual / 4 unanswerable = 30** (`golden_check` `TARGETS` and `GOLDEN_README.md` updated). The Gemini route replaces the 38 model drafts; `eval/golden_drafts.*` stay committed as a record, no further review. The owner produces `eval/golden_owner.jsonl` from Gemini using the kit and verifies the pages himself. Checkpoint 3 (trial licence) waits until the retrieval eval.
+## Golden set: final (checkpoint 2 done, 2026-10-23)
+`eval/golden.jsonl` = 30 questions: **8 exact_term / 10 conceptual / 8 mixed / 4 unanswerable** (identical to `eval/golden_owner.jsonl`; ids are `e001`.. / `m001`.. / `c001`.. / `u001`.., not renumbered to `q001`..). `python -m eval.golden_check eval/golden.jsonl` passes (0 errors, 0 warnings); overlap figures for the README come from `eval/results/golden_overlap.json`. Every conceptual question has 0-1 shared rare terms and no copied 4-word run with its expected pages; ratio-only flags are accepted (conceptual 6 of 10, mixed 6 of 8 flagged). `eval/results/golden_page_check_lines.txt` holds the supporting lines found in each expected page. `eval/golden_owner.v1.jsonl` (the pre-rewrite file, kept untracked) and `eval/golden_drafts.*` (38 model drafts, not used) are records only.
 
-**The kit (committed):** `eval/build_question_kit.py` (deterministic, seed 11, no API calls) generates `eval/question_kit.md`: A exact-term 12 candidates, B mixed 10 (each with a verbatim fact), C conceptual 12 passages, D unanswerable 4 (+2 off-topic). `extract_fact` now requires at least `MIN_FACT_WORDS` (6) words instead of rejecting letters-only sentences; the regenerated kit is byte-identical to the old one (the bug did not change this seed's picks), and the 13 kit tests pass. Handing the kit to Gemini is the owner's action.
+**For the README (how the questions were made):** drafted with LLM help: Gemini wrote them from a verified corpus kit (`eval/question_kit.md`, built deterministically from the indexed pages with `term_stats` proof), then Claude Code reworded them against the overlap rules (`eval.overlap_check`, page text only, no retrieval output). The owner approved the final wording, and the expected pages were checked against page text (not retrieval results) and approved by the owner. The 4 unanswerable questions are confirmed absent: their key strings appear in 0 indexed chunks for both chunkers. Overlap is a lexical proxy, not a guarantee that a question is hard.
+
+**Open item for the retrieval eval:** 4 questions list 2-3 expected pages (e007, c002, c005 have 2, c008 has 3); recall counts a hit on any expected page.
 
 ## Next steps
-1. You: produce `eval/golden_owner.jsonl`, check with `python -m eval.golden_check` and `python -m eval.overlap_check`; I merge and renumber to `eval/golden.jsonl` (`q001`...).
-2. Then Phase 7: `eval/retrieval_eval.py` (exhausted-list rule from `eval/metrics.py`, pool sweep 50/100/200, six chunker x mode rows split by question type), `eval/answer_eval.py`, the checkpoint-4 sampler; checkpoint 3 (trial licence, native vs Python cross-check) happens at the retrieval eval; then Phase 8 (API, Docker, small query-embedding cache).
-3. Checkpoint 4 (hand-label 25 verifier judgements) and checkpoint 5 (README results, CV bullet) come later.
+1. Phase 7: `eval/retrieval_eval.py` (exhausted-list rule from `eval/metrics.py`, pool sweep 50/100/200, six chunker x mode rows split by question type). Checkpoint 3 (you start the trial licence) happens here, for the native vs Python RRF cross-check.
+2. `eval/answer_eval.py`, then the checkpoint-4 sampler (blind labelling, stratified: every `partial` and `no` plus random `yes` to make 25).
+3. Phase 8: API, Docker, small query-embedding cache. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
 
 ## Spend so far: about $0.2895 of the $5 limit (no API calls since the drafting run)
 | Item | Cost |

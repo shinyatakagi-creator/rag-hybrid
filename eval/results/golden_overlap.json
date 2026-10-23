@@ -1,0 +1,458 @@
+{
+ "source": "eval/golden.jsonl",
+ "pages": 477,
+ "by_type": {
+  "exact_term": {
+   "n": 8,
+   "ratio_median": 0.865,
+   "ratio_mean": 0.83,
+   "ratio_min": 0.57,
+   "ratio_max": 1.0,
+   "rare_terms_mean": 1.6,
+   "copied_phrase": 2,
+   "flagged": null
+  },
+  "conceptual": {
+   "n": 10,
+   "ratio_median": 0.635,
+   "ratio_mean": 0.63,
+   "ratio_min": 0.33,
+   "ratio_max": 0.89,
+   "rare_terms_mean": 0.6,
+   "copied_phrase": 0,
+   "flagged": 6
+  },
+  "mixed": {
+   "n": 8,
+   "ratio_median": 0.63,
+   "ratio_mean": 0.65,
+   "ratio_min": 0.31,
+   "ratio_max": 1.0,
+   "rare_terms_mean": 1.2,
+   "copied_phrase": 0,
+   "flagged": 6
+  }
+ },
+ "questions": [
+  {
+   "id": "e001",
+   "type": "exact_term",
+   "overlap_ratio": 0.57,
+   "rare_terms": 3,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "auth",
+    "reconcile",
+    "role"
+   ],
+   "copied_phrases": [],
+   "question": "When reconciling roles with kubectl auth reconcile, what happens if I pass `--remove-extra-subjects`?",
+   "flagged": false,
+   "exact_terms": [
+    "--remove-extra-subjects"
+   ],
+   "worst_doc": "reference/access-authn-authz/rbac"
+  },
+  {
+   "id": "e002",
+   "type": "exact_term",
+   "overlap_ratio": 1.0,
+   "rare_terms": 0,
+   "copied_phrase": true,
+   "rare_term_list": [],
+   "copied_phrases": [
+    "on the api server"
+   ],
+   "question": "What configuration setting does `--service-account-max-token-expiration` control on the API server?",
+   "flagged": false,
+   "exact_terms": [
+    "--service-account-max-token-expiration"
+   ],
+   "worst_doc": "reference/access-authn-authz/authentication"
+  },
+  {
+   "id": "e003",
+   "type": "exact_term",
+   "overlap_ratio": 0.73,
+   "rare_terms": 3,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "advertise",
+    "peer",
+    "unspecifi"
+   ],
+   "copied_phrases": [],
+   "question": "What default value do API server peers fall back to if `--advertise-address` and `--bind-address` are both left unspecified?",
+   "flagged": false,
+   "exact_terms": [
+    "--bind-address"
+   ],
+   "worst_doc": "concepts/architecture/mixed-version-proxy"
+  },
+  {
+   "id": "e004",
+   "type": "exact_term",
+   "overlap_ratio": 0.67,
+   "rare_terms": 3,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "coordinat",
+    "election",
+    "leader"
+   ],
+   "copied_phrases": [],
+   "question": "In coordinated leader election, what information does the `acquireTime` field record?",
+   "flagged": false,
+   "exact_terms": [
+    "acquireTime"
+   ],
+   "worst_doc": "concepts/cluster-administration/coordinated-leader-election"
+  },
+  {
+   "id": "e005",
+   "type": "exact_term",
+   "overlap_ratio": 0.71,
+   "rare_terms": 1,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "extension"
+   ],
+   "copied_phrases": [],
+   "question": "In the scheduler extension points pipeline, what role do `preBind` plugins perform?",
+   "flagged": false,
+   "exact_terms": [
+    "preBind"
+   ],
+   "worst_doc": "reference/scheduling/config"
+  },
+  {
+   "id": "e006",
+   "type": "exact_term",
+   "overlap_ratio": 1.0,
+   "rare_terms": 0,
+   "copied_phrase": true,
+   "rare_term_list": [],
+   "copied_phrases": [
+    "in the workload api"
+   ],
+   "question": "How does a controller use `compositePodGroupTemplates` in the Workload API?",
+   "flagged": false,
+   "exact_terms": [
+    "compositePodGroupTemplates"
+   ],
+   "worst_doc": "concepts/workloads/workload-api/_index"
+  },
+  {
+   "id": "e007",
+   "type": "exact_term",
+   "overlap_ratio": 1.0,
+   "rare_terms": 2,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "initialize",
+    "taint"
+   ],
+   "copied_phrases": [],
+   "question": "When a component initializes with `--cloud-provider=external`, why is the taint `node.cloudprovider.kubernetes.io/uninitialized` added?",
+   "flagged": false,
+   "exact_terms": [
+    "node.cloudprovider.kubernetes.io/uninitialized"
+   ],
+   "worst_doc": "concepts/scheduling-eviction/taint-and-toleration"
+  },
+  {
+   "id": "e008",
+   "type": "exact_term",
+   "overlap_ratio": 1.0,
+   "rare_terms": 1,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "token"
+   ],
+   "copied_phrases": [],
+   "question": "Which tokens include the annotation key `authentication.kubernetes.io/mutatingwebhookconfiguration-uid`?",
+   "flagged": false,
+   "exact_terms": [
+    "authentication.kubernetes.io/mutatingwebhookconfiguration-uid"
+   ],
+   "worst_doc": "reference/access-authn-authz/extensible-admission-controllers"
+  },
+  {
+   "id": "m001",
+   "type": "mixed",
+   "overlap_ratio": 0.8,
+   "rare_terms": 2,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "now",
+    "replacement"
+   ],
+   "copied_phrases": [],
+   "question": "I restarted kube-controller-manager after pointing --root-ca-file at a file holding the previous CA plus the replacement one. What do service accounts created from now on get?",
+   "flagged": true,
+   "exact_terms": [
+    "--root-ca-file"
+   ],
+   "worst_doc": "tasks/tls/manual-rotation-of-ca-certificates"
+  },
+  {
+   "id": "m002",
+   "type": "mixed",
+   "overlap_ratio": 1.0,
+   "rare_terms": 0,
+   "copied_phrase": false,
+   "rare_term_list": [],
+   "copied_phrases": [],
+   "question": "What is the result of setting `--enable-priority-and-fairness` to false when starting the API server?",
+   "flagged": true,
+   "exact_terms": [
+    "--enable-priority-and-fairness"
+   ],
+   "worst_doc": "concepts/cluster-administration/flow-control"
+  },
+  {
+   "id": "m003",
+   "type": "mixed",
+   "overlap_ratio": 0.5,
+   "rare_terms": 3,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "binary",
+    "cosign",
+    "download"
+   ],
+   "copied_phrases": [],
+   "question": "My Cosign 2.0 check of a downloaded Kubernetes binary only works when I give it --certificate-identity. What else must I supply?",
+   "flagged": true,
+   "exact_terms": [
+    "--certificate-identity"
+   ],
+   "worst_doc": "tasks/administer-cluster/verify-signed-artifacts"
+  },
+  {
+   "id": "m004",
+   "type": "mixed",
+   "overlap_ratio": 0.62,
+   "rare_terms": 0,
+   "copied_phrase": false,
+   "rare_term_list": [],
+   "copied_phrases": [],
+   "question": "What effect does adding string entries to `schedulingGates` in a pod manifest have on when it gets scheduled?",
+   "flagged": true,
+   "exact_terms": [
+    "schedulingGates"
+   ],
+   "worst_doc": "concepts/scheduling-eviction/pod-scheduling-readiness"
+  },
+  {
+   "id": "m005",
+   "type": "mixed",
+   "overlap_ratio": 0.42,
+   "rare_terms": 0,
+   "copied_phrase": false,
+   "rare_term_list": [],
+   "copied_phrases": [],
+   "question": "One of my machines lacks a label named in topologySpreadConstraints. Do the pods already on it still matter when the scheduler checks how lopsided my layout is?",
+   "flagged": false,
+   "exact_terms": [
+    "topologySpreadConstraints"
+   ],
+   "worst_doc": "concepts/scheduling-eviction/topology-spread-constraints"
+  },
+  {
+   "id": "m006",
+   "type": "mixed",
+   "overlap_ratio": 0.89,
+   "rare_terms": 2,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "mount",
+    "restriction"
+   ],
+   "copied_phrases": [],
+   "question": "If my container runtime can't apply the extra mount restrictions, what does the kubelet do with a pod that sets bindMountOptions?",
+   "flagged": true,
+   "exact_terms": [
+    "bindMountOptions"
+   ],
+   "worst_doc": "concepts/storage/volumes"
+  },
+  {
+   "id": "m007",
+   "type": "mixed",
+   "overlap_ratio": 0.64,
+   "rare_terms": 2,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "rbac",
+    "role"
+   ],
+   "copied_phrases": [],
+   "question": "Our built-in ClusterRoles are tagged kubernetes.io/bootstrapping=rbac-defaults. If I tweak one by hand, will my change survive the next API server restart?",
+   "flagged": true,
+   "exact_terms": [
+    "kubernetes.io/bootstrapping"
+   ],
+   "worst_doc": "reference/access-authn-authz/rbac"
+  },
+  {
+   "id": "m008",
+   "type": "mixed",
+   "overlap_ratio": 0.31,
+   "rare_terms": 1,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "cach"
+   ],
+   "copied_phrases": [],
+   "question": "Our caching resolver container got OOMKilled and now name lookups from other workloads on that machine fail until it comes back. Why?",
+   "flagged": false,
+   "exact_terms": [
+    "OOMKilled"
+   ],
+   "worst_doc": "tasks/administer-cluster/nodelocaldns"
+  },
+  {
+   "id": "c001",
+   "type": "conceptual",
+   "overlap_ratio": 0.45,
+   "rare_terms": 0,
+   "copied_phrase": false,
+   "rare_term_list": [],
+   "copied_phrases": [],
+   "question": "My node's drive is almost full. Before the kubelet starts removing my pods, what does it clean up first?",
+   "flagged": false,
+   "exact_terms": [],
+   "worst_doc": "concepts/scheduling-eviction/node-pressure-eviction"
+  },
+  {
+   "id": "c002",
+   "type": "conceptual",
+   "overlap_ratio": 0.44,
+   "rare_terms": 0,
+   "copied_phrase": false,
+   "rare_term_list": [],
+   "copied_phrases": [],
+   "question": "Checking live CPU and memory use per node fails, and the controller that grows and shrinks my workloads has stopped working too. What add-on supplies the numbers both rely on?",
+   "flagged": false,
+   "exact_terms": [],
+   "worst_doc": "tasks/debug/debug-cluster/resource-usage-monitoring"
+  },
+  {
+   "id": "c003",
+   "type": "conceptual",
+   "overlap_ratio": 0.85,
+   "rare_terms": 1,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "send"
+   ],
+   "copied_phrases": [],
+   "question": "Two different tools change the same Deployment. With the newer way of sending changes to the server, how does Kubernetes remember which tool set which value?",
+   "flagged": true,
+   "exact_terms": [],
+   "worst_doc": "reference/using-api/server-side-apply"
+  },
+  {
+   "id": "c004",
+   "type": "conceptual",
+   "overlap_ratio": 0.75,
+   "rare_terms": 1,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "act"
+   ],
+   "copied_phrases": [],
+   "question": "A contractor is only allowed to create Pods in one namespace. How could they still end up reading that namespace's Secrets or acting as its service accounts?",
+   "flagged": true,
+   "exact_terms": [],
+   "worst_doc": "reference/access-authn-authz/authorization"
+  },
+  {
+   "id": "c005",
+   "type": "conceptual",
+   "overlap_ratio": 0.6,
+   "rare_terms": 0,
+   "copied_phrase": false,
+   "rare_term_list": [],
+   "copied_phrases": [],
+   "question": "Our security team wants some built-in API groups unavailable on the cluster. How do we switch them off at the API server?",
+   "flagged": true,
+   "exact_terms": [],
+   "worst_doc": "reference/using-api/_index"
+  },
+  {
+   "id": "c006",
+   "type": "conceptual",
+   "overlap_ratio": 0.89,
+   "rare_terms": 1,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "dev"
+   ],
+   "copied_phrases": [],
+   "question": "We call our namespaces dev and prod in every cluster we run. Why should each one have a name that no other cluster uses?",
+   "flagged": true,
+   "exact_terms": [],
+   "worst_doc": "concepts/security/multi-tenancy"
+  },
+  {
+   "id": "c007",
+   "type": "conceptual",
+   "overlap_ratio": 0.33,
+   "rare_terms": 1,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "happen"
+   ],
+   "copied_phrases": [],
+   "question": "What automatically happens when an application container is created without RAM request or ceiling settings in a constrained namespace?",
+   "flagged": false,
+   "exact_terms": [],
+   "worst_doc": "tasks/administer-cluster/manage-resources/memory-default-namespace"
+  },
+  {
+   "id": "c008",
+   "type": "conceptual",
+   "overlap_ratio": 0.88,
+   "rare_terms": 1,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "link"
+   ],
+   "copied_phrases": [],
+   "question": "Apart from labels, what links my Pods to the controller that created them, so that deleting the controller also removes them?",
+   "flagged": true,
+   "exact_terms": [],
+   "worst_doc": "concepts/architecture/garbage-collection"
+  },
+  {
+   "id": "c009",
+   "type": "conceptual",
+   "overlap_ratio": 0.4,
+   "rare_terms": 1,
+   "copied_phrase": false,
+   "rare_term_list": [
+    "often"
+   ],
+   "copied_phrases": [],
+   "question": "Our cluster grows and shrinks its node count by itself, but the count is often wrong for the load. How can bad CPU and memory requests on Pods cause that?",
+   "flagged": false,
+   "exact_terms": [],
+   "worst_doc": "concepts/cluster-administration/node-autoscaling"
+  },
+  {
+   "id": "c010",
+   "type": "conceptual",
+   "overlap_ratio": 0.67,
+   "rare_terms": 0,
+   "copied_phrase": false,
+   "rare_term_list": [],
+   "copied_phrases": [],
+   "question": "We pushed a new version of an agent that runs on every node, but on some nodes the new Pods can't start because those nodes are full. What should I do?",
+   "flagged": true,
+   "exact_terms": [],
+   "worst_doc": "tasks/manage-daemon/update-daemon-set"
+  }
+ ]
+}
