@@ -28,7 +28,8 @@ Phases 0-6 are built; Phase 7 (eval) has not been started. Run `git log --onelin
 
 ## Decisions / work pending from you
 - **Golden set (checkpoint 2):** you write 10 `exact_term` and 5 `unanswerable` questions into `eval/golden_owner.jsonl` (format and helpers: `eval/GOLDEN_README.md`; check with `python -m eval.golden_check eval/golden_owner.jsonl` (more than 3 expected docs is a warning; an optional non-empty `note` field silences it); page list `eval/doc_ids.tsv`; term check `python -m eval.term_stats`). I draft `conceptual` (22) and `mixed` (16) with `python -m eval.draft_questions` **once you approve the cost** (dry run: about $0.22 typical, $0.64 worst case, 38 drafts on Sonnet 5.5), then stop for you to choose the `expected_doc_ids`. No retrieval eval and no answer generation until the golden set is final.
-- **HTML entities in chunk text** (approved 2026-10-24): decoding outside code is implemented and the chunk files are regenerated (1,281 decoded, 109 left inside code; also fixes indented-fence detection and uppercase `<B>` tags, see `NOTES.md` Phase 7a). **The index still holds the old chunks until you approve the re-embed dry-run and I re-index.** Draft questions wait for that.
+- **HTML entities in chunk text**: done and live. 1,281 entities decoded outside code, 109 left inside code; also fixes indented-fence detection and uppercase `<B>` tags (`NOTES.md` Phase 7a). Re-embedded 721 texts and re-indexed: `rag-docs` = 8,599 docs (4,072 fixed + 4,527 heading), a rerun makes 0 calls.
+- **Drafts are ready for your review (checkpoint 2):** `eval/golden_drafts.md` (read this) and `eval/golden_drafts.jsonl`: 22 conceptual + 16 mixed, 0 failed, 34 flagged. Cost $0.134 on Sonnet 5.5. Flags are a signal, not a filter: the model reduced overlap but did not remove it (conceptual median overlap ratio 0.54, mixed 0.72). Known weaknesses to look for: a few mixed drafts leak their own answer in the question (d024 "namely ownerReferences", d031 "called: OnDelete"), and some questions assume context. Pick the final `expected_doc_ids` from your own reading; `source_doc` is only a suggestion.
 - **Native RRF (checkpoint 3):** you start the trial licence (`POST _license/start_trial?acknowledge=true`); the cluster is on the basic licence.
 
 ## Next step
@@ -36,7 +37,7 @@ Phases 0-6 are built; Phase 7 (eval) has not been started. Run `git log --onelin
 2. Me, on approval: `python -m eval.draft_questions` (then stop); you review `eval/golden_drafts.md` and choose the `expected_doc_ids`.
 3. Then `eval/retrieval_eval.py` (with the exhausted-list rule from `eval/metrics.py` and the pool sweep), then `eval/answer_eval.py`, then the checkpoint-4 sampler (blind, stratified: every partial/no plus random yes; see open item 1).
 
-## Spend so far (about $0.150 of the $5 limit)
+## Spend so far (about $0.289 of the $5 limit; the table below is the 2026-10-24 v2 snapshot, plus two lines at the end)
 | Item | Cost | Source |
 |---|---|---|
 | Embeddings: corpus (2,750,672 tokens) + re-embed (66,058) + queries (~652, estimated) | $0.0563 | API-reported / estimate |
@@ -46,7 +47,9 @@ Phases 0-6 are built; Phase 7 (eval) has not been started. Run `git log --onelin
 | Verification rows 0,1 (v2, Haiku) | $0.0014 | usage fields |
 | Mutation set v2, 25 pairs, Haiku | $0.0023 | usage fields |
 | Mutation set v2, 25 pairs, Sonnet 5.5 cross-check | $0.0405 | usage fields |
-| **Total** | **about $0.1503** | |
+| Re-embed after the entity fix (234,612 tokens, 8 calls) | $0.0047 | API-reported |
+| Golden-set drafting, 38 calls (Sonnet 5.5) | $0.1345 | usage fields |
+| **Total** | **about $0.2895** | |
 
 `MAX_SPEND_USD` is enforced per run, not cumulatively.
 
