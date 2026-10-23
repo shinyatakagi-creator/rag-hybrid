@@ -123,10 +123,12 @@ def estimate(system: str, user: str, model: str) -> dict:
 
 
 def generate(client, guard: SpendGuard, model: str, question: str, chunks: list[dict], confirm=None, dry_run: bool = False,
-             log_path: str | None = LOG_PATH) -> dict:
+             log_path: str | None = LOG_PATH, extra: dict | None = None) -> dict:
+    """`extra` is merged into the result and the log row (the eval uses it to record question id and config)."""
     user = build_user_message(question, chunks)
     est = estimate(SYSTEM, user, model)
     result = {"question": question, "model": model, "effort": EFFORT, "estimate": est,
+              **(extra or {}),
               "chunks": [{"n": i, "chunk_id": c["chunk_id"], "doc_id": c["doc_id"], "heading_path": c["heading_path"], "url": c["url"],
                           "content": c["content"]}  # stored so a logged answer can be verified without the index
                          for i, c in enumerate(chunks, 1)]}

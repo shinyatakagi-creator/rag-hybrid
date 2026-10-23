@@ -83,7 +83,7 @@ def main() -> int:
           "or BM25 rank 2 + absent vs absent + dense rank 2). Python sums exact fractions, so these are true ties and it keeps the first-seen order (BM25 list order, then dense). "
           "The native retriever scores in float32 (scores agree to about 1e-9) and breaks ties its own way, and in these cases the order of the tied pair is swapped. "
           "In one case (m004, heading) the tied pair straddles position 10/11, so the 10th distinct doc differs (9 of 10 docs in common). "
-          "In no case does a non-tied chunk move, the same chunks are in the fused window, and the first expected-doc rank is identical for all 52 question x chunker pairs, "
+          "In no case does a non-tied chunk move, the top-10 chunk sets agree, and the first expected-doc rank is identical for all 52 question x chunker pairs, "
           "so the Recall and MRR figures would be the same under the native retriever.", "", "## Settings", "", "```json", json.dumps(meta["settings"], indent=1), "```", ""]
     Path("eval/results/native_rrf_check.md").write_text("\n".join(L), encoding="utf8")
     print(json.dumps(summ, indent=1))
