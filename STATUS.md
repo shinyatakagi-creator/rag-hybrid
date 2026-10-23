@@ -2,7 +2,7 @@
 
 The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
-**Current phase: Phase 7, retrieval eval next. The golden set is FINAL (checkpoint 2 done).** Phases 0-6 are built and committed. No eval has been run yet. `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last commit: `8985644` (224 tests passed there).
+**Current phase: Phase 7, baseline retrieval eval done; answer eval next. The golden set is FINAL and frozen (checkpoint 2 done).** Phases 0-6 are built and committed. `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last commit: `8985644` (224 tests passed there).
 
 ## Phases done
 
@@ -29,12 +29,17 @@ The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
 **Open item for the retrieval eval:** 4 questions list 2-3 expected pages (e007, c002, c005 have 2, c008 has 3); recall counts a hit on any expected page.
 
+## Retrieval baseline (done 2026-10-23, `eval/results/retrieval_baseline.{json,md}`)
+`python -m eval.retrieval_eval --yes` (code `eval/retrieval_eval.py`, tests `tests/test_retrieval_eval.py`): 6 rows (bm25 / dense / hybrid Python RRF k=60 x fixed / heading), current settings (pool 200, kNN k=200, num_candidates 800, index_options as built), 26 answerable questions at doc level, no tuning. Run twice: results, paired comparison and settings identical (the second run made 0 API calls). Query embeddings cost about $0.0000138 (26 queries, 691 tokens, 1 call). The golden set is frozen: no edits after seeing these results unless a genuine error is found, then with a NOTES.md entry and a full rerun.
+
+Headline (read the intervals, n = 26): overall Recall@10 fixed bm25/dense/hybrid 0.615 / 0.865 / 0.788, heading 0.673 / 0.878 / 0.827; exact_term and mixed are near ceiling for every row; the difference is conceptual (n = 10), where bm25 is near 0 and dense beats hybrid (hybrid recall@10 0.45 fixed / 0.55 heading vs dense 0.65 / 0.68). Hybrid does not beat dense overall on this set. Full tables and per-question ranks are in the `.md`. No README claim yet (checkpoint 5).
+
 ## Next steps
-1. Phase 7: `eval/retrieval_eval.py` (exhausted-list rule from `eval/metrics.py`, pool sweep 50/100/200, six chunker x mode rows split by question type). Checkpoint 3 (you start the trial licence) happens here, for the native vs Python RRF cross-check.
-2. `eval/answer_eval.py`, then the checkpoint-4 sampler (blind labelling, stratified: every `partial` and `no` plus random `yes` to make 25).
+1. `eval/answer_eval.py`, then the checkpoint-4 sampler (blind labelling, stratified: every `partial` and `no` plus random `yes` to make 25).
+2. Only after you decide: the pool sweep 50/100/200 and the native-RRF cross-check (checkpoint 3: you start the trial licence). Neither has been run.
 3. Phase 8: API, Docker, small query-embedding cache. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
 
-## Spend so far: about $0.2895 of the $5 limit (no API calls since the drafting run)
+## Spend so far: about $0.2895 of the $5 limit (plus about $0.00001 for the 26 baseline query embeddings)
 | Item | Cost |
 |---|---|
 | Embeddings: corpus (2,750,672 tokens) + two re-embeds (66,058 and 234,612) + queries (~652, estimated) | $0.0610 |
