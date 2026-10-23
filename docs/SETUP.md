@@ -56,7 +56,7 @@ This starts a single-node Elasticsearch 9.5.5 (security off, 1 GB heap) publishe
 python -m ingest.run --corpus-dir data/k8s --chunker both
 ```
 Writes `data/chunks/fixed.jsonl` (4,072 chunks) and `data/chunks/heading.jsonl` (4,527 chunks) and `eval/results/chunk_stats.json`. The run must report `pages=502`
-and no chunk over 800 tokens. The output files are identical, byte for byte, on every machine we have checked.
+and no chunk over 800 tokens. The output files are identical, byte for byte, on every machine we have checked (a fresh clone reproduced our `fixed.jsonl` and `heading.jsonl` sha256 exactly).
 
 ## 7. Embed and index (**PAID**, once)
 ```bash
@@ -65,6 +65,9 @@ python -m ingest.index               # asks for confirmation, then embeds and bu
 ```
 With no embedding cache present the dry run reports 8,577 unique texts, 2,670,798 tokens, about $0.053. `MAX_SPEND_USD` aborts the run if the estimate exceeds it.
 Vectors are cached in `data/embed_cache/text-embedding-3-small.jsonl` (git-ignored, about 0.3 GB), so a re-run costs nothing. The index is named by `ES_INDEX`.
+
+Steps 6 and 7 also rewrite two result files that are tracked in git (`eval/results/mapping.json`, which records the index name, and `eval/results/embed_run.json`, which records the embedding usage).
+`git status` will show them as modified; that is expected. `git checkout eval/results/mapping.json eval/results/embed_run.json` restores the committed copies.
 
 ## 8. Check the index
 ```bash
@@ -78,8 +81,9 @@ curl -s "127.0.0.1:9200/rag-docs/_count?pretty" -H 'content-type: application/js
 python -m eval.retrieval_eval --dry-run     # query-embedding estimate (about $0.00001), no API call
 python -m eval.retrieval_eval --yes --out-json eval/results/retrieval_repro.json --out-md eval/results/retrieval_repro.md   # the 6 rows on the 26 answerable golden questions
 ```
-The output goes to separate `retrieval_repro.*` files so the committed baseline is not overwritten. Compare `eval/results/retrieval_repro.json` with the committed `eval/results/retrieval_baseline.json`. BM25 rows should match exactly; dense and hybrid rows can differ slightly, because embeddings produced by a new API call are not bit-identical
-to the ones in the original cache, and Elasticsearch approximate nearest-neighbour search is not guaranteed to be deterministic across indexes.
+The output goes to separate `retrieval_repro.*` files so the committed baseline is not overwritten. Compare `eval/results/retrieval_repro.json` with the committed `eval/results/retrieval_baseline.json`. What a clean clone reproduced when we checked (new index, fresh embeddings, new query embeddings):
+all BM25 numbers matched exactly (Recall@5, Recall@10, MRR, overall and by type; only the order among chunks with exactly equal BM25 scores can differ, because Elasticsearch breaks ties by internal document id, which depends on indexing order).
+Dense and hybrid rows can differ slightly, because embeddings from a new API call are not bit-identical to the cached ones (in our check 21 of 26 query vectors were identical and the others differed by at most 5e-4 per component); in our check one of 104 dense/hybrid per-question ranks moved (rank 6 to 7) and every headline number stayed inside the baseline's bootstrap interval.
 
 ## 10. Run the API
 **Supported mode: Docker Compose.**
