@@ -49,6 +49,24 @@ python -m eval.term_stats -- --max-requests-inflight
 python -m eval.golden_check eval/golden_owner.jsonl
 ```
 
+```bash
+# does a question reuse the expected page's own words? (no API calls; --doc-id is repeatable)
+python -m eval.overlap_check --question "How can I stop one tenant from using all the process slots?" --doc-id concepts/policy/pid-limiting
+python -m eval.overlap_check --type mixed --question "What does maxSurge allow during a rollout?" --doc-id concepts/workloads/controllers/deployment
+
+# the same numbers for the whole file, by question type; --json-out saves them (cite that file for README figures)
+python -m eval.golden_check eval/golden_owner.jsonl --json-out eval/results/golden_overlap.json
+```
+
+`overlap_check` prints, per page: the **overlap ratio** (share of the question's content terms, stemmed and without
+stopwords, that occur on the page), the **shared rare terms** (shared terms found on under 20% of the pages, the ones BM25
+latches onto), any **copied run of 4 consecutive words**, whether a draft of that `--type` would be flagged
+(conceptual: ratio at or above 0.5; mixed: 0.6; 2 or more rare terms; or a copied run; `exact_term` is never flagged),
+and the page's chunks that overlap most. For `mixed`, flags / camelCase / snake_case / hyphenated names / backticked text
+are taken out of the question first (`--exact-term` overrides the detection). The `golden_check` summary uses the worst
+case over a question's expected pages. Numbers are computed from the indexed chunk text, so they can differ in a borderline
+rare term from the drafting-time numbers in `golden_drafts.md`.
+
 `term_stats` is a literal, case-insensitive substring match on the cleaned chunk text (use `--case` for exact case).
 For an `exact_term` question you want the term in only a handful of pages and `expected_doc_ids` to list them.
 

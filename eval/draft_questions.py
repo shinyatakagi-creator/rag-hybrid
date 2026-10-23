@@ -19,7 +19,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from eval.overlap import content_terms, distinctive_shared, doc_frequency, overlap_ratio, shared_ngrams
+from eval.overlap import FLAG_DISTINCTIVE, FLAG_RATIO, doc_frequency, flags_for, question_metrics  # noqa: F401 (re-exported for callers and tests)
 from ingest.embed_cache import SpendGuard
 from ingest.loaders import load_corpus
 from rag.generate import CHARS_PER_TOKEN, cost_usd
@@ -35,8 +35,6 @@ MAX_TABLE_SHARE = 0.4  # ... or mostly table rows
 MAX_TOKENS = 1500  # drafting ceiling (thinking + JSON); the worst case charged to the spend guard
 TYPICAL_OUTPUT_TOKENS = 400  # ASSUMPTION used only for the 'typical' cost line; the real cost is read from usage
 EFFORT = "low"
-FLAG_RATIO = {"conceptual": 0.5, "mixed": 0.6}  # overlap_ratio at or above this is flagged
-FLAG_DISTINCTIVE = 2  # this many shared corpus-rare terms is flagged
 OUT_JSONL, OUT_MD = "eval/golden_drafts.jsonl", "eval/golden_drafts.md"
 
 _ENTITY = re.compile(r"&(#\d+|#x[0-9a-fA-F]+|quot|amp|lt|gt|nbsp|apos);")
@@ -149,21 +147,8 @@ def validate_draft(obj, typ: str, chunk_content: str) -> dict:
 
 
 def draft_metrics(draft: dict, typ: str, chunk_text: str, df, n_docs: int) -> dict:
-    """Overlap numbers for a draft. For a mixed draft the declared exact term is taken out first: sharing it is the point."""
-    q = draft["question"].replace(draft["exact_term"], " ") if draft["exact_term"] else draft["question"]
-    dist = distinctive_shared(q, chunk_text, df, n_docs) - content_terms(draft["exact_term"])
-    return {"overlap_ratio": round(overlap_ratio(q, chunk_text), 2), "distinctive_shared": sorted(dist), "copied_phrases": shared_ngrams(q, chunk_text)}
-
-
-def flags_for(metrics: dict, typ: str) -> list[str]:
-    flags = []
-    if metrics["overlap_ratio"] >= FLAG_RATIO[typ]:
-        flags.append(f"high_overlap({metrics['overlap_ratio']})")
-    if len(metrics["distinctive_shared"]) >= FLAG_DISTINCTIVE:
-        flags.append("distinctive_terms:" + ",".join(metrics["distinctive_shared"]))
-    if metrics["copied_phrases"]:
-        flags.append("copied_phrase:" + "|".join(metrics["copied_phrases"][:3]))
-    return flags
+    """Overlap numbers for a draft (shared implementation: eval.overlap.question_metrics, declared exact term taken out first)."""
+    return question_metrics(draft["question"], draft["exact_term"], chunk_text, df, n_docs)
 
 
 def estimate_one(model: str, typ: str, chunk: dict) -> dict:

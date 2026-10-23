@@ -61,3 +61,50 @@ def doc_frequency(texts: list[str]) -> Counter:
 def distinctive_shared(question: str, passage: str, df: Counter, n_docs: int, max_df: float = 0.2) -> set[str]:
     """Shared terms that appear in fewer than `max_df` of the corpus texts: the ones that give a lexical match away."""
     return {t for t in shared_terms(question, passage) if df[t] / n_docs < max_df}
+
+
+# -- the numbers every tool reports (draft_questions, overlap_check, golden_check) ---------------------------------
+FLAG_RATIO = {"conceptual": 0.5, "mixed": 0.6}  # overlap_ratio at or above this is flagged; exact_term questions are never flagged
+FLAG_DISTINCTIVE = 2  # this many shared corpus-rare terms is flagged
+_EXACT = re.compile(r"`([^`\n]+)`|(--[a-z][a-z0-9-]{3,})|\b([A-Za-z]+[a-z][A-Z][A-Za-z0-9]*)\b|\b([a-z]+_[a-z0-9_]+)\b|\b([a-z][a-z0-9]+(?:-[a-z0-9]+)+)\b")
+
+
+def detect_exact_terms(question: str) -> list[str]:
+    """Flags, camelCase / PascalCase names, snake_case and hyphenated names (and anything in backticks) in a question."""
+    return list(dict.fromkeys(next(g for g in m.groups() if g) for m in _EXACT.finditer(question)))
+
+
+def question_metrics(question: str, exact_terms: list[str] | str, text: str, df: Counter, n_docs: int) -> dict:
+    """overlap ratio, corpus-rare shared terms and copied 4-word runs of `question` against `text` (a page). The declared
+    exact term(s) are taken out of the question first: sharing the exact term is the point of a mixed question."""
+    terms = [exact_terms] if isinstance(exact_terms, str) else list(exact_terms)
+    q = question
+    for t in filter(None, terms):
+        q = q.replace(t, " ")
+    dist = distinctive_shared(q, text, df, n_docs)  # q no longer contains the exact term, so its words are not counted; plain-prose uses of the same word are
+    return {"overlap_ratio": round(overlap_ratio(q, text), 2), "distinctive_shared": sorted(dist), "copied_phrases": shared_ngrams(q, text)}
+
+
+def flags_for(metrics: dict, typ: str) -> list[str]:
+    if typ not in FLAG_RATIO:
+        return []
+    flags = []
+    if metrics["overlap_ratio"] >= FLAG_RATIO[typ]:
+        flags.append(f"high_overlap({metrics['overlap_ratio']})")
+    if len(metrics["distinctive_shared"]) >= FLAG_DISTINCTIVE:
+        flags.append("distinctive_terms:" + ",".join(metrics["distinctive_shared"]))
+    if metrics["copied_phrases"]:
+        flags.append("copied_phrase:" + "|".join(metrics["copied_phrases"][:3]))
+    return flags
+
+
+def page_texts(chunks_path: str = "data/chunks/heading.jsonl") -> tuple[dict[str, str], dict[str, list[dict]]]:
+    """({doc_id: title + all chunk text}, {doc_id: chunks}) from the indexed chunk file: the text a retriever can match."""
+    import json
+
+    chunks: dict[str, list[dict]] = {}
+    for line in open(chunks_path, encoding="utf8"):
+        c = json.loads(line)
+        chunks.setdefault(c["doc_id"], []).append(c)
+    texts = {d: cs[0]["title"] + "\n" + "\n".join(c["content"] for c in cs) for d, cs in chunks.items()}
+    return texts, chunks
