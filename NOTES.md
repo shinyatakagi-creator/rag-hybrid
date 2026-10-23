@@ -23,3 +23,11 @@
 - **chunk_id** = sha256(doc_id, chunker, position, content)[:16] as in the guide. Position is in the hash, so inserting a chunk earlier in a doc changes the ids of later chunks (stable only for unchanged chunk sequences).
 - **Embedding cache key (Phase 2, decided now)**: `sha256(embed_model + dims + exact_embedded_text)`, jsonl, not keyed by `chunk_id`. Deviation from "chunk hash + model": changing the heading-path prefix format, chunk size or model changes the text/model and so the key; unchanged text keeps its vector even if its position moved, and identical text shared by both chunkers is embedded once.
 - **Leftover check**: "any `{{`, `}}`, `{%`, `<!--`" is not 0 because code (JSON, Go templates, Liquid) legitimately contains them; the run reports strict counts, counts outside code, and a shortcode-shaped count, with examples.
+
+## Phase 2
+- **Effective `index_options` is `bbq_hnsw`** (m=16, ef_construction=100, rescore_vector oversample 3.0) although the mapping did not set it: ES 9.5.5 quantises `dense_vector` to binary by default for dims >= 384. The saved `eval/results/mapping.json` shows it (field mapping with `include_defaults`). Phase 3/7 can compare against explicit `hnsw` / `int8_hnsw` if dense recall looks low.
+- **Mapping additions** to the guide's mapping: `token_count` and `position` (integer), plus 1 shard / 0 replicas so the single node stays green.
+- **Actual embedding usage matched the estimate exactly**: 2,750,672 tokens, 91 calls, $0.0550 (`eval/results/embed_run.json`). 9,035 chunks across the two chunkers share 9,009 unique texts (26 identical texts embedded once).
+- **Cache size**: `data/embed_cache/text-embedding-3-small.jsonl` is 273 MB (9,009 vectors as JSON text), bigger than the guide's "well under 200 MB" because jsonl stores floats as text. ES stores the index in 128 MB. Parquet or float16 would shrink it; not worth it for a laptop project.
+- **Spend guard is per run**, not cumulative across runs; re-runs cost nothing because of the cache.
+- **Re-running the indexer** re-sends all 9,035 docs to ES (same `_id`, so idempotent) but makes zero embedding calls.
