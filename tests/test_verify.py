@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from eval.verify_mutation import MUTATIONS, build
+from eval.verify_mutation import CONTROLS, MUTATIONS, build
 from ingest.embed_cache import BudgetExceeded, SpendGuard
 from rag.verify import (
     InvalidVerdicts, build_message, load_row_chunks, pairs_of, summarize, validate_verdicts, verify_answer,
@@ -130,9 +130,27 @@ def test_mutations_apply_to_the_saved_answers_and_actually_change_something():
     rows = [json.loads(l) for l in open("eval/results/generation_log.jsonl")]
     by_row = build(rows)
     items = [m for v in by_row.values() for m in v]
-    assert len(items) == len(MUTATIONS) == 10 and sum(m["kind"] == "swap" for m in items) == 5
-    for m in items:
+    wrong = [m for m in items if m["kind"] in ("swap", "text")]
+    ctrl = [m for m in items if m["kind"].startswith("control")]
+    assert len(wrong) == len(MUTATIONS) == 10 and len(ctrl) == len(CONTROLS) == 5 and sum(m["kind"] == "swap" for m in wrong) == 5
+    for m in wrong:
         if m["kind"] == "swap":
             assert m["sentence"] == m["orig_sentence"] and m["citations"] != m["orig_citations"]
         else:
             assert m["sentence"] != m["orig_sentence"] and m["citations"] == m["orig_citations"]
+    for m in ctrl:  # controls are unchanged
+        assert m["sentence"] == m["orig_sentence"] and m["citations"] == m["orig_citations"]
+    assert [m["id"] for m in by_row[0]] != sorted(m["id"] for m in by_row[0])  # shuffled, not grouped by kind
+
+
+@pytest.mark.skipif(not Path("eval/results/context_snapshot.json").exists(), reason="no snapshot")
+def test_authored_controls_are_verbatim_from_their_cited_chunk():
+    import re
+    rows = [json.loads(l) for l in open("eval/results/generation_log.jsonl")]
+    snap = json.load(open("eval/results/context_snapshot.json"))["chunks"]
+    norm = lambda s: re.sub(r"[^a-z0-9 ]", "", re.sub(r"\s+", " ", s.lower().replace("`", "")))
+    for cid, kind, ri, si, text, cites in CONTROLS:
+        if kind != "control_authored":
+            continue
+        chunk = snap[rows[ri]["chunks"][cites[0] - 1]["chunk_id"]]["content"]
+        assert norm(text) in norm(chunk), f"{cid} is not literally in chunk [{cites[0]}]"

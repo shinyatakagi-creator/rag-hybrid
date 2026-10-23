@@ -1,40 +1,50 @@
-# Status (end of day 1)
+# Status (end of day 2)
 
-Last commit before this file: `cf704d8`. 92 tests passed at that commit. No Phase 6 work has been started.
+Phases 0-6 are built; Phase 7 (eval) has not been started. Run `git log --oneline` for the exact head; see `NOTES.md` for every deviation from the guide.
 
 ## Phases done
 
 | Phase | Commit(s) | Notes |
 |---|---|---|
 | 0 Setup | `b9d3d05` | ES 9.5.5, 1 GB heap, Kibana under `--profile debug`, pinned deps |
-| 1 Chunking | `809c63d` (WIP), `14655bf` | Corpus scope B: 511 pages, 489 with chunks; 4,211 fixed / 4,824 heading chunks. Details in `NOTES.md`, `docs/CORPUS.md`, `eval/results/phase1_stats.txt` |
-| 2 Index | `a23ab0b`, `053ea2d`, `2b21f82` | 9,035 docs in `rag-docs`, counts match chunk files; `eval/results/mapping.json` (effective `index_options` = `bbq_hnsw`); re-run makes 0 embedding calls |
-| 3+4 Retrieval + Python RRF | `519a55a` | bm25 / dense / hybrid, chunker-filtered; own RRF (k=60) |
-| 5 Generation | `cf704d8` | Cited, validated structured answers; also the 200-chunk retriever window (`eval/results/pool_check.txt`) and `eval/overlap.py` |
+| 1 Chunking | `809c63d`, `14655bf`, `3959f71`, `5eb9cf4`, `3ca1f19` | Final rules: "What's next" sections stripped in the loader, headless include partials excluded, front-matter-at-EOF bug fixed. **502 pages, 477 with chunks; 4,087 fixed / 4,528 heading chunks** (`docs/CORPUS.md`, `eval/results/phase1_stats.txt`) |
+| 2 Index | `a23ab0b`, `053ea2d`, `2b21f82`, `3ca1f19` | `rag-docs` = 8,615 docs, counts match the chunk files; `eval/results/mapping.json` (`bbq_hnsw`); a rerun makes 0 embedding calls |
+| 3+4 Retrieval + Python RRF | `519a55a` | bm25 / dense / hybrid, chunker-filtered; own RRF (k=60); window raised to 200 in `cf704d8` |
+| 5 Generation | `cf704d8` | Cited, validated structured answers (`claude-sonnet-5-5`) |
+| 6 Verification | `bc853f1`, then the latest commit | `claude-haiku-5-5`, one batched call per answer, validated; mutation test + controls. Results in `NOTES.md` (Phase 6) |
 
-## Open items you raised, not done yet
-1. **BM25 exhausted-list rule.** Remaining BM25 shortfalls (7 per chunker on the proxy queries) are rare identifiers that match only 1-14 chunks in the whole index. The rule for Phase 7 is written in `NOTES.md` ("report as list exhausted, not a window miss") but nothing in the eval code implements it yet.
-2. **"Stop the Docker daemon" rank explanation.** Explained in `NOTES.md` (BM25 rank 2 on the word "Stop" + dense rank 9, so RRF puts a 37-token chunk first once kNN is near-exact), but you have not signed it off, and the 37-token chunk question ties into the tiny-chunk rule below.
-3. **Hard refusal test.** The Terraform/AWS RDS refusal was an easy case (nothing related in the corpus). Still to do: a harder out-of-corpus question that sits next to the corpus (Kubernetes-adjacent, answer not in these docs) to see whether the model refuses or invents.
-4. **Phase 8 query-cache note.** Plan is written in `NOTES.md` (a cache miss streams 273 MB, too slow for `/ask`: small separate query cache or a key-to-offset index). No code change yet.
+## Where Phase 6 landed
+- Mutation test: 10 wrong pairs -> 7 `no`, 3 `partial`, 0 missed; 5 controls -> 5 `yes`, 0 false alarms.
+- Saved answers: citation precision 0.57 and 0.60, but at least 3 of the 5 `partial`s look like false alarms to me, so the verifier is noisy on paraphrased sentences. The pid-limiting sentence citing [4] is `yes` (correct); the verifier cannot see that it is only loosely relevant.
+- Hard-refusal question (answer only in an excluded page): the model refused.
 
-## Decisions pending from you
-- **Tiny-chunk rule, before the golden set.** Currently accepted as-is: 568 of 4,824 heading chunks (11.8%) are under 100 tokens, and fixed has 131 of 4,211 (3.1%). Phase 7 is to measure how often chunks under 100 tokens appear in the top 5 and whether any is a correct hit. You still need to confirm the final rule (keep, merge across H2 boundaries, or drop/skip "What's next" link lists) so the golden set is built against a fixed index.
-- **Golden-set questions you are writing yourself:** the `exact_term` questions and the `unanswerable` ones. I draft only `conceptual` and `mixed`, with the `eval/overlap.py` check (checkpoint 2: you choose the final `expected_doc_ids`).
+## Open items
+1. **Checkpoint 4 (yours): hand-label 25 verifier judgements** before any verifier number is quoted. Not built yet: a sampler that prints 25 (sentence, chunk, verdict) triples and computes agreement from your labels. With only 12 real pairs in the saved answers, I would generate more answers first (a paid step, to be estimated and confirmed).
+2. **`partial` is a loose bucket** (it labels some faithful paraphrases and some contradicted sentences). Decide whether to tighten the verifier prompt (and re-run the mutation test) or report only `yes` vs not-`yes`.
+3. **BM25 exhausted-list rule**: implemented in `eval/metrics.py`; to be wired into `eval/retrieval_eval.py` in Phase 7.
+4. **Pool sweep** (50/100/200) on the golden set before stating any hybrid result (window changes dense accuracy and RRF order, see `NOTES.md` Phase 4b).
+5. **Phase 8 query-cache note**: plan written, no code.
 
-## Exact next step
-Phase 6, citation verification, per the guide: one batched call per answer to the Haiku-class verifier (`VERIFIER_MODEL=claude-haiku-5-5`) asking yes / partial / no for each (sentence, cited chunk); report citation precision and the list of unsupported sentences; then print 25 sampled judgements (sentence, chunk, verdict) for you to hand-label (checkpoint 4) and compute agreement from your labels. Before any paid call: estimate, confirmation prompt, `MAX_SPEND_USD` guard. Your last message did not add Phase 6 instructions beyond the guide, so tell me if you want something different.
+## Decisions / work pending from you
+- **Golden set (checkpoint 2):** you write the `exact_term` and `unanswerable` questions; I draft only `conceptual` and `mixed` (with the `eval/overlap.py` check) and stop for you to choose the `expected_doc_ids`. The corpus is now fixed at the 502 pages above, so the set can be written against it.
+- **Native RRF (checkpoint 3):** you start the trial licence (`POST _license/start_trial?acknowledge=true`); the cluster is on the basic licence.
 
-## Spend so far (about $0.095 of the $5 limit)
+## Next step
+Phase 7 (eval), but its inputs are not ready: it needs the golden set (yours to write/choose) and, for the answer-eval half, the checkpoint-4 hand labels. I can build `eval/retrieval_eval.py` (no paid calls except query embeddings) in the meantime.
+
+## Spend so far (about $0.106 of the $5 limit)
 | Item | Cost | Source |
 |---|---|---|
-| Corpus embeddings (2,750,672 tokens, 91 calls) | $0.0550 | API-reported usage, `eval/results/embed_run.json` |
-| Answer generation, 3 questions | $0.0402 | API-reported usage, `eval/results/generation_log.jsonl` |
-| Query embeddings (about 632 tokens) | $0.0000126 | token-count estimate, not API-reported |
-| **Total** | **about $0.0952** | |
+| Corpus embeddings, first run (2,750,672 tokens) | $0.0550 | API-reported |
+| Re-embed after the What's-next rule (66,058 tokens) | $0.0013 | API-reported |
+| Query embeddings (~652 tokens) | $0.000013 | token-count estimate |
+| Answer generation, 4 questions | $0.0477 | usage fields |
+| Verification of saved answers, 2 calls | $0.0009 | usage fields |
+| Mutation test + controls, 2 calls | $0.0012 | usage fields |
+| **Total** | **about $0.1061** | |
 
 `MAX_SPEND_USD` is enforced per run, not cumulatively.
 
 ## Resuming
-- ES container `rag-hybrid-es-1` is still running with the `rag-docs` index in a Docker volume. If Docker was restarted: `docker compose up -d` (the index persists).
-- Local only, not in git: `.env` (both API keys), `data/` (corpus checkout, chunks, the 273 MB embedding cache). Activate with `source .venv/bin/activate`.
+- ES container `rag-hybrid-es-1`; `rag-docs` lives in a Docker volume (`docker compose up -d` if Docker was restarted).
+- Local only, not in git: `.env` (both keys), `data/` (corpus checkout, chunks, the embedding cache). Activate with `source .venv/bin/activate`.

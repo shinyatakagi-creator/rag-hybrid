@@ -1,0 +1,271 @@
+{
+ "model": "claude-haiku-5-5",
+ "n": 15,
+ "summary": {
+  "wrong_pairs": {
+   "n": 10,
+   "no": 7,
+   "partial": 3,
+   "yes": 0
+  },
+  "swap": {
+   "no": 5,
+   "partial": 0,
+   "yes": 0
+  },
+  "text": {
+   "no": 2,
+   "partial": 3,
+   "yes": 0
+  },
+  "controls": {
+   "n": 5,
+   "no": 0,
+   "partial": 0,
+   "yes": 5
+  }
+ },
+ "results": [
+  {
+   "id": "C02",
+   "kind": "control_authored",
+   "orig_sentence": "Process IDs (PIDs) are a fundamental resource on nodes.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "Process IDs (PIDs) are a fundamental resource on nodes.",
+   "citations": [
+    2
+   ],
+   "verdict": "yes",
+   "reason": "Excerpt states PIDs are a fundamental resource on nodes.",
+   "source_row": 0,
+   "cost_share": 7.262222222222223e-05
+  },
+  {
+   "id": "M02",
+   "kind": "swap",
+   "orig_sentence": "For example, if the host OS allows a maximum of 262144 PIDs and you expect fewer than 250 Pods, you could give each Pod a budget of 1000 PIDs.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "For example, if the host OS allows a maximum of 262144 PIDs and you expect fewer than 250 Pods, you could give each Pod a budget of 1000 PIDs.",
+   "citations": [
+    3
+   ],
+   "verdict": "no",
+   "reason": "Excerpt 3 is about horizontal pod autoscaling and load termination, not PID limits.",
+   "source_row": 0,
+   "cost_share": 7.262222222222223e-05
+  },
+  {
+   "id": "C03",
+   "kind": "control_authored",
+   "orig_sentence": "On certain Linux installations, the operating system sets the PIDs limit to a low default, such as 32768.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "On certain Linux installations, the operating system sets the PIDs limit to a low default, such as 32768.",
+   "citations": [
+    2
+   ],
+   "verdict": "yes",
+   "reason": "Excerpt says the OS sets a low PIDs limit default, such as 32768, on certain Linux installations.",
+   "source_row": 0,
+   "cost_share": 7.262222222222223e-05
+  },
+  {
+   "id": "M01",
+   "kind": "swap",
+   "orig_sentence": "Kubernetes lets you limit the number of process IDs (PIDs) that a Pod can use, which prevents a single Pod from exhausting the node's PIDs.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "Kubernetes lets you limit the number of process IDs (PIDs) that a Pod can use, which prevents a single Pod from exhausting the node's PIDs.",
+   "citations": [
+    6
+   ],
+   "verdict": "no",
+   "reason": "Excerpt 6 covers graceful Pod termination and signals, not limiting PIDs per Pod.",
+   "source_row": 0,
+   "cost_share": 7.262222222222223e-05
+  },
+  {
+   "id": "M06",
+   "kind": "text",
+   "orig_sentence": "For example, if the host OS allows a maximum of 262144 PIDs and you expect fewer than 250 Pods, you could give each Pod a budget of 1000 PIDs.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "For example, if the host OS allows a maximum of 524288 PIDs and you expect fewer than 250 Pods, you could give each Pod a budget of 1000 PIDs.",
+   "citations": [
+    2
+   ],
+   "verdict": "partial",
+   "reason": "Excerpt gives 262144 PIDs and 250 Pods, not 524288; the 524288 figure is unsupported.",
+   "source_row": 0,
+   "cost_share": 7.262222222222223e-05
+  },
+  {
+   "id": "M03",
+   "kind": "swap",
+   "orig_sentence": "You can also reserve an amount of PIDs for node overhead, separate from the allocation to Pods, so that host daemons such as the kubelet are protected.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "You can also reserve an amount of PIDs for node overhead, separate from the allocation to Pods, so that host daemons such as the kubelet are protected.",
+   "citations": [
+    8
+   ],
+   "verdict": "no",
+   "reason": "Excerpt 8 concerns ResourceQuotas and namespaces; it says nothing about reserving PIDs or kubelet protection.",
+   "source_row": 0,
+   "cost_share": 7.262222222222223e-05
+  },
+  {
+   "id": "M08",
+   "kind": "text",
+   "orig_sentence": "Per-Pod PID limiting does not ensure that all Pods scheduled onto a host are unable to impact the node overall, and it does not protect the node agents themselves from PID exhaustion.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "Per-Pod PID limiting ensures that all Pods scheduled onto a host are unable to impact the node overall, and it does not protect the node agents themselves from PID exhaustion.",
+   "citations": [
+    2
+   ],
+   "verdict": "partial",
+   "reason": "Excerpt says per-Pod limiting does not ensure all Pods cannot impact the node, but does not say that all Pods are unable to impact it.",
+   "source_row": 0,
+   "cost_share": 7.262222222222223e-05
+  },
+  {
+   "id": "M07",
+   "kind": "text",
+   "orig_sentence": "You configure this limit as a setting on the kubelet rather than in the Pod's .spec, since Pod-defined PID limits are not currently supported.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "You configure this limit as a setting on the kube-scheduler rather than in the Pod's .spec, since Pod-defined PID limits are not currently supported.",
+   "citations": [
+    2
+   ],
+   "verdict": "partial",
+   "reason": "Excerpt says the limit is set on the kubelet, not kube-scheduler; the kube-scheduler claim is contradicted.",
+   "source_row": 0,
+   "cost_share": 7.262222222222223e-05
+  },
+  {
+   "id": "C01",
+   "kind": "control_model",
+   "orig_sentence": "This kind of limiting helps prevent simple fork bombs from affecting the operation of an entire cluster.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "This kind of limiting helps prevent simple fork bombs from affecting the operation of an entire cluster.",
+   "citations": [
+    2
+   ],
+   "verdict": "yes",
+   "reason": "Excerpt states this resource limiting helps prevent simple fork bombs affecting an entire cluster.",
+   "source_row": 0,
+   "cost_share": 7.262222222222223e-05
+  },
+  {
+   "id": "M10",
+   "kind": "text",
+   "orig_sentence": "Some long-running requests, such as remote command execution or log tailing, are not subject to this limit.",
+   "orig_citations": [
+    1
+   ],
+   "sentence": "Some long-running requests, such as remote command execution or log tailing, are always subject to this limit.",
+   "citations": [
+    1
+   ],
+   "verdict": "no",
+   "reason": "Excerpt says long-running requests like remote command execution and log tailing are NOT subject to APF filter; sentence claims the opposite.",
+   "source_row": 1,
+   "cost_share": 8.316666666666666e-05
+  },
+  {
+   "id": "C04",
+   "kind": "control_authored",
+   "orig_sentence": "Each incoming request is assigned to a single priority level.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "Each incoming request is assigned to a single priority level.",
+   "citations": [
+    2
+   ],
+   "verdict": "yes",
+   "reason": "Excerpt states each incoming request is assigned to a single priority level.",
+   "source_row": 1,
+   "cost_share": 8.316666666666666e-05
+  },
+  {
+   "id": "M05",
+   "kind": "swap",
+   "orig_sentence": "When API Priority and Fairness is disabled, watch requests are not subject to the --max-requests-inflight limit.",
+   "orig_citations": [
+    1
+   ],
+   "sentence": "When API Priority and Fairness is disabled, watch requests are not subject to the --max-requests-inflight limit.",
+   "citations": [
+    3
+   ],
+   "verdict": "no",
+   "reason": "Excerpt 3 concerns the EventRateLimit admission controller, not watch requests or max-requests-inflight.",
+   "source_row": 1,
+   "cost_share": 8.316666666666666e-05
+  },
+  {
+   "id": "C05",
+   "kind": "control_authored",
+   "orig_sentence": "APF classifies and isolates requests in a more fine-grained way.",
+   "orig_citations": [
+    1
+   ],
+   "sentence": "APF classifies and isolates requests in a more fine-grained way.",
+   "citations": [
+    1
+   ],
+   "verdict": "yes",
+   "reason": "Excerpt says APF classifies and isolates requests in a more fine-grained way.",
+   "source_row": 1,
+   "cost_share": 8.316666666666666e-05
+  },
+  {
+   "id": "M04",
+   "kind": "swap",
+   "orig_sentence": "Without API Priority and Fairness enabled, overall concurrency in the API server is limited by these two flags.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "Without API Priority and Fairness enabled, overall concurrency in the API server is limited by these two flags.",
+   "citations": [
+    5
+   ],
+   "verdict": "no",
+   "reason": "Excerpt 5 covers kube-apiserver tracing spans and config, not concurrency limits or the two inflight flags.",
+   "source_row": 1,
+   "cost_share": 8.316666666666666e-05
+  },
+  {
+   "id": "M09",
+   "kind": "text",
+   "orig_sentence": "With APF enabled, the concurrency limits defined by these flags are summed and the sum is divided among a configurable set of priority levels.",
+   "orig_citations": [
+    2
+   ],
+   "sentence": "With APF enabled, the concurrency limits defined by these flags are multiplied and the product is divided among a configurable set of priority levels.",
+   "citations": [
+    2
+   ],
+   "verdict": "no",
+   "reason": "Excerpt says the concurrency limits are summed, not multiplied; the sentence's 'multiplied and product' contradicts it.",
+   "source_row": 1,
+   "cost_share": 8.316666666666666e-05
+  }
+ ],
+ "spend_usd": 0.0011526000000000002
+}
