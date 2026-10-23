@@ -1,8 +1,8 @@
-# Status (2026-10-23, written for a context handoff)
+# Status (2026-10-24, written for a context handoff)
 
 The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
-**Current phase: Phase 7, baseline retrieval eval done; answer eval next. The golden set is FINAL and frozen (checkpoint 2 done).** Phases 0-6 are built and committed. `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last commit: `8985644` (224 tests passed there).
+**Current phase: Phase 7 is done (baseline, sensitivity, native-RRF cross-check, answer eval, correctness check; checkpoints 2, 3 and 4 closed); Phase 8 (serving) is in progress. The golden set is FINAL and frozen.** `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last full test run: 270 passed (HEAD `1dda407`, before this tidy).
 
 ## Phases done
 
@@ -20,7 +20,6 @@ The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 - **HTML-entity fix** (`6272ace`, re-index `f15a76c`): 1,281 entities decoded in prose, 109 left inside code; also fixed indentation-aware fence detection and uppercase `<B>` tags. Re-embedded 721 texts for $0.0047.
 - **Drafts** (`b529a30`): `eval/golden_drafts.md` / `.jsonl`: 22 conceptual + 16 mixed, 0 failed, 34 flagged, cost $0.1345. Flags are a signal: the model reduced word overlap with the source page but did not remove it (conceptual median overlap ratio 0.54). Known weaknesses: a few mixed drafts leak their own answer (d024, d031); some questions assume context. `source_doc` is only a suggestion for `expected_doc_ids`.
 - **Overlap tools** (`8985644`): `python -m eval.overlap_check --question "..." --doc-id <id>` (no API calls) and a per-type overlap summary in `golden_check` (`--json-out eval/results/golden_overlap.json` for README figures). One implementation in `eval/overlap.py`; fixed a bug where an exact term's words were hidden from the rare-term count even when used in plain prose. Under the shared tools 33 of 38 drafts would be flagged (d002 flips); the drafts files were not regenerated.
-- **Checkpoint-4 sampler design recorded, not built** (it needs real golden-set answers, so it comes after `answer_eval`): blind labelling (the labeller never sees the verifier's verdict, reason or claim statuses) and a stratified sample with every `partial` and `no` plus random `yes` to make 25.
 
 ## Golden set: final (checkpoint 2 done, 2026-10-23)
 `eval/golden.jsonl` = 30 questions: **8 exact_term / 10 conceptual / 8 mixed / 4 unanswerable** (identical to `eval/golden_owner.jsonl`; ids are `e001`.. / `m001`.. / `c001`.. / `u001`.., not renumbered to `q001`..). `python -m eval.golden_check eval/golden.jsonl` passes (0 errors, 0 warnings); overlap figures for the README come from `eval/results/golden_overlap.json`. Every conceptual question has 0-1 shared rare terms and no copied 4-word run with its expected pages; ratio-only flags are accepted (conceptual 6 of 10, mixed 6 of 8 flagged). `eval/results/golden_page_check_lines.txt` holds the supporting lines found in each expected page. `eval/golden_owner.v1.jsonl` (the pre-rewrite file, kept untracked) and `eval/golden_drafts.*` (38 model drafts, not used) are records only.
@@ -58,11 +57,6 @@ Pre-registered: Haiku judges each answered answerable answer (hybrid 21, dense 2
 - Results: hybrid 18 of 21 clean (covered yes and no contradiction), dense 18 of 23; 0 judged `no`; contradicts-reference flagged on 2 + 2 (hybrid m007, c007; dense m007, c007). 8 answers not clean in total plus 6 seeded random clean ones are in `correctness_review.md`, which has a "your mark" column (answer wrong / reference too narrow / judge wrong). m007 (dense) answers that hand additions survive a restart: possibly a case of "reference too narrow", for you to decide. **Your spot-check of about 10 rows is pending.**
 - **Judge controls (pre-registered, built from heading/dense answers, definitions in `CONTROLS` in the module):** 3 swapped to an unrelated question (S1 e002 answer vs c010 question, S2 m001 vs c005, S3 e005 vs e004), 3 edited (A1 m002 inverted "disables" to "enables", A2 m003 "Cosign 2.0" to "1.0", A3 m006 "rejects" to "accepts and ignores"), 2 hand-written faithful rewordings (R1 e004, R2 e008). Result: **6 of 6 wrong controls caught** (key facts no or contradicts yes), **0 of 2 correct controls wrongly failed**, 0 control errors. n is tiny: it shows the judge is not blind to blatant errors, not that it is accurate on subtle ones.
 
-## Checkpoint 4: hand labelling plan (sampler BUILT, labels NOT yet given; nothing is computed from labels until you finish)
-- `python -m eval.checkpoint4 sample` (done; seed 30): all 11 cited (sentence, excerpt) pairs the Haiku verifier did not mark `yes` + 19 random `yes` pairs (out of 154), shuffled into L01..L30. `eval/checkpoint4/labelling_sheet.md` shows only the sentence and its cited excerpt text (what the verifier saw): no verdict, reason, claims, config, question id/type, page or heading. The pair-to-verdict key is in `eval/checkpoint4/key_do_not_open_until_labelled.json`: do not open it before labelling.
-- You: write one label per row (`supported` / `partial` / `unsupported`, from that excerpt alone) in `eval/checkpoint4/my_labels.csv` (`id,label,note`).
-- Only after all 30 are saved: `python -m eval.checkpoint4 score` (refuses on incomplete labels) writes `eval/checkpoint4/agreement.json`: exact agreement (verifier yes/partial/no vs supported/partial/unsupported), 3x3 confusion matrix (human rows, verifier columns), per-stratum agreement and a population-weighted agreement (the sample over-represents non-yes pairs), and the false-yes rate = share of the 19 verifier-`yes` pairs you did not label `supported` (also the stricter `unsupported`-only version) with an exact Clopper-Pearson 95% interval. `sample` refuses to overwrite a labels file that already has labels.
-
 ## Checkpoint 4 round 1 (done; scored 2026-10-23)
 `eval/checkpoint4/my_labels.csv` (owner's labels, unmodified) and `agreement.json` are committed as the **first pass: first pass; labels not edited after unblinding; the disagreement review found apparent labelling inconsistencies (e.g. L25, L18, L08 near-verbatim but labelled unsupported; L06/L21 half-covered but labelled supported).** Numbers: exact agreement 11 of 30 (0.367); `yes` stratum 8 of 19, not-`yes` stratum 3 of 11; population-weighted 0.411; false-yes rate 11 of 19 = 0.579 (exact 95% CI 0.335-0.797), `unsupported`-only 6 of 19 = 0.316 (0.126-0.566). Do not quote these as the verifier's accuracy until round 2.
 
@@ -79,8 +73,14 @@ Checkpoint 4 is CLOSED. Human labelling of the verifier was attempted three time
 
 Round 3 details for the record: interactive tool `eval/checkpoint4_round3.py` (calibration warm-up, fresh controls K1-K6, labels written by the tool); its labels (`labels.jsonl`, `practice_log.jsonl`) and `agreement.json` (controls only) are committed as saved. Nothing else was computed from the owner's labels.
 
+## README limitations (owner decisions, 2026-10-24; use these words)
+- "Phase 6 owner spot-check of the verifier was not achieved (three human labelling rounds failed their own controls)."
+- "The correctness check against reference answers is unvalidated: the owner spot-check of the review file was not done, and m007 and c007 are flagged as possibly 'reference too narrow'. Do not use correctness figures as a headline result; if mentioned, label them unvalidated and name m007 and c007."
+- Plus the earlier ones: the verifier mutation set is a dev set built from the verifier's own earlier failures; faithfulness numbers are verifier outputs; n is small (26 answerable questions); no held-out set, so all sensitivity runs are sensitivity analyses, not tuning.
+No reference answers or golden-set items were changed by these decisions (the m007/c007 correction is not made: the owner's spot-check marks were never received).
+
 ## Next steps
-1. Spot-check about 10 rows of `correctness_review.md` (mark column; still pending: marks not yet received, so no reference correction for m007/c007 has been made).
+1. (Open, optional) the spot-check of `correctness_review.md` was not done; see the README limitations above. No reference correction for m007/c007 has been made.
 2. Phase 8: API, Docker, small query-embedding cache. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
 
 ## Spend so far: about $0.2895 of the $5 limit (plus about $0.000015 for the baseline and bare-term query embeddings and $0.7295 for the answer eval, plus $0.0073 for the correctness check, so about $1.03 in total)
