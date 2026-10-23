@@ -14,13 +14,14 @@ Phases 0-6 are built; Phase 7 (eval) has not been started. Run `git log --onelin
 | 6 Verification | `bc853f1`, then the latest commit | `claude-haiku-5-5`, one batched call per answer, validated; mutation test + controls. Results in `NOTES.md` (Phase 6) |
 
 ## Where Phase 6 landed
-- Mutation test: 10 wrong pairs -> 7 `no`, 3 `partial`, 0 missed; 5 controls -> 5 `yes`, 0 false alarms.
-- Saved answers: citation precision 0.57 and 0.60, but at least 3 of the 5 `partial`s look like false alarms to me, so the verifier is noisy on paraphrased sentences. The pid-limiting sentence citing [4] is `yes` (correct); the verifier cannot see that it is only loosely relevant.
+- **Verifier rubric v2 (`claims-v2`)**: the model lists each sentence's claims and marks them supported / unsupported / contradicted; the verdict (yes / partial / no) is derived in code. v1's loose `partial` is gone (v1 results kept in `eval/results/verify_mutation_v1.json`).
+- **Dev set (25 pairs; not an accuracy figure, v2 was written after seeing v1's failures on it)**: Haiku 10/10 wrong pairs `no`, 5/5 verbatim controls `yes`, 10/10 paraphrased controls `yes`. Sonnet 5.5 as verifier agrees on 25/25 pairs (claim lists identical on 16/25). Haiku stays the verifier (Sonnet cost 17x more).
+- **Saved answers under v2**: citation precision 6/7 = 0.86 and 5/5 = 1.00 (v1: 0.57, 0.60). The pid-limiting sentence citing [4] is `yes`. One `partial` remains (row 0, the "reserve PIDs ... so that the kubelet is protected" sentence), a good case for your hand labels. Not a faithfulness number: 12 pairs.
 - Hard-refusal question (answer only in an excluded page): the model refused.
 
 ## Open items
 1. **Checkpoint 4 (yours): hand-label 25 verifier judgements** before any verifier number is quoted. Not built yet: a sampler that prints 25 (sentence, chunk, verdict) triples and computes agreement from your labels. With only 12 real pairs in the saved answers, I would generate more answers first (a paid step, to be estimated and confirmed).
-2. **`partial` is a loose bucket** (it labels some faithful paraphrases and some contradicted sentences). Decide whether to tighten the verifier prompt (and re-run the mutation test) or report only `yes` vs not-`yes`.
+2. ~~`partial` is a loose bucket~~ Addressed by rubric v2 (claims + derived verdict). The real test is your hand labels: v2 has only been checked on my hand-built dev set and 12 real pairs.
 3. **BM25 exhausted-list rule**: implemented in `eval/metrics.py`; to be wired into `eval/retrieval_eval.py` in Phase 7.
 4. **Pool sweep** (50/100/200) on the golden set before stating any hybrid result (window changes dense accuracy and RRF order, see `NOTES.md` Phase 4b).
 5. **Phase 8 query-cache note**: plan written, no code.
@@ -32,16 +33,17 @@ Phases 0-6 are built; Phase 7 (eval) has not been started. Run `git log --onelin
 ## Next step
 Phase 7 (eval), but its inputs are not ready: it needs the golden set (yours to write/choose) and, for the answer-eval half, the checkpoint-4 hand labels. I can build `eval/retrieval_eval.py` (no paid calls except query embeddings) in the meantime.
 
-## Spend so far (about $0.106 of the $5 limit)
+## Spend so far (about $0.150 of the $5 limit)
 | Item | Cost | Source |
 |---|---|---|
-| Corpus embeddings, first run (2,750,672 tokens) | $0.0550 | API-reported |
-| Re-embed after the What's-next rule (66,058 tokens) | $0.0013 | API-reported |
-| Query embeddings (~652 tokens) | $0.000013 | token-count estimate |
+| Embeddings: corpus (2,750,672 tokens) + re-embed (66,058) + queries (~652, estimated) | $0.0563 | API-reported / estimate |
 | Answer generation, 4 questions | $0.0477 | usage fields |
-| Verification of saved answers, 2 calls | $0.0009 | usage fields |
-| Mutation test + controls, 2 calls | $0.0012 | usage fields |
-| **Total** | **about $0.1061** | |
+| Verification rows 0,1 (v1) | $0.0009 | usage fields |
+| Mutation test v1 (15 pairs, Haiku) | $0.0012 | usage fields |
+| Verification rows 0,1 (v2, Haiku) | $0.0014 | usage fields |
+| Mutation set v2, 25 pairs, Haiku | $0.0023 | usage fields |
+| Mutation set v2, 25 pairs, Sonnet 5.5 cross-check | $0.0405 | usage fields |
+| **Total** | **about $0.1503** | |
 
 `MAX_SPEND_USD` is enforced per run, not cumulatively.
 

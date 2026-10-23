@@ -18,18 +18,23 @@ from ingest.embed_cache import SpendGuard
 from rag.generate import CHARS_PER_TOKEN, PRICES, cost_usd
 
 VERDICTS = ("yes", "partial", "no")
-MAX_TOKENS = 3000
+STATUSES = ("supported", "unsupported", "contradicted")
+MAX_TOKENS = 6000  # claim lists make the output longer than a bare verdict; also the worst case charged to the spend guard
 EFFORT = "low"
+RUBRIC = "claims-v2"  # v1 (direct yes/partial/no verdicts) is kept in git history and eval/results/verify_mutation_v1.json
 SNAPSHOT = "eval/results/context_snapshot.json"
 LOG_PATH = "eval/results/verification_log.jsonl"
 
-SYSTEM = """You check citations. You are given numbered documentation excerpts and numbered sentences; each sentence cites one or more excerpts. For EVERY (sentence, excerpt) pair listed, decide whether that excerpt supports the sentence.
+SYSTEM = """You check citations. You are given numbered documentation excerpts and numbered sentences; each sentence cites one or more excerpts. For EVERY (sentence, excerpt) pair listed:
 
-- yes: the excerpt states, or directly implies, everything the sentence claims, including every specific number, name, condition and quantifier.
-- partial: the excerpt supports part of the sentence, but the sentence also contains a claim, number, condition or generalisation that is not in the excerpt, or goes beyond what it says.
-- no: the excerpt does not support the sentence, is about something else, or contradicts it.
+1. Split the sentence into its distinct factual claims. Each specific fact, number, name, condition, quantifier or causal link is a claim; a short sentence may be a single claim.
+2. Classify each claim against that excerpt only:
+   - supported: the excerpt states the claim or directly implies it. Paraphrase, synonyms, a different word order, and equivalent numbers or formats (for example "fewer than 250" and "less than 250", "262,144" and "262144", "1h" and "60 minutes") all count as supported.
+   - unsupported: the excerpt says nothing about the claim, or the claim goes beyond what the excerpt says.
+   - contradicted: the excerpt says something incompatible with the claim, such as a different number, a different component, or the opposite.
+3. Add a one-line reason (under 25 words) naming the decisive point.
 
-Judge ONLY against the excerpt text provided. Do not use your own knowledge of Kubernetes, and do not give credit because the sentence happens to be true. Give a one-line reason (under 25 words) that names what is or is not in the excerpt. Return exactly one judgement per listed pair, no others."""
+Judge ONLY against the excerpt text provided. Do not use your own knowledge of Kubernetes and do not give credit because a claim happens to be true. Return exactly one judgement per listed pair, no others."""
 
 SCHEMA = {
     "type": "object",
@@ -41,10 +46,18 @@ SCHEMA = {
                 "properties": {
                     "sentence": {"type": "integer"},
                     "citation": {"type": "integer"},
-                    "verdict": {"type": "string", "enum": list(VERDICTS)},
+                    "claims": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {"claim": {"type": "string"}, "status": {"type": "string", "enum": list(STATUSES)}},
+                            "required": ["claim", "status"],
+                            "additionalProperties": False,
+                        },
+                    },
                     "reason": {"type": "string"},
                 },
-                "required": ["sentence", "citation", "verdict", "reason"],
+                "required": ["sentence", "citation", "claims", "reason"],
                 "additionalProperties": False,
             },
         }
@@ -52,6 +65,17 @@ SCHEMA = {
     "required": ["judgements"],
     "additionalProperties": False,
 }
+
+
+def derive_verdict(claims: list[dict]) -> str:
+    """The verdict comes from the claim statuses, not from the model: any contradicted -> no; all supported -> yes;
+    some supported and none contradicted -> partial; none supported -> no."""
+    statuses = [c["status"] for c in claims]
+    if "contradicted" in statuses:
+        return "no"
+    if all(s == "supported" for s in statuses):
+        return "yes"
+    return "partial" if "supported" in statuses else "no"
 
 
 class InvalidVerdicts(ValueError):
@@ -77,18 +101,23 @@ def validate_verdicts(obj, expected: list[tuple[int, int]]) -> list[dict]:
         raise InvalidVerdicts(f"expected {{'judgements': [...]}}, got {obj!r}")
     seen = {}
     for j in obj["judgements"]:
-        if not isinstance(j, dict) or set(j) != {"sentence", "citation", "verdict", "reason"}:
+        if not isinstance(j, dict) or set(j) != {"sentence", "citation", "claims", "reason"}:
             raise InvalidVerdicts(f"malformed judgement {j!r}")
         if type(j["sentence"]) is not int or type(j["citation"]) is not int:
             raise InvalidVerdicts(f"sentence/citation must be integers: {j!r}")
-        if j["verdict"] not in VERDICTS:
-            raise InvalidVerdicts(f"verdict {j['verdict']!r} not in {VERDICTS}")
+        if not isinstance(j["claims"], list) or not j["claims"]:
+            raise InvalidVerdicts(f"a pair needs at least one claim: {j!r}")
+        for c in j["claims"]:
+            if not isinstance(c, dict) or set(c) != {"claim", "status"} or not isinstance(c["claim"], str) or not c["claim"].strip():
+                raise InvalidVerdicts(f"malformed claim {c!r}")
+            if c["status"] not in STATUSES:
+                raise InvalidVerdicts(f"claim status {c['status']!r} not in {STATUSES}")
         if not isinstance(j["reason"], str) or not j["reason"].strip():
             raise InvalidVerdicts(f"empty reason for {j!r}")
         key = (j["sentence"], j["citation"])
         if key in seen:
             raise InvalidVerdicts(f"duplicate judgement for pair {key}")
-        seen[key] = j
+        seen[key] = {**j, "verdict": derive_verdict(j["claims"])}  # verdict is derived here, never taken from the model
     missing, extra = [p for p in expected if p not in seen], [p for p in seen if p not in set(expected)]
     if missing or extra:
         raise InvalidVerdicts(f"pairs missing {missing}, unexpected {extra}")
@@ -168,9 +197,10 @@ def main(argv=None) -> None:
     ap.add_argument("--log", default="eval/results/generation_log.jsonl")
     ap.add_argument("--rows", default=None, help="comma-separated 0-based row indexes (default all)")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--model", default=None, help="override VERIFIER_MODEL (e.g. a Sonnet cross-check)")
     a = ap.parse_args(argv)
     import anthropic
-    model = os.environ["VERIFIER_MODEL"]
+    model = a.model or os.environ["VERIFIER_MODEL"]
     guard = SpendGuard(float(os.environ.get("MAX_SPEND_USD", "5")))
     rows = [json.loads(l) for l in open(a.log, encoding="utf8")]
     snap = json.loads(Path(SNAPSHOT).read_text())["chunks"] if Path(SNAPSHOT).exists() else {}
@@ -193,7 +223,8 @@ def main(argv=None) -> None:
             print(f"    DRY RUN: ~{r['estimate']['input_tokens_est']} input tokens = ${r['estimate']['input_cost_est']:.5f}; worst case ${r['estimate']['worst_case_cost']:.5f}")
             continue
         for j in r["judgements"]:
-            print(f"    s{j['sentence']} vs [{j['citation']}]: {j['verdict'].upper():7} {j['reason']}")
+            marks = "".join({"supported": "S", "unsupported": "U", "contradicted": "C"}[c["status"]] for c in j["claims"])
+            print(f"    s{j['sentence']} vs [{j['citation']}]: {j['verdict'].upper():7} claims[{marks}] {j['reason']}")
         s = r["summary"]
         print(f"    citation precision {s['yes']}/{s['citations']} = {s['citation_precision']:.2f} (partial {s['partial']}, no {s['no']}); "
               f"unsupported sentences: {[u['sentence'] for u in s['unsupported_sentences']]}; partial-only: {[u['sentence'] for u in s['partially_supported_sentences']]}")
@@ -201,7 +232,7 @@ def main(argv=None) -> None:
         Path(LOG_PATH).parent.mkdir(parents=True, exist_ok=True)
         with open(LOG_PATH, "a", encoding="utf8") as f:
             f.write(json.dumps({"ts": datetime.now(timezone.utc).isoformat(), "source": a.log, "row": i, "question": row["question"], "model": model,
-                                "effort": EFFORT, **{k: v for k, v in r.items() if k != "estimate"}}, ensure_ascii=False) + "\n")
+                                "effort": EFFORT, "rubric": RUBRIC, **{k: v for k, v in r.items() if k != "estimate"}}, ensure_ascii=False) + "\n")
     if a.dry_run:
         print(f"\nDRY RUN total (input only): ${total_est:.5f}. No API call made.")
     else:
