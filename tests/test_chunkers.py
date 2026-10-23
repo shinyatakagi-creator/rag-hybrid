@@ -1,7 +1,11 @@
+from pathlib import Path
+
+import pytest
+
 from ingest.chunkers import (
     HEADING_TARGET, MAX_TOKENS, _sections, embed_text, fixed_chunks, heading_chunks, make_chunk_id, ntok,
 )
-from ingest.loaders import Doc
+from ingest.loaders import Doc, load_corpus
 
 
 def words(n: int, w: str = "alpha") -> str:
@@ -70,6 +74,38 @@ def test_heading_less_page_is_one_section_with_title_path():
 def test_merge_that_would_exceed_target_is_refused():
     d = doc(f"## A\n{words(HEADING_TARGET - 30)}\n### a1\n{words(60)}")
     assert paths(d) == ["T > A", "T > A > a1"]  # 60 tiny tokens would push A past the target
+
+
+def crosses_boundary(member: dict, out: dict) -> bool:
+    """Independent of _can_merge: a source section moved under an output section from another H1/H2."""
+    if member["level"] >= 1 and member["h1"] != out["h1"]:
+        return True
+    return member["level"] >= 2 and out["level"] >= 2 and member["h2"] != out["h2"]
+
+
+def merged_sections(docs):
+    return [(s, m) for d in docs for s in _sections(d) for m in s["members"]]
+
+
+def test_no_merge_crosses_an_h2_or_h1_boundary_synthetic():
+    docs = [
+        doc(f"## A\n{words(20)}\n## B\n{words(20)}\n### b1\n{words(20)}\n### b2\n{words(20)}\n## C\n{words(20)}"),
+        doc(f"# One\n{words(20)}\n## A\n### a1\n{words(20)}\n# Two\n{words(20)}\n## B\n{words(200)}\n### b1\n{words(20)}"),
+        doc(f"{words(20)}\n## A\n{words(20)}\n## B\n### b1\n{words(20)}\n## C\n{words(20)}"),
+    ]
+    pairs = merged_sections(docs)
+    assert pairs and not [1 for m, s in ((m, s) for s, m in pairs) if crosses_boundary(m, s)]
+    assert any(len(s["members"]) > 1 for d in docs for s in _sections(d))  # merges did happen
+
+
+@pytest.mark.skipif(not Path("data/k8s/docs").exists(), reason="corpus checkout not present")
+def test_no_merge_crosses_an_h2_or_h1_boundary_real_corpus():
+    docs = load_corpus(Path("data/k8s"))
+    secs = [s for d in docs for s in _sections(d)]
+    crossings = [(s["path"], m["path"]) for s in secs for m in s["members"] if crosses_boundary(m, s)]
+    merges = sum(len(s["members"]) - 1 for s in secs)
+    print(f"sections={len(secs)} merged-in sections={merges} boundary-crossing merges={len(crossings)}")
+    assert merges > 100 and crossings == []
 
 
 def test_h1_equal_to_title_is_not_duplicated_in_path():

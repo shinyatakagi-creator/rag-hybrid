@@ -167,7 +167,7 @@ def _labelled(s: dict) -> str:
 
 def _group(parts: list[dict], final: dict) -> dict:
     text = "\n\n".join([_labelled(p) for p in parts] + [final["text"]]).strip()
-    return {"path": final["path"], "level": final["level"], "text": text}
+    return {**final, "text": text, "members": parts + [final]}  # members: source sections, for the boundary test
 
 
 def _sections(doc: Doc) -> list[dict]:
@@ -179,7 +179,10 @@ def _sections(doc: Doc) -> list[dict]:
         path = [doc.title] + [d.metadata[k] for k in keys]
         if len(path) > 1 and path[1] == doc.title:
             del path[1]
-        secs.append({"path": path, "level": max((int(k[1]) for k in keys), default=0), "text": d.page_content.strip()})
+        secs.append({
+            "path": path, "level": max((int(k[1]) for k in keys), default=0), "text": d.page_content.strip(),
+            "h1": d.metadata.get("h1"), "h2": d.metadata.get("h2"),
+        })
     out, pending = [], []  # pending: tiny sections waiting to move under the next section
     for s in secs:
         if pending and not _can_merge(pending[-1], s):  # parent boundary: the tiny run stays where it is
@@ -198,6 +201,7 @@ def _sections(doc: Doc) -> list[dict]:
         if merged and ntok(s["text"]) < MIN_SECTION and _can_merge(merged[-1], s) \
                 and ntok(merged[-1]["text"] + "\n\n" + _labelled(s)) <= HEADING_TARGET:
             merged[-1]["text"] += "\n\n" + _labelled(s)
+            merged[-1]["members"] += s["members"]
         else:
             merged.append(s)
     return merged
