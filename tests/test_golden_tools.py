@@ -76,13 +76,28 @@ def test_term_stats_case_sensitivity_and_missing_term():
 
 # -- golden check -----------------------------------------------------------------------------------------
 def good(**kw):
-    base = {"id": "e01", "type": "exact_term", "question": "What does the flag do?", "expected_doc_ids": ["concepts/policy/pid-limiting"], "reference_answer": "It limits PIDs.", "answerable": True}
+    base = {"id": "e01", "type": "exact_term", "question": "What does the flag do?", "expected_doc_ids": ["concepts/policy/pid-limiting"], "reference_answer": "It limits PIDs.", "answerable": True, "exact_term": "the flag"}
     return {**base, **kw}
+
+
+def test_exact_term_rules_by_type():
+    assert check_line(good(type="mixed"), DOCS) == ([], [])
+    for bad_kw, frag in [({"exact_term": ""}, "non-empty exact_term"), ({"exact_term": "  "}, "non-empty exact_term"),
+                         ({"exact_term": "--nope"}, "verbatim"), ({"exact_term": "THE FLAG"}, "verbatim"), ({"exact_term": 3}, "must be a string")]:
+        for typ in ("exact_term", "mixed"):
+            assert any(frag in e for e in check_line(good(type=typ, **bad_kw), DOCS)[0]), (typ, bad_kw)
+    absent = {k: v for k, v in good().items() if k != "exact_term"}
+    assert any("non-empty exact_term" in e for e in check_line(absent, DOCS)[0])  # missing on exact_term
+    con = {**absent, "type": "conceptual"}
+    assert check_line(con, DOCS) == ([], []) and check_line({**con, "exact_term": ""}, DOCS) == ([], [])
+    assert any("must not have an exact_term" in e for e in check_line({**con, "exact_term": "the flag"}, DOCS)[0])
+    un = {**absent, "type": "unanswerable", "expected_doc_ids": [], "reference_answer": "", "answerable": False}
+    assert check_line(un, DOCS) == ([], []) and any("must not have" in e for e in check_line({**un, "exact_term": "the flag"}, DOCS)[0])
 
 
 def test_a_valid_answerable_and_unanswerable_line_pass():
     assert check_line(good(), DOCS) == ([], [])
-    assert check_line(good(id="u01", type="unanswerable", expected_doc_ids=[], reference_answer="", answerable=False), DOCS) == ([], [])
+    assert check_line(good(id="u01", type="unanswerable", expected_doc_ids=[], reference_answer="", answerable=False, exact_term=""), DOCS) == ([], [])
     assert check_line(good(expected_doc_ids=["concepts/policy/pid-limiting", "concepts/workloads/pods/_index"]), DOCS) == ([], [])
     assert check_line(good(note="why this is the right page"), DOCS) == ([], [])  # the optional note field is accepted
 

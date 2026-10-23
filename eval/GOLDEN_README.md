@@ -17,6 +17,7 @@ the checker on purpose).
 | `expected_doc_ids` | 1-3 `doc_id`s of the pages that answer it; `[]` for `unanswerable` |
 | `reference_answer` | one or two sentences, from the pages; `""` is fine for `unanswerable` |
 | `answerable` | `true`, except `false` for `unanswerable` |
+| `exact_term` | required and non-empty for `exact_term` and `mixed` questions, and it must appear verbatim (case-sensitive) in the question; empty or absent for `conceptual` and `unanswerable` |
 | `note` | optional free text. 1-3 expected docs is the plan; more than 3 gives a *warning* (not an error), and a non-empty `note` saying why silences it. At least 1 expected doc is still required for answerable questions |
 
 **Types.** `exact_term`: the question contains an exact flag, field name, command or error string that appears in the
@@ -57,6 +58,8 @@ python -m eval.overlap_check --type mixed --question "What does maxSurge allow d
 
 # the same numbers for the whole file, by question type; --json-out saves them (cite that file for README figures)
 python -m eval.golden_check eval/golden_owner.jsonl --json-out eval/results/golden_overlap.json
+# list each flagged question with its ratio, shared rare terms and copied 4-word run
+python -m eval.golden_check eval/golden_owner.jsonl --details
 ```
 
 `overlap_check` prints, per page: the **overlap ratio** (share of the question's content terms, stemmed and without

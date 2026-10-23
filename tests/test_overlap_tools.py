@@ -162,3 +162,23 @@ def test_missing_chunk_file_skips_the_summary_without_failing(tmp_path, capsys):
     p = golden_file(tmp_path, [q("c1", "conceptual", "The fork bomb can exhaust process slots on the kubelet node", ["pids"])])
     assert golden_main([p, "--doc-list", str(ids), "--chunks", str(tmp_path / "missing.jsonl")]) == 0
     assert "overlap summary skipped" in capsys.readouterr().out
+
+
+def test_declared_exact_term_is_used_for_mixed_instead_of_detection(chunk_file, tmp_path):
+    texts, _ = page_texts(chunk_file)
+    p = golden_file(tmp_path, [q("m1", "mixed", "Which field such as podPidsLimit caps IDs for a Pod?", ["pids"], exact_term="Pod")])
+    _, rows = overlap_summary(p, texts, doc_frequency(list(texts.values())), len(texts))
+    assert rows[0]["exact_terms"] == ["Pod"]
+
+
+def test_details_lists_each_flagged_question_with_ratio_terms_and_copied_run(chunk_file, tmp_path, capsys):
+    ids = tmp_path / "ids.tsv"
+    docids.write_list([{"doc_id": d, "url": "u", "title": "t", "chunks_fixed": 1, "chunks_heading": 1} for d in ("pids", "misc")], str(ids))
+    p = golden_file(tmp_path, [q("c1", "conceptual", "The fork bomb can exhaust process slots on the kubelet node", ["pids"]),
+                               q("c2", "conceptual", "What keeps one runaway workload from starving the host?", ["misc"])])
+    assert golden_main([p, "--doc-list", str(ids), "--chunks", chunk_file]) == 0
+    assert "details:" not in capsys.readouterr().out  # off by default
+    assert golden_main([p, "--doc-list", str(ids), "--chunks", chunk_file, "--details"]) == 0
+    out = capsys.readouterr().out
+    assert "details: 1 flagged question(s)" in out and "c1 [conceptual] ratio" in out and "c2 [conceptual]" not in out
+    assert "shared rare terms:" in out and "fork bomb can exhaust" in out.lower()

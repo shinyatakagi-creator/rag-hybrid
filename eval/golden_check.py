@@ -1,7 +1,8 @@
 """python -m eval.golden_check eval/golden_owner.jsonl
 
 Checks a golden-set file against the agreed format (see eval/GOLDEN_README.md) and against the list of indexed pages
-(eval/doc_ids.tsv): known doc_ids that actually have chunks, at least 1 expected doc for answerable questions, none for
+(eval/doc_ids.tsv): exact_term required (non-empty, verbatim in the question) for exact_term and mixed questions and empty or
+absent otherwise; known doc_ids that actually have chunks, at least 1 expected doc for answerable questions, none for
 unanswerable ones, unique ids, no leftover REPLACE placeholders. Exits 1 when there are errors. More than 3 expected
 docs is only a WARNING (exit stays 0); an optional non-empty "note" field on the line says why and silences it.
 
@@ -22,7 +23,7 @@ from eval.overlap import FLAG_DISTINCTIVE, FLAG_RATIO, detect_exact_terms, doc_f
 TYPES = ("exact_term", "conceptual", "mixed", "unanswerable")
 TARGETS = {"exact_term": 8, "conceptual": 10, "mixed": 8, "unanswerable": 4}  # the 30-question plan (owner, 2026-10-23)
 KEYS = {"id", "type", "question", "expected_doc_ids", "reference_answer", "answerable"}
-OPTIONAL = {"note"}  # free text; a non-empty note on a question with more than 3 expected docs silences that warning
+OPTIONAL = {"note", "exact_term"}  # note: free text, a non-empty one silences the >3 expected docs warning; exact_term: see check_line
 MAX_EXPECTED = 3
 
 
@@ -35,6 +36,16 @@ def check_line(obj, docs: dict[str, dict]) -> tuple[list[str], list[str]]:
         return [f"keys must be {sorted(KEYS)} (plus optional {sorted(OPTIONAL)}); missing {sorted(KEYS - set(obj))}, unexpected {sorted(set(obj) - KEYS - OPTIONAL)}"], []
     if "note" in obj and not isinstance(obj["note"], str):
         errs.append("note must be a string")
+    et = obj.get("exact_term", "")
+    if not isinstance(et, str):
+        errs.append("exact_term must be a string")
+    elif obj["type"] in ("exact_term", "mixed"):
+        if not et.strip():
+            errs.append(f"a {obj['type']} question needs a non-empty exact_term")
+        elif isinstance(obj["question"], str) and et not in obj["question"]:
+            errs.append(f"exact_term {et!r} does not appear verbatim in the question")
+    elif obj["type"] in TYPES and et.strip():
+        errs.append(f"a {obj['type']} question must not have an exact_term")
     if not isinstance(obj["id"], str) or not re.fullmatch(r"[A-Za-z0-9_-]+", obj["id"]):
         errs.append("id must be a non-empty string of letters, digits, '-' or '_'")
     if obj["type"] not in TYPES:
@@ -119,12 +130,15 @@ def overlap_summary(path: str, texts: dict[str, str], df, n_docs: int) -> tuple[
         ids = obj.get("expected_doc_ids")
         if not isinstance(ids, list) or not ids or not all(i in texts for i in ids) or not isinstance(obj.get("question"), str):
             continue
-        terms = detect_exact_terms(obj["question"]) if obj["type"] == "mixed" else []
+        declared = obj.get("exact_term")
+        terms = [declared] if isinstance(declared, str) and declared.strip() else detect_exact_terms(obj["question"]) if obj["type"] == "mixed" else []
         per_doc = {i: question_metrics(obj["question"], terms, texts[i], df, n_docs) for i in ids}
         worst = max(per_doc.values(), key=lambda m: (m["overlap_ratio"], len(m["distinctive_shared"])))
         rows.append({"id": obj.get("id"), "type": obj["type"], "overlap_ratio": worst["overlap_ratio"],
                      "rare_terms": max(len(m["distinctive_shared"]) for m in per_doc.values()),
                      "copied_phrase": any(m["copied_phrases"] for m in per_doc.values()),
+                     "rare_term_list": sorted({t for m in per_doc.values() for t in m["distinctive_shared"]}),
+                     "copied_phrases": sorted({p for m in per_doc.values() for p in m["copied_phrases"]}), "question": obj["question"],
                      "flagged": any(flags_for(m, obj["type"]) for m in per_doc.values()), "exact_terms": terms,
                      "worst_doc": max(per_doc, key=lambda i: per_doc[i]["overlap_ratio"])})
     summary = {}
@@ -151,12 +165,27 @@ def format_overlap(summary: dict[str, dict]) -> str:
     return "\n".join(out)
 
 
+def format_details(rows: list[dict]) -> str:
+    """One block per flagged question: id, type, worst overlap ratio, shared rare terms, copied 4-word runs."""
+    flagged = [r for r in rows if r["flagged"]]
+    if not flagged:
+        return "details: no flagged questions"
+    out = [f"details: {len(flagged)} flagged question(s)"]
+    for r in flagged:
+        out += [f"  {r['id']} [{r['type']}] ratio {r['overlap_ratio']:.2f} (worst page {r['worst_doc']})",
+                f"    question: {r['question']}",
+                f"    shared rare terms: {', '.join(r['rare_term_list']) or '-'}",
+                f"    copied 4-word run: {' | '.join(r['copied_phrases']) or '-'}"]
+    return "\n".join(out)
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("path")
     ap.add_argument("--doc-list", default=LIST_PATH)
     ap.add_argument("--chunks", default="data/chunks/heading.jsonl", help="indexed chunks, the source of page text for the overlap summary")
     ap.add_argument("--no-overlap", action="store_true", help="skip the overlap summary")
+    ap.add_argument("--details", action="store_true", help="list each flagged question with its ratio, shared rare terms and copied 4-word runs")
     ap.add_argument("--json-out", help="also save the per-type summary and per-question numbers here (use for README figures)")
     a = ap.parse_args(argv)
     if not Path(a.path).exists():
@@ -178,6 +207,8 @@ def main(argv=None) -> int:
             texts, _ = page_texts(a.chunks)
             ov, rows = overlap_summary(a.path, texts, doc_frequency(list(texts.values())), len(texts))
             print("\n" + (format_overlap(ov) if ov else "overlap summary: no answerable question with known expected docs yet"))
+            if a.details:
+                print("\n" + format_details(rows))
             if a.json_out:
                 Path(a.json_out).write_text(json.dumps({"source": a.path, "pages": len(texts), "by_type": ov, "questions": rows}, indent=1))
                 print(f"saved {a.json_out}")
