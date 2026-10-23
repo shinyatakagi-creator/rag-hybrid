@@ -1,0 +1,70 @@
+{
+ "mapping": {
+  "rag-docs-hnsw": {
+   "mappings": {
+    "properties": {
+     "chunker": {
+      "type": "keyword"
+     },
+     "content": {
+      "type": "text",
+      "analyzer": "english"
+     },
+     "doc_id": {
+      "type": "keyword"
+     },
+     "embedding": {
+      "type": "dense_vector",
+      "dims": 1536,
+      "index": true,
+      "similarity": "cosine",
+      "index_options": {
+       "type": "hnsw",
+       "m": 16,
+       "ef_construction": 100
+      }
+     },
+     "heading_path": {
+      "type": "text"
+     },
+     "position": {
+      "type": "integer"
+     },
+     "title": {
+      "type": "text"
+     },
+     "token_count": {
+      "type": "integer"
+     },
+     "url": {
+      "type": "keyword"
+     }
+    }
+   }
+  }
+ },
+ "embedding_with_defaults": {
+  "rag-docs-hnsw": {
+   "mappings": {
+    "embedding": {
+     "full_name": "embedding",
+     "mapping": {
+      "embedding": {
+       "type": "dense_vector",
+       "element_type": "float",
+       "dims": 1536,
+       "index": true,
+       "similarity": "cosine",
+       "index_options": {
+        "type": "hnsw",
+        "m": 16,
+        "ef_construction": 100
+       },
+       "meta": {}
+      }
+     }
+    }
+   }
+  }
+ }
+}

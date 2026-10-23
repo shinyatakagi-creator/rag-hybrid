@@ -1,0 +1,4356 @@
+{
+ "meta": {
+  "timestamp": "2026-10-23T05:03:49+00:00",
+  "git": {
+   "sha": "a1dec2ee3c56e24438412da3113e0b165c138070",
+   "dirty_files": [
+    "M eval/retrieval_eval.py",
+    " M ingest/index.py",
+    " M rag/retrieve.py",
+    " M tests/test_retrieve.py",
+    "?? eval/failure_analysis.py",
+    "?? eval/golden_owner.v1.jsonl",
+    "?? eval/sensitivity.py"
+   ]
+  },
+  "golden_file": "eval/golden.jsonl",
+  "golden_sha256": "898d37e180c2c131655d0219bf017b0ee5723dae99155f56c6ef69ad5540c8a5",
+  "n_answerable": 16,
+  "n_unanswerable": 14,
+  "n_by_type": {
+   "exact_term": 8,
+   "mixed": 8
+  },
+  "settings": {
+   "index": "rag-docs",
+   "es_version": "9.5.5",
+   "docs_per_chunker": {
+    "fixed": 4072,
+    "heading": 4527
+   },
+   "embed_model": "text-embedding-3-small",
+   "pool": 200,
+   "knn": {
+    "k": 200,
+    "num_candidates": 800
+   },
+   "rrf_k": 60,
+   "hybrid_fused_list": 400,
+   "bm25_fields": [
+    "title^2",
+    "heading_path^1.5",
+    "content"
+   ],
+   "bm25_window": 200,
+   "ks": [
+    5,
+    10
+   ],
+   "tiny_chunk_tokens": 100,
+   "bootstrap": {
+    "n": 10000,
+    "seed": 0,
+    "method": "percentile, resampling questions"
+   },
+   "index_options": "as built (effective bbq_hnsw)",
+   "fusion": "python",
+   "query_embeddings_api_calls_this_run": 1,
+   "query_embeddings_est_spend_usd": 1.62e-06,
+   "query": "the question's exact_term field alone, e.g. '--root-ca-file'",
+   "queries": {
+    "e001": "--remove-extra-subjects",
+    "e002": "--service-account-max-token-expiration",
+    "e003": "--bind-address",
+    "e004": "acquireTime",
+    "e005": "preBind",
+    "e006": "compositePodGroupTemplates",
+    "e007": "node.cloudprovider.kubernetes.io/uninitialized",
+    "e008": "authentication.kubernetes.io/mutatingwebhookconfiguration-uid",
+    "m001": "--root-ca-file",
+    "m002": "--enable-priority-and-fairness",
+    "m003": "--certificate-identity",
+    "m004": "schedulingGates",
+    "m005": "topologySpreadConstraints",
+    "m006": "bindMountOptions",
+    "m007": "kubernetes.io/bootstrapping",
+    "m008": "OOMKilled"
+   }
+  },
+  "title": "Bare-term diagnostic (sensitivity analysis, not part of the golden-set baseline)",
+  "intro": "Query = the exact term alone, for the 16 exact_term and mixed questions; same 6 rows, same metrics, same expected docs. It shows how much of the baseline score on these questions comes from the surrounding words."
+ },
+ "results": {
+  "fixed/bm25": {
+   "overall": {
+    "n": 16,
+    "mrr": 0.6510416666666666,
+    "recall@5": 0.875,
+    "recall@10": 0.9375,
+    "exhausted": 9,
+    "exhausted_share": 0.5625,
+    "exhausted_missed": 0,
+    "short": 8,
+    "recall@10_ci95": [
+     0.8125,
+     1.0
+    ],
+    "mrr_ci95": [
+     0.474,
+     0.8229
+    ]
+   },
+   "by_type": {
+    "exact_term": {
+     "n": 8,
+     "mrr": 0.5520833333333334,
+     "recall@5": 0.875,
+     "recall@10": 0.875,
+     "exhausted": 5,
+     "exhausted_share": 0.625,
+     "exhausted_missed": 0,
+     "short": 4,
+     "recall@10_ci95": [
+      0.625,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.3125,
+      0.8125
+     ]
+    },
+    "mixed": {
+     "n": 8,
+     "mrr": 0.75,
+     "recall@5": 0.875,
+     "recall@10": 1.0,
+     "exhausted": 4,
+     "exhausted_share": 0.5,
+     "exhausted_missed": 0,
+     "short": 4,
+     "recall@10_ci95": [
+      1.0,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.5,
+      1.0
+     ]
+    }
+   },
+   "tiny": {
+    "top_chunks": 72,
+    "tiny": 0,
+    "tiny_share": 0.0,
+    "tiny_from_expected": 0,
+    "tiny_from_expected_share": 0.0,
+    "questions_with_tiny_expected": 0,
+    "questions": 16
+   },
+   "questions": [
+    {
+     "id": "e001",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 95,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/rbac",
+       "tokens": 379,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/access-authn-authz/rbac",
+       "tokens": 370,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta4",
+       "tokens": 376,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta3",
+       "tokens": 359,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 233,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e002",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 55,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/authentication": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 394,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/security/service-accounts",
+       "tokens": 387,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/projected-volumes",
+       "tokens": 389,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 387,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 371,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "e003",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.08333333333333333,
+     "distinct_docs": 86,
+     "exhausted": false,
+     "ranks": {
+      "concepts/architecture/mixed-version-proxy": 12
+     },
+     "first_rank": 12,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 185,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-proxy-config.v1alpha1",
+       "tokens": 383,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/security/hardening-guide/scheduler",
+       "tokens": 400,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/storage-classes",
+       "tokens": 352,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e004",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 3,
+     "exhausted": true,
+     "ranks": {
+      "concepts/cluster-administration/coordinated-leader-election": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 3,
+     "top5": [
+      {
+       "doc_id": "tasks/debug/debug-cluster/_index",
+       "tokens": 397,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 387,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/coordinated-leader-election",
+       "tokens": 385,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "e005",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 7,
+     "exhausted": true,
+     "ranks": {
+      "reference/scheduling/config": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 11,
+     "top5": [
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 331,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-scheduler-config.v1",
+       "tokens": 354,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-scheduler-config.v1",
+       "tokens": 381,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 369,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e006",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 6,
+     "exhausted": true,
+     "ranks": {
+      "concepts/workloads/workload-api/_index": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 13,
+     "top5": [
+      {
+       "doc_id": "concepts/workloads/workload-api/_index",
+       "tokens": 344,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/policies",
+       "tokens": 258,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/_index",
+       "tokens": 377,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/topology-aware-scheduling",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 194,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e007",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 4,
+     "exhausted": true,
+     "ranks": {
+      "tasks/administer-cluster/running-cloud-controller": 2,
+      "concepts/scheduling-eviction/taint-and-toleration": 3
+     },
+     "first_rank": 2,
+     "n_chunks": 6,
+     "top5": [
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 403,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/running-cloud-controller",
+       "tokens": 190,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/taint-and-toleration",
+       "tokens": 341,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/administer-cluster/running-cloud-controller",
+       "tokens": 387,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 360,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e008",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 64,
+     "exhausted": true,
+     "ranks": {
+      "reference/access-authn-authz/extensible-admission-controllers": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 164,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 398,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 398,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 330,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 396,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m001",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 73,
+     "exhausted": false,
+     "ranks": {
+      "tasks/tls/manual-rotation-of-ca-certificates": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 284,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/extend-kubernetes/configure-aggregation-layer",
+       "tokens": 355,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 381,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 317,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 270,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m002",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 62,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/flow-control": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 392,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 365,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 369,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 343,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 302,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m003",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 60,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/verify-signed-artifacts": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 354,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 392,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/verify-signed-artifacts",
+       "tokens": 184,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 282,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/verify-signed-artifacts",
+       "tokens": 387,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m004",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 1,
+     "exhausted": true,
+     "ranks": {
+      "concepts/scheduling-eviction/pod-scheduling-readiness": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 2,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 393,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 351,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m005",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 2,
+     "exhausted": true,
+     "ranks": {
+      "concepts/scheduling-eviction/topology-spread-constraints": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 15,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 377,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 376,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 389,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 382,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/config-api/kube-scheduler-config.v1",
+       "tokens": 381,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m006",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 2,
+     "exhausted": true,
+     "ranks": {
+      "concepts/storage/volumes": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 2,
+     "top5": [
+      {
+       "doc_id": "concepts/storage/volumes",
+       "tokens": 289,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 386,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m007",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.16666666666666666,
+     "distinct_docs": 80,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 6
+     },
+     "first_rank": 6,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 171,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 382,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 391,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 366,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m008",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 3,
+     "exhausted": true,
+     "ranks": {
+      "tasks/administer-cluster/nodelocaldns": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 5,
+     "top5": [
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "tokens": 108,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "tokens": 382,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "tokens": 349,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "tokens": 382,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/nodelocaldns",
+       "tokens": 403,
+       "expected": true
+      }
+     ]
+    }
+   ]
+  },
+  "fixed/dense": {
+   "overall": {
+    "n": 16,
+    "mrr": 0.3309549247049247,
+    "recall@5": 0.46875,
+    "recall@10": 0.65625,
+    "exhausted": 0,
+    "exhausted_share": 0.0,
+    "exhausted_missed": 0,
+    "short": 0,
+    "recall@10_ci95": [
+     0.4375,
+     0.875
+    ],
+    "mrr_ci95": [
+     0.1717,
+     0.5115
+    ]
+   },
+   "by_type": {
+    "exact_term": {
+     "n": 8,
+     "mrr": 0.19212962962962962,
+     "recall@5": 0.4375,
+     "recall@10": 0.5625,
+     "exhausted": 0,
+     "exhausted_share": 0.0,
+     "exhausted_missed": 0,
+     "short": 0,
+     "recall@10_ci95": [
+      0.25,
+      0.875
+     ],
+     "mrr_ci95": [
+      0.0921,
+      0.3036
+     ]
+    },
+    "mixed": {
+     "n": 8,
+     "mrr": 0.4697802197802198,
+     "recall@5": 0.5,
+     "recall@10": 0.75,
+     "exhausted": 0,
+     "exhausted_share": 0.0,
+     "exhausted_missed": 0,
+     "short": 0,
+     "recall@10_ci95": [
+      0.375,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.1771,
+      0.7679
+     ]
+    }
+   },
+   "tiny": {
+    "top_chunks": 80,
+    "tiny": 10,
+    "tiny_share": 0.125,
+    "tiny_from_expected": 0,
+    "tiny_from_expected_share": 0.0,
+    "questions_with_tiny_expected": 0,
+    "questions": 16
+   },
+   "questions": [
+    {
+     "id": "e001",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.025,
+     "distinct_docs": 95,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 40
+     },
+     "first_rank": 40,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/configure-pod-container/migrate-from-psp",
+       "tokens": 374,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-pod-level-resources",
+       "tokens": 356,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/manage-kubernetes-objects/declarative-config",
+       "tokens": 392,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 312,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-resources/access-dra-device-metadata",
+       "tokens": 68,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e002",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 53,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/authentication": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 379,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 365,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 362,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 366,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 365,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e003",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.037037037037037035,
+     "distinct_docs": 62,
+     "exhausted": false,
+     "ranks": {
+      "concepts/architecture/mixed-version-proxy": 27
+     },
+     "first_rank": 27,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/services-networking/service",
+       "tokens": 305,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-proxy-config.v1alpha1",
+       "tokens": 383,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubelet-config-file",
+       "tokens": 372,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/debug/debug-application/debug-service",
+       "tokens": 345,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/debug/debug-application/debug-service",
+       "tokens": 233,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e004",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.06666666666666667,
+     "distinct_docs": 57,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/coordinated-leader-election": 15
+     },
+     "first_rank": 15,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/workloads/controllers/ttlafterfinished",
+       "tokens": 95,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/instrumentation/metrics",
+       "tokens": 392,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 332,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 89,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 89,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e005",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 62,
+     "exhausted": false,
+     "ranks": {
+      "reference/scheduling/config": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 331,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 369,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-scheduler-config.v1",
+       "tokens": 378,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/scheduling/config",
+       "tokens": 276,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-priority-preemption",
+       "tokens": 300,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e006",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.125,
+     "distinct_docs": 56,
+     "exhausted": false,
+     "ranks": {
+      "concepts/workloads/workload-api/_index": 8
+     },
+     "first_rank": 8,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 38,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 371,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 85,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 194,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/lifecycle",
+       "tokens": 356,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e007",
+     "type": "exact_term",
+     "recall@5": 0.5,
+     "recall@10": 0.5,
+     "rr": 0.2,
+     "distinct_docs": 85,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/running-cloud-controller": 5,
+      "concepts/scheduling-eviction/taint-and-toleration": 83
+     },
+     "first_rank": 5,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/workloads/pods/init-containers",
+       "tokens": 94,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-controller-manager-config.v1alpha1",
+       "tokens": 359,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/debug/debug-application/debug-running-pod",
+       "tokens": 358,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/debug/debug-application/debug-running-pod",
+       "tokens": 376,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 386,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e008",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 40,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/extensible-admission-controllers": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 354,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 388,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 331,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 384,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m001",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.14285714285714285,
+     "distinct_docs": 55,
+     "exhausted": false,
+     "ranks": {
+      "tasks/tls/manual-rotation-of-ca-certificates": 7
+     },
+     "first_rank": 7,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/administer-cluster/kubelet-in-userns",
+       "tokens": 264,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 400,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 385,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubelet-in-userns",
+       "tokens": 379,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubelet-in-userns",
+       "tokens": 383,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m002",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 59,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/flow-control": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 330,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 179,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 365,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 227,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 392,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m003",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.1,
+     "distinct_docs": 25,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/verify-signed-artifacts": 10
+     },
+     "first_rank": 10,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/certificate-signing-requests",
+       "tokens": 377,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 151,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/certificate-signing-requests",
+       "tokens": 238,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/certificate-signing-requests",
+       "tokens": 368,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 392,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m004",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 66,
+     "exhausted": false,
+     "ranks": {
+      "concepts/scheduling-eviction/pod-scheduling-readiness": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 393,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/gang-scheduling",
+       "tokens": 368,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 372,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/_index",
+       "tokens": 76,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduler-perf-tuning",
+       "tokens": 345,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m005",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 71,
+     "exhausted": false,
+     "ranks": {
+      "concepts/scheduling-eviction/topology-spread-constraints": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 389,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 399,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 377,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 375,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 328,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m006",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 67,
+     "exhausted": false,
+     "ranks": {
+      "concepts/storage/volumes": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 185,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/volumes",
+       "tokens": 289,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/storage/volumes",
+       "tokens": 321,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubelet-config-file",
+       "tokens": 142,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m007",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.015384615384615385,
+     "distinct_docs": 91,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 65
+     },
+     "first_rank": 65,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 171,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 382,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 312,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 391,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m008",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.0,
+     "distinct_docs": 75,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/nodelocaldns": null
+     },
+     "first_rank": null,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "tokens": 108,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/job/coarse-parallel-processing-work-queue",
+       "tokens": 102,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 97,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 78,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 288,
+       "expected": false
+      }
+     ]
+    }
+   ]
+  },
+  "fixed/hybrid": {
+   "overall": {
+    "n": 16,
+    "mrr": 0.4870535714285714,
+    "recall@5": 0.875,
+    "recall@10": 0.9375,
+    "exhausted": 0,
+    "exhausted_share": 0.0,
+    "exhausted_missed": 0,
+    "short": 0,
+    "recall@10_ci95": [
+     0.8125,
+     1.0
+    ],
+    "mrr_ci95": [
+     0.3396,
+     0.651
+    ]
+   },
+   "by_type": {
+    "exact_term": {
+     "n": 8,
+     "mrr": 0.3970238095238095,
+     "recall@5": 0.875,
+     "recall@10": 1.0,
+     "exhausted": 0,
+     "exhausted_share": 0.0,
+     "exhausted_missed": 0,
+     "short": 0,
+     "recall@10_ci95": [
+      1.0,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.2429,
+      0.5938
+     ]
+    },
+    "mixed": {
+     "n": 8,
+     "mrr": 0.5770833333333333,
+     "recall@5": 0.875,
+     "recall@10": 0.875,
+     "exhausted": 0,
+     "exhausted_share": 0.0,
+     "exhausted_missed": 0,
+     "short": 0,
+     "recall@10_ci95": [
+      0.625,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.3417,
+      0.8229
+     ]
+    }
+   },
+   "tiny": {
+    "top_chunks": 80,
+    "tiny": 3,
+    "tiny_share": 0.0375,
+    "tiny_from_expected": 0,
+    "tiny_from_expected_share": 0.0,
+    "questions_with_tiny_expected": 0,
+    "questions": 16
+   },
+   "questions": [
+    {
+     "id": "e001",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.2,
+     "distinct_docs": 150,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 5
+     },
+     "first_rank": 5,
+     "n_chunks": 365,
+     "top5": [
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta4",
+       "tokens": 376,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta3",
+       "tokens": 359,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta4",
+       "tokens": 377,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta4",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/access-application-cluster/configure-access-multiple-clusters",
+       "tokens": 148,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e002",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 71,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/authentication": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 287,
+     "top5": [
+      {
+       "doc_id": "concepts/security/service-accounts",
+       "tokens": 387,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 365,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 396,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 342,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 394,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e003",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.14285714285714285,
+     "distinct_docs": 110,
+     "exhausted": false,
+     "ranks": {
+      "concepts/architecture/mixed-version-proxy": 7
+     },
+     "first_rank": 7,
+     "n_chunks": 333,
+     "top5": [
+      {
+       "doc_id": "reference/config-api/kube-proxy-config.v1alpha1",
+       "tokens": 383,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/networking/virtual-ips",
+       "tokens": 358,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 185,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta3",
+       "tokens": 364,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e004",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 58,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/coordinated-leader-election": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 201,
+     "top5": [
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 387,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/coordinated-leader-election",
+       "tokens": 385,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/debug/debug-cluster/_index",
+       "tokens": 397,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/controllers/ttlafterfinished",
+       "tokens": 95,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/instrumentation/metrics",
+       "tokens": 392,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e005",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 63,
+     "exhausted": false,
+     "ranks": {
+      "reference/scheduling/config": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 202,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 331,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 369,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-scheduler-config.v1",
+       "tokens": 378,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/scheduling/config",
+       "tokens": 276,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 386,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e006",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 56,
+     "exhausted": false,
+     "ranks": {
+      "concepts/workloads/workload-api/_index": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 201,
+     "top5": [
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 371,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 194,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/policies",
+       "tokens": 258,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/lifecycle",
+       "tokens": 356,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 388,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e007",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 85,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/running-cloud-controller": 1,
+      "concepts/scheduling-eviction/taint-and-toleration": 4
+     },
+     "first_rank": 1,
+     "n_chunks": 201,
+     "top5": [
+      {
+       "doc_id": "tasks/administer-cluster/running-cloud-controller",
+       "tokens": 190,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/administer-cluster/running-cloud-controller",
+       "tokens": 387,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/using-api/api-concepts",
+       "tokens": 342,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 403,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/taint-and-toleration",
+       "tokens": 341,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "e008",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 86,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/extensible-admission-controllers": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 326,
+     "top5": [
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 388,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 385,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 370,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 396,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m001",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 96,
+     "exhausted": false,
+     "ranks": {
+      "tasks/tls/manual-rotation-of-ca-certificates": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 315,
+     "top5": [
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 358,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 284,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 270,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 317,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 381,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m002",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 99,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/flow-control": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 318,
+     "top5": [
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 365,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 392,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 330,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 369,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 179,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m003",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 62,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/verify-signed-artifacts": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 277,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 392,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 354,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/certificate-signing-requests",
+       "tokens": 377,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/certificate-signing-requests",
+       "tokens": 238,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/certificate-signing-requests",
+       "tokens": 368,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m004",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 66,
+     "exhausted": false,
+     "ranks": {
+      "concepts/scheduling-eviction/pod-scheduling-readiness": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 393,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 351,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/gang-scheduling",
+       "tokens": 368,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 372,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/_index",
+       "tokens": 76,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m005",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 71,
+     "exhausted": false,
+     "ranks": {
+      "concepts/scheduling-eviction/topology-spread-constraints": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 377,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 328,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 382,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 376,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 389,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m006",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 67,
+     "exhausted": false,
+     "ranks": {
+      "concepts/storage/volumes": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/volumes",
+       "tokens": 289,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 185,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/volumes",
+       "tokens": 321,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubelet-config-file",
+       "tokens": 142,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m007",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.08333333333333333,
+     "distinct_docs": 138,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 12
+     },
+     "first_rank": 12,
+     "n_chunks": 359,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 171,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 386,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 382,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 391,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 366,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m008",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.2,
+     "distinct_docs": 76,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/nodelocaldns": 5
+     },
+     "first_rank": 5,
+     "n_chunks": 202,
+     "top5": [
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "tokens": 108,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "tokens": 382,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "tokens": 349,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/job/coarse-parallel-processing-work-queue",
+       "tokens": 102,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 97,
+       "expected": false
+      }
+     ]
+    }
+   ]
+  },
+  "heading/bm25": {
+   "overall": {
+    "n": 16,
+    "mrr": 0.6188988095238095,
+    "recall@5": 0.875,
+    "recall@10": 1.0,
+    "exhausted": 9,
+    "exhausted_share": 0.5625,
+    "exhausted_missed": 0,
+    "short": 8,
+    "recall@10_ci95": [
+     1.0,
+     1.0
+    ],
+    "mrr_ci95": [
+     0.4509,
+     0.7917
+    ]
+   },
+   "by_type": {
+    "exact_term": {
+     "n": 8,
+     "mrr": 0.5398809523809524,
+     "recall@5": 0.75,
+     "recall@10": 1.0,
+     "exhausted": 5,
+     "exhausted_share": 0.625,
+     "exhausted_missed": 0,
+     "short": 4,
+     "recall@10_ci95": [
+      1.0,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.294,
+      0.8095
+     ]
+    },
+    "mixed": {
+     "n": 8,
+     "mrr": 0.6979166666666666,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "exhausted": 4,
+     "exhausted_share": 0.5,
+     "exhausted_missed": 0,
+     "short": 4,
+     "recall@10_ci95": [
+      1.0,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.4792,
+      0.9167
+     ]
+    }
+   },
+   "tiny": {
+    "top_chunks": 71,
+    "tiny": 2,
+    "tiny_share": 0.028169014084507043,
+    "tiny_from_expected": 1,
+    "tiny_from_expected_share": 0.5,
+    "questions_with_tiny_expected": 1,
+    "questions": 16
+   },
+   "questions": [
+    {
+     "id": "e001",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 106,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/rbac",
+       "tokens": 265,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta4",
+       "tokens": 418,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta3",
+       "tokens": 334,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 182,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 382,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e002",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.2,
+     "distinct_docs": 50,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/authentication": 5
+     },
+     "first_rank": 5,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 255,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 515,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/node",
+       "tokens": 240,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/projected-volumes",
+       "tokens": 407,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/security/service-accounts",
+       "tokens": 605,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e003",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.14285714285714285,
+     "distinct_docs": 87,
+     "exhausted": false,
+     "ranks": {
+      "concepts/architecture/mixed-version-proxy": 7
+     },
+     "first_rank": 7,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 206,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 113,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 392,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/networking/virtual-ips",
+       "tokens": 618,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/networking/virtual-ips",
+       "tokens": 520,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e004",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 3,
+     "exhausted": true,
+     "ranks": {
+      "concepts/cluster-administration/coordinated-leader-election": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 3,
+     "top5": [
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 258,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/debug/debug-cluster/_index",
+       "tokens": 613,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/coordinated-leader-election",
+       "tokens": 579,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "e005",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.14285714285714285,
+     "distinct_docs": 7,
+     "exhausted": true,
+     "ranks": {
+      "reference/scheduling/config": 7
+     },
+     "first_rank": 7,
+     "n_chunks": 12,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 206,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 182,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-scheduler-config.v1",
+       "tokens": 155,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 234,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/assign-pod-node",
+       "tokens": 202,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e006",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 6,
+     "exhausted": true,
+     "ranks": {
+      "concepts/workloads/workload-api/_index": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 12,
+     "top5": [
+      {
+       "doc_id": "concepts/workloads/workload-api/_index",
+       "tokens": 84,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/_index",
+       "tokens": 578,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/_index",
+       "tokens": 367,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/policies",
+       "tokens": 260,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/policies",
+       "tokens": 143,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e007",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 4,
+     "exhausted": true,
+     "ranks": {
+      "tasks/administer-cluster/running-cloud-controller": 2,
+      "concepts/scheduling-eviction/taint-and-toleration": 3
+     },
+     "first_rank": 2,
+     "n_chunks": 5,
+     "top5": [
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 181,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/running-cloud-controller",
+       "tokens": 422,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/taint-and-toleration",
+       "tokens": 589,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/administer-cluster/running-cloud-controller",
+       "tokens": 543,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/using-api/api-concepts",
+       "tokens": 344,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e008",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 64,
+     "exhausted": true,
+     "ranks": {
+      "reference/access-authn-authz/extensible-admission-controllers": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 149,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 590,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 452,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/user-impersonation",
+       "tokens": 523,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 279,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 233,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m001",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 80,
+     "exhausted": false,
+     "ranks": {
+      "tasks/tls/manual-rotation-of-ca-certificates": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 141,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 581,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/extend-kubernetes/configure-aggregation-layer",
+       "tokens": 580,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 266,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 331,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m002",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 67,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/flow-control": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 385,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 258,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 352,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 127,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 252,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m003",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 59,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/verify-signed-artifacts": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/architecture/leases",
+       "tokens": 562,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/architecture/leases",
+       "tokens": 278,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/controllers/statefulset",
+       "tokens": 139,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/controllers/statefulset",
+       "tokens": 116,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/controllers/statefulset",
+       "tokens": 150,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m004",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 1,
+     "exhausted": true,
+     "ranks": {
+      "concepts/scheduling-eviction/pod-scheduling-readiness": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 2,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 480,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 221,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m005",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 2,
+     "exhausted": true,
+     "ranks": {
+      "concepts/scheduling-eviction/topology-spread-constraints": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 12,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 350,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 469,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 386,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 574,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 615,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m006",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 2,
+     "exhausted": true,
+     "ranks": {
+      "concepts/storage/volumes": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 2,
+     "top5": [
+      {
+       "doc_id": "concepts/storage/volumes",
+       "tokens": 224,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 392,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m007",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 82,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 223,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 312,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 314,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 73,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 147,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m008",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 3,
+     "exhausted": true,
+     "ranks": {
+      "tasks/administer-cluster/nodelocaldns": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 4,
+     "top5": [
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "tokens": 332,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "tokens": 577,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "tokens": 613,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/nodelocaldns",
+       "tokens": 410,
+       "expected": true
+      }
+     ]
+    }
+   ]
+  },
+  "heading/dense": {
+   "overall": {
+    "n": 16,
+    "mrr": 0.3436458333333333,
+    "recall@5": 0.5,
+    "recall@10": 0.71875,
+    "exhausted": 0,
+    "exhausted_share": 0.0,
+    "exhausted_missed": 0,
+    "short": 0,
+    "recall@10_ci95": [
+     0.5,
+     0.9062
+    ],
+    "mrr_ci95": [
+     0.1873,
+     0.5251
+    ]
+   },
+   "by_type": {
+    "exact_term": {
+     "n": 8,
+     "mrr": 0.22598214285714285,
+     "recall@5": 0.5,
+     "recall@10": 0.8125,
+     "exhausted": 0,
+     "exhausted_share": 0.0,
+     "exhausted_missed": 0,
+     "short": 0,
+     "recall@10_ci95": [
+      0.5625,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.1395,
+      0.3222
+     ]
+    },
+    "mixed": {
+     "n": 8,
+     "mrr": 0.46130952380952384,
+     "recall@5": 0.5,
+     "recall@10": 0.625,
+     "exhausted": 0,
+     "exhausted_share": 0.0,
+     "exhausted_missed": 0,
+     "short": 0,
+     "recall@10_ci95": [
+      0.25,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.1627,
+      0.7639
+     ]
+    }
+   },
+   "tiny": {
+    "top_chunks": 80,
+    "tiny": 9,
+    "tiny_share": 0.1125,
+    "tiny_from_expected": 0,
+    "tiny_from_expected_share": 0.0,
+    "questions_with_tiny_expected": 0,
+    "questions": 16
+   },
+   "questions": [
+    {
+     "id": "e001",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.14285714285714285,
+     "distinct_docs": 107,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 7
+     },
+     "first_rank": 7,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/job/parallel-processing-expansion",
+       "tokens": 51,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/extended-resource",
+       "tokens": 41,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 38,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/migrate-from-psp",
+       "tokens": 486,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/manage-kubernetes-objects/declarative-config",
+       "tokens": 286,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e002",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.16666666666666666,
+     "distinct_docs": 58,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/authentication": 6
+     },
+     "first_rank": 6,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 255,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 434,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 459,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 492,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-service-account",
+       "tokens": 418,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e003",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 71,
+     "exhausted": false,
+     "ranks": {
+      "concepts/architecture/mixed-version-proxy": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta4",
+       "tokens": 172,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta3",
+       "tokens": 172,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/services-networking/service",
+       "tokens": 588,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/architecture/mixed-version-proxy",
+       "tokens": 130,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 206,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e004",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.04,
+     "distinct_docs": 84,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/coordinated-leader-election": 25
+     },
+     "first_rank": 25,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/labels-annotations-taints/audit-annotations",
+       "tokens": 92,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/audit-annotations",
+       "tokens": 59,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 160,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-proxy-config.v1alpha1",
+       "tokens": 117,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/audit-annotations",
+       "tokens": 89,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e005",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 73,
+     "exhausted": false,
+     "ranks": {
+      "reference/scheduling/config": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 206,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 182,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/scheduling/config",
+       "tokens": 219,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 293,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-priority-preemption",
+       "tokens": 286,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e006",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 65,
+     "exhausted": false,
+     "ranks": {
+      "concepts/workloads/workload-api/_index": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 221,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 183,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/lifecycle",
+       "tokens": 204,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 551,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/lifecycle",
+       "tokens": 337,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e007",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 0.5,
+     "rr": 0.125,
+     "distinct_docs": 94,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/running-cloud-controller": 8,
+      "concepts/scheduling-eviction/taint-and-toleration": null
+     },
+     "first_rank": 8,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/overview/working-with-objects/namespaces",
+       "tokens": 182,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 181,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kube-controller-manager-config.v1alpha1",
+       "tokens": 133,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 314,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 312,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e008",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 46,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/extensible-admission-controllers": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 149,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 233,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/config-api/kube-controller-manager-config.v1alpha1",
+       "tokens": 151,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 206,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 279,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m001",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.1111111111111111,
+     "distinct_docs": 59,
+     "exhausted": false,
+     "ranks": {
+      "tasks/tls/manual-rotation-of-ca-certificates": 9
+     },
+     "first_rank": 9,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/administer-cluster/kubelet-in-userns",
+       "tokens": 205,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubelet-in-userns",
+       "tokens": 129,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 600,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/configuration/organize-cluster-access-kubeconfig",
+       "tokens": 67,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubelet-config.v1beta1",
+       "tokens": 141,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m002",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 68,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/flow-control": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 127,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 385,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 258,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/security/multi-tenancy",
+       "tokens": 170,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 434,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m003",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.05555555555555555,
+     "distinct_docs": 41,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/verify-signed-artifacts": 18
+     },
+     "first_rank": 18,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 600,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/certificate-signing-requests",
+       "tokens": 576,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 347,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/certificates",
+       "tokens": 27,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/certificate-signing-requests",
+       "tokens": 516,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m004",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 69,
+     "exhausted": false,
+     "ranks": {
+      "concepts/scheduling-eviction/pod-scheduling-readiness": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 221,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/gang-scheduling",
+       "tokens": 224,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/workloadbuilder",
+       "tokens": 207,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/podgroup-scheduling",
+       "tokens": 160,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/podgroup-scheduling",
+       "tokens": 199,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m005",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 64,
+     "exhausted": false,
+     "ranks": {
+      "concepts/scheduling-eviction/topology-spread-constraints": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 449,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 518,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 505,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 259,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 350,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m006",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 61,
+     "exhausted": false,
+     "ranks": {
+      "concepts/storage/volumes": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 113,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/volumes",
+       "tokens": 224,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 392,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/storage-classes",
+       "tokens": 82,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/persistent-volumes",
+       "tokens": 194,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m007",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.023809523809523808,
+     "distinct_docs": 96,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 42
+     },
+     "first_rank": 42,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 223,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 314,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 312,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 608,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 147,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m008",
+     "type": "mixed",
+     "recall@5": 0.0,
+     "recall@10": 0.0,
+     "rr": 0.0,
+     "distinct_docs": 86,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/nodelocaldns": null
+     },
+     "first_rank": null,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/node-pressure-eviction",
+       "tokens": 327,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "tokens": 332,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "tokens": 577,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/job/coarse-parallel-processing-work-queue",
+       "tokens": 225,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/job/coarse-parallel-processing-work-queue",
+       "tokens": 596,
+       "expected": false
+      }
+     ]
+    }
+   ]
+  },
+  "heading/hybrid": {
+   "overall": {
+    "n": 16,
+    "mrr": 0.6099702380952381,
+    "recall@5": 0.9375,
+    "recall@10": 1.0,
+    "exhausted": 0,
+    "exhausted_share": 0.0,
+    "exhausted_missed": 0,
+    "short": 0,
+    "recall@10_ci95": [
+     1.0,
+     1.0
+    ],
+    "mrr_ci95": [
+     0.4402,
+     0.7865
+    ]
+   },
+   "by_type": {
+    "exact_term": {
+     "n": 8,
+     "mrr": 0.5907738095238095,
+     "recall@5": 0.875,
+     "recall@10": 1.0,
+     "exhausted": 0,
+     "exhausted_share": 0.0,
+     "exhausted_missed": 0,
+     "short": 0,
+     "recall@10_ci95": [
+      1.0,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.3661,
+      0.8304
+     ]
+    },
+    "mixed": {
+     "n": 8,
+     "mrr": 0.6291666666666667,
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "exhausted": 0,
+     "exhausted_share": 0.0,
+     "exhausted_missed": 0,
+     "short": 0,
+     "recall@10_ci95": [
+      1.0,
+      1.0
+     ],
+     "mrr_ci95": [
+      0.3583,
+      0.9062
+     ]
+    }
+   },
+   "tiny": {
+    "top_chunks": 80,
+    "tiny": 7,
+    "tiny_share": 0.0875,
+    "tiny_from_expected": 2,
+    "tiny_from_expected_share": 0.2857142857142857,
+    "questions_with_tiny_expected": 2,
+    "questions": 16
+   },
+   "questions": [
+    {
+     "id": "e001",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 169,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 361,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/rbac",
+       "tokens": 70,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/access-authn-authz/rbac",
+       "tokens": 616,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta4",
+       "tokens": 418,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta4",
+       "tokens": 278,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta3",
+       "tokens": 334,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e002",
+     "type": "exact_term",
+     "recall@5": 0.0,
+     "recall@10": 1.0,
+     "rr": 0.14285714285714285,
+     "distinct_docs": 71,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/authentication": 7
+     },
+     "first_rank": 7,
+     "n_chunks": 271,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 255,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/service-accounts-admin",
+       "tokens": 459,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-service-account",
+       "tokens": 418,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/projected-volumes",
+       "tokens": 407,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-service-account",
+       "tokens": 313,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e003",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 119,
+     "exhausted": false,
+     "ranks": {
+      "concepts/architecture/mixed-version-proxy": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 336,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 206,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 113,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/security/hardening-guide/scheduler",
+       "tokens": 153,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/architecture/mixed-version-proxy",
+       "tokens": 130,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/config-api/kubeadm-config.v1beta4",
+       "tokens": 172,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e004",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 85,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/coordinated-leader-election": 2
+     },
+     "first_rank": 2,
+     "n_chunks": 201,
+     "top5": [
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 258,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/coordinated-leader-election",
+       "tokens": 579,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/audit-annotations",
+       "tokens": 92,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/debug/debug-cluster/_index",
+       "tokens": 613,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/audit-annotations",
+       "tokens": 59,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e005",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 74,
+     "exhausted": false,
+     "ranks": {
+      "reference/scheduling/config": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 202,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 206,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 182,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/scheduling-framework",
+       "tokens": 293,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 234,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/scheduling/config",
+       "tokens": 592,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "e006",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 65,
+     "exhausted": false,
+     "ranks": {
+      "concepts/workloads/workload-api/_index": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 201,
+     "top5": [
+      {
+       "doc_id": "concepts/workloads/workload-api/_index",
+       "tokens": 578,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/policies",
+       "tokens": 260,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 551,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/policies",
+       "tokens": 143,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/compositepodgroup-api/_index",
+       "tokens": 177,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e007",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.5,
+     "distinct_docs": 95,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/running-cloud-controller": 2,
+      "concepts/scheduling-eviction/taint-and-toleration": 5
+     },
+     "first_rank": 2,
+     "n_chunks": 201,
+     "top5": [
+      {
+       "doc_id": "reference/labels-annotations-taints/_index",
+       "tokens": 181,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/running-cloud-controller",
+       "tokens": 422,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/administer-cluster/running-cloud-controller",
+       "tokens": 543,
+       "expected": true
+      },
+      {
+       "doc_id": "reference/using-api/api-concepts",
+       "tokens": 344,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/overview/working-with-objects/namespaces",
+       "tokens": 182,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "e008",
+     "type": "exact_term",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 90,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/extensible-admission-controllers": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 298,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 233,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 149,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 279,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/extensible-admission-controllers",
+       "tokens": 124,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/admission-webhooks-good-practices",
+       "tokens": 143,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m001",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.3333333333333333,
+     "distinct_docs": 107,
+     "exhausted": false,
+     "ranks": {
+      "tasks/tls/manual-rotation-of-ca-certificates": 3
+     },
+     "first_rank": 3,
+     "n_chunks": 313,
+     "top5": [
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 141,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 331,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/extend-kubernetes/configure-aggregation-layer",
+       "tokens": 580,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 85,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/tls/manual-rotation-of-ca-certificates",
+       "tokens": 266,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m002",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 106,
+     "exhausted": false,
+     "ranks": {
+      "concepts/cluster-administration/flow-control": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 316,
+     "top5": [
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 385,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 127,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 258,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 252,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/cluster-administration/flow-control",
+       "tokens": 352,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m003",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 68,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/verify-signed-artifacts": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 266,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 347,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 548,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/kubeadm/kubeadm-certs",
+       "tokens": 74,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/authentication",
+       "tokens": 387,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/certificate-signing-requests",
+       "tokens": 576,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m004",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 69,
+     "exhausted": false,
+     "ranks": {
+      "concepts/scheduling-eviction/pod-scheduling-readiness": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 221,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/pod-scheduling-readiness",
+       "tokens": 480,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/gang-scheduling",
+       "tokens": 224,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/workloads/workload-api/workloadbuilder",
+       "tokens": 207,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/podgroup-scheduling",
+       "tokens": 160,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m005",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 64,
+     "exhausted": false,
+     "ranks": {
+      "concepts/scheduling-eviction/topology-spread-constraints": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 350,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 518,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 449,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 469,
+       "expected": true
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/topology-spread-constraints",
+       "tokens": 259,
+       "expected": true
+      }
+     ]
+    },
+    {
+     "id": "m006",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 1.0,
+     "distinct_docs": 61,
+     "exhausted": false,
+     "ranks": {
+      "concepts/storage/volumes": 1
+     },
+     "first_rank": 1,
+     "n_chunks": 200,
+     "top5": [
+      {
+       "doc_id": "concepts/storage/volumes",
+       "tokens": 224,
+       "expected": true
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 392,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/configure-bind-mount-options",
+       "tokens": 113,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/storage-classes",
+       "tokens": 82,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/storage/persistent-volumes",
+       "tokens": 194,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m007",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.2,
+     "distinct_docs": 151,
+     "exhausted": false,
+     "ranks": {
+      "reference/access-authn-authz/rbac": 5
+     },
+     "first_rank": 5,
+     "n_chunks": 356,
+     "top5": [
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 223,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 312,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 314,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 147,
+       "expected": false
+      },
+      {
+       "doc_id": "reference/access-authn-authz/kubelet-tls-bootstrapping",
+       "tokens": 73,
+       "expected": false
+      }
+     ]
+    },
+    {
+     "id": "m008",
+     "type": "mixed",
+     "recall@5": 1.0,
+     "recall@10": 1.0,
+     "rr": 0.25,
+     "distinct_docs": 87,
+     "exhausted": false,
+     "ranks": {
+      "tasks/administer-cluster/nodelocaldns": 4
+     },
+     "first_rank": 4,
+     "n_chunks": 201,
+     "top5": [
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "tokens": 332,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "tokens": 577,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "tokens": 613,
+       "expected": false
+      },
+      {
+       "doc_id": "concepts/scheduling-eviction/node-pressure-eviction",
+       "tokens": 327,
+       "expected": false
+      },
+      {
+       "doc_id": "tasks/administer-cluster/nodelocaldns",
+       "tokens": 410,
+       "expected": true
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "paired": {}
+}

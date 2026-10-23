@@ -68,33 +68,39 @@ def distinct_docs(hits: list[dict], n: int | None = None) -> list[dict]:
     return out[:n]
 
 
-def rrf(result_lists: list[list[dict]], k: int = RRF_K, top_n: int = 8, names: list[str] | None = None) -> list[dict]:
-    """Reciprocal rank fusion: score(d) = sum over lists of 1 / (k + rank), rank starting at 1.
+def rrf(result_lists: list[list[dict]], k: int = RRF_K, top_n: int = 8, names: list[str] | None = None,
+        weights: list | None = None) -> list[dict]:
+    """Reciprocal rank fusion: score(d) = sum over lists of weight / (k + rank), rank starting at 1 (weights default to 1,
+    which is plain RRF; they are only used for the weighted-RRF sensitivity analysis, never in the baseline).
 
     A hit repeated inside one list counts once, at its best rank. Scores are summed as exact fractions so
     ties are real ties; ties keep first-seen order (list order, then rank). Each returned hit is the first
     copy seen, with `score` replaced by the RRF score and `ranks` giving its rank per input list (None if absent)."""
     names = names or [f"list{i}" for i in range(len(result_lists))]
+    ws = [Fraction(str(w)) for w in (weights if weights is not None else [1] * len(result_lists))]
+    if len(ws) != len(result_lists):
+        raise ValueError("one weight per result list")
     scores: dict[str, Fraction] = {}
     first: dict[str, dict] = {}
     ranks: dict[str, dict] = {}
-    for name, results in zip(names, result_lists):
+    for name, w, results in zip(names, ws, result_lists):
         seen = set()
         for rank, hit in enumerate(results, start=1):
             i = hit["_id"]
             if i in seen:
                 continue
             seen.add(i)
-            scores[i] = scores.get(i, Fraction(0)) + Fraction(1, k + rank)
+            scores[i] = scores.get(i, Fraction(0)) + w / (k + rank)
             first.setdefault(i, hit)
             ranks.setdefault(i, {n: None for n in names})[name] = rank
     order = sorted(scores, key=lambda i: scores[i], reverse=True)  # stable: ties keep first-seen order
     return [{**first[i], "score": float(scores[i]), "ranks": ranks[i]} for i in order[:top_n]]
 
 
-def hybrid(es: Elasticsearch, index: str, q: str, vec: list[float], chunker: str, k: int = 8, pool: int = POOL) -> list[dict]:
+def hybrid(es: Elasticsearch, index: str, q: str, vec: list[float], chunker: str, k: int = 8, pool: int = POOL,
+           weights: list | None = None) -> list[dict]:
     lists = [bm25(es, index, q, chunker, pool), dense(es, index, vec, chunker, pool)]
-    return rrf(lists, RRF_K, k, names=["bm25", "dense"])
+    return rrf(lists, RRF_K, k, names=["bm25", "dense"], weights=weights)
 
 
 def search(es: Elasticsearch, index: str, query: str, mode: str, chunker: str, k: int = 8, embed=None) -> list[dict]:

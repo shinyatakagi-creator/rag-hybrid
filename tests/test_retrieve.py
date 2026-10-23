@@ -172,3 +172,16 @@ def test_chunker_filter_never_leaks_other_chunker(es_with_both_chunkers, mode, c
     other = "heading" if chunker == "fixed" else "fixed"
     assert not {h["_id"] for h in result} & {h["_id"] for h in es_with_both_chunkers.search(
         index=INDEX, query={"term": {"chunker": other}}, size=1000)["hits"]["hits"]}
+
+
+def test_weighted_rrf_defaults_to_plain_rrf_and_weights_scale_each_list():
+    from fractions import Fraction
+    from rag.retrieve import rrf
+    a = [{"_id": "x"}, {"_id": "y"}]
+    b = [{"_id": "y"}, {"_id": "x"}]
+    assert rrf([a, b], 60, 5) == rrf([a, b], 60, 5, weights=[1, 1])
+    out = rrf([a, b], 60, 5, names=["bm25", "dense"], weights=[1, 2])
+    assert [h["_id"] for h in out] == ["y", "x"]  # dense counts double: y is dense rank 1
+    assert out[0]["score"] == float(Fraction(1, 62) + 2 * Fraction(1, 61))
+    with pytest.raises(ValueError):
+        rrf([a, b], 60, 5, weights=[1])

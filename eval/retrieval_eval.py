@@ -100,27 +100,30 @@ def git_info() -> dict:
     return {"sha": run("rev-parse", "HEAD"), "dirty_files": [l for l in run("status", "--short").splitlines() if "eval/results" not in l]}
 
 
-def retrieve_all(es, index, questions, embed) -> dict:
-    """{(chunker, mode): {question id: ranked chunk hits}}"""
+def retrieve_all(es, index, questions, embed, query_of=lambda q: q["question"], modes=MODES, weights=None) -> dict:
+    """{(chunker, mode): {question id: ranked chunk hits}}. `query_of` picks the query text (default: the question);
+    `weights` ([bm25, dense]) is only for the weighted-RRF sensitivity run (None = plain RRF, the baseline)."""
     out = {}
     for chunker in CHUNKERS:
-        for mode in MODES:
+        for mode in modes:
             per = {}
             for q in questions:
+                text = query_of(q)
                 if mode == "bm25":
-                    per[q["id"]] = bm25(es, index, q["question"], chunker, POOL)
+                    per[q["id"]] = bm25(es, index, text, chunker, POOL)
                 elif mode == "dense":
-                    per[q["id"]] = dense(es, index, embed(q["question"]), chunker, POOL)
+                    per[q["id"]] = dense(es, index, embed(text), chunker, POOL)
                 else:
-                    per[q["id"]] = hybrid(es, index, q["question"], embed(q["question"]), chunker, HYBRID_TOP, POOL)
+                    per[q["id"]] = hybrid(es, index, text, embed(text), chunker, HYBRID_TOP, POOL, weights=weights)
             out[(chunker, mode)] = per
     return out
 
 
-def score(questions, retrieved) -> dict:
+def score(questions, retrieved, label=lambda chunker, mode: f"{chunker}/{mode}") -> dict:
     rows_out = {}
+    types = [t for t in TYPES if any(q["type"] == t for q in questions)]
     for (chunker, mode), per in retrieved.items():
-        name = f"{chunker}/{mode}"
+        name = label(chunker, mode)
         qrows = []
         for q in questions:
             hits = per[q["id"]]
@@ -128,7 +131,7 @@ def score(questions, retrieved) -> dict:
             ranks = doc_ranks(hits, q["expected_doc_ids"])
             qrows.append({"id": q["id"], "type": q["type"], **m, "ranks": ranks, "first_rank": first_rank(ranks), "n_chunks": len(hits),
                           "top5": [{"doc_id": h["doc_id"], "tokens": h["token_count"], "expected": h["doc_id"] in q["expected_doc_ids"]} for h in hits[:TOP_CHUNKS]]})
-        rows_out[name] = {"overall": summarize(qrows), "by_type": {t: summarize([r for r in qrows if r["type"] == t]) for t in TYPES},
+        rows_out[name] = {"overall": summarize(qrows), "by_type": {t: summarize([r for r in qrows if r["type"] == t]) for t in types},
                           "tiny": tiny_stats([(per[q["id"]], q["expected_doc_ids"]) for q in questions]), "questions": qrows}
     return rows_out
 
@@ -152,36 +155,42 @@ def _f(x):
 
 
 def format_md(doc: dict) -> str:
+    """Readable report. Rows are whatever `results` holds; the intro and title come from meta (title, intro)."""
     r, m = doc["results"], doc["meta"]
-    names = [f"{c}/{mo}" for c in CHUNKERS for mo in MODES]
-    L = ["# Retrieval baseline", "",
+    names = list(r)
+    types = list(m["n_by_type"])
+    n_all = m["n_answerable"]
+    L = [f"# {m.get('title', 'Retrieval baseline')}", "",
          f"Git `{m['git']['sha'][:7]}` | {m['timestamp']} | golden `{m['golden_file']}` (sha256 `{m['golden_sha256'][:12]}`) | "
-         f"{m['n_answerable']} answerable questions (exact_term {m['n_by_type']['exact_term']}, mixed {m['n_by_type']['mixed']}, conceptual {m['n_by_type']['conceptual']}); "
-         f"{m['n_unanswerable']} unanswerable excluded.", "",
-         "Doc-level metrics after dedupe. Recall@k = share of expected docs in the top k distinct docs; MRR = mean 1/rank of the first expected doc. "
-         "Exhausted lists stay in the denominator as misses. Baseline only: no tuning. n is small, so read differences with the intervals.", "",
-         "## Overall (n = 26 questions per row)", "",
-         "| row | n | Recall@5 | Recall@10 | Recall@10 95% CI | MRR | MRR 95% CI | exhausted | exhausted & missed | <10 docs |", "|---|---|---|---|---|---|---|---|---|---|"]
+         f"{n_all} questions scored (" + ", ".join(f"{t} {m['n_by_type'][t]}" for t in types) + f"); {m['n_unanswerable']} unanswerable excluded.", ""]
+    if m.get("intro"):
+        L += [m["intro"], ""]
+    L += ["Doc-level metrics after dedupe. Recall@k = share of expected docs in the top k distinct docs; MRR = mean 1/rank of the first expected doc. "
+          "Exhausted lists stay in the denominator as misses. n is small, so read differences with the intervals.", "",
+          f"## Overall (n = {n_all} questions per row)", "",
+          "| row | n | Recall@5 | Recall@10 | Recall@10 95% CI | MRR | MRR 95% CI | exhausted | exhausted & missed | <10 docs |", "|---|---|---|---|---|---|---|---|---|---|"]
     for n in names:
         o = r[n]["overall"]
         L.append(f"| {n} | {o['n']} | {_f(o['recall@5'])} | {_f(o['recall@10'])} | {o['recall@10_ci95'][0]:.3f}-{o['recall@10_ci95'][1]:.3f} | {_f(o['mrr'])} | "
                  f"{o['mrr_ci95'][0]:.3f}-{o['mrr_ci95'][1]:.3f} | {o['exhausted']} | {o['exhausted_missed']} | {o['short']} |")
-    L += ["", "Bootstrap: percentile, 10,000 resamples of the questions, seed 0. Hybrid is never exhausted by construction (its dense list always fills the window); "
+    L += ["", "Bootstrap: percentile, 10,000 resamples of the questions, seed 0. A hybrid row is never exhausted by construction (its dense list always fills the window); "
           "its exhausted count is 0 and says nothing about the BM25 half.", "", "## By question type", ""]
-    for t in TYPES:
-        L += [f"### {t} (n = {r[names[0]]['by_type'][t]['n']})", "", "| row | n | Recall@5 | Recall@10 | MRR | exhausted | exhausted & missed |", "|---|---|---|---|---|---|---|"]
+    for t in types:
+        L += [f"### {t} (n = {m['n_by_type'][t]})", "", "| row | n | Recall@5 | Recall@10 | MRR | exhausted | exhausted & missed |", "|---|---|---|---|---|---|---|"]
         for n in names:
             o = r[n]["by_type"][t]
             L.append(f"| {n} | {o['n']} | {_f(o['recall@5'])} | {_f(o['recall@10'])} | {_f(o['mrr'])} | {o['exhausted']} | {o['exhausted_missed']} |")
         L.append("")
-    L += ["## Paired comparison: rank of the first expected doc, hybrid vs a single mode", "",
-          "win = hybrid ranks the first expected doc better, loss = worse, tie = same rank (including both missing).", "",
-          "| comparison | scope | n | wins | ties | losses |", "|---|---|---|---|---|---|"]
-    for k, e in doc["paired"].items():
-        for scope in ("overall", *TYPES):
-            p = e[scope]
-            L.append(f"| {k} | {scope} | {sum(p.values())} | {p['win']} | {p['tie']} | {p['loss']} |")
-    L += ["", f"## Tiny-chunk diagnostic (top {TOP_CHUNKS} chunks per question, tiny = under {TINY} tokens)", "",
+    if doc.get("paired"):
+        L += ["## Paired comparison: rank of the first expected doc, hybrid vs a single mode", "",
+              "win = hybrid ranks the first expected doc better, loss = worse, tie = same rank (including both missing).", "",
+              "| comparison | scope | n | wins | ties | losses |", "|---|---|---|---|---|---|"]
+        for k, e in doc["paired"].items():
+            for scope in ("overall", *types):
+                p = e[scope]
+                L.append(f"| {k} | {scope} | {sum(p.values())} | {p['win']} | {p['tie']} | {p['loss']} |")
+        L.append("")
+    L += [f"## Tiny-chunk diagnostic (top {TOP_CHUNKS} chunks per question, tiny = under {TINY} tokens)", "",
           "| row | top-5 chunks | tiny | tiny share | tiny from an expected doc | share of tiny | questions with one |", "|---|---|---|---|---|---|---|"]
     for n in names:
         t = r[n]["tiny"]
@@ -190,8 +199,26 @@ def format_md(doc: dict) -> str:
           "| id | type | " + " | ".join(names) + " |", "|---|---|" + "---|" * len(names)]
     for i, q in enumerate(r[names[0]]["questions"]):
         L.append(f"| {q['id']} | {q['type']} | " + " | ".join(str(r[n]["questions"][i]["first_rank"] or "-") for n in names) + " |")
-    L += ["", "## Settings", "", "```json", json.dumps(doc["meta"]["settings"], indent=1), "```", ""]
+    if doc.get("extra_md"):
+        L += ["", *doc["extra_md"]]
+    L += ["", "## Settings", "", "```json", json.dumps(m["settings"], indent=1), "```", ""]
     return "\n".join(L)
+
+
+def make_meta(es, index, golden_path, golden, questions, model, emb, guard, index_options, extra_settings=None, **extra) -> dict:
+    """Provenance and every setting that affects a retrieval number."""
+    counts = {c: es.count(index=index, query={"term": {"chunker": c}})["count"] for c in CHUNKERS}
+    settings = {"index": index, "es_version": es.info()["version"]["number"], "docs_per_chunker": counts, "embed_model": model,
+                "pool": POOL, "knn": {k: v for k, v in knn_clause([], "x").items() if k in ("k", "num_candidates")},
+                "rrf_k": RRF_K, "hybrid_fused_list": HYBRID_TOP, "bm25_fields": BM25_FIELDS, "bm25_window": POOL, "ks": list(KS),
+                "tiny_chunk_tokens": TINY, "bootstrap": {"n": BOOTSTRAP_N, "seed": BOOTSTRAP_SEED, "method": "percentile, resampling questions"},
+                "index_options": index_options, "fusion": "python", "query_embeddings_api_calls_this_run": emb.calls,
+                "query_embeddings_est_spend_usd": round(guard.spent, 8), **(extra_settings or {})}
+    types = [t for t in TYPES if any(q["type"] == t for q in questions)]
+    return {"timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"), "git": git_info(), "golden_file": golden_path,
+            "golden_sha256": hashlib.sha256(Path(golden_path).read_bytes()).hexdigest(), "n_answerable": len(questions),
+            "n_unanswerable": len(golden) - len(questions), "n_by_type": {t: sum(q["type"] == t for q in questions) for t in types},
+            "settings": settings, **extra}
 
 
 def main(argv=None) -> int:
@@ -231,17 +258,8 @@ def main(argv=None) -> int:
     es = Elasticsearch(os.environ.get("ES_URL", "http://127.0.0.1:9200"))
     retrieved = retrieve_all(es, index, questions, emb)
     results = score(questions, retrieved)
-    counts = {c: es.count(index=index, query={"term": {"chunker": c}})["count"] for c in CHUNKERS}
-    meta = {"timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"), "git": git_info(), "golden_file": a.golden,
-            "golden_sha256": hashlib.sha256(Path(a.golden).read_bytes()).hexdigest(),
-            "n_answerable": len(questions), "n_unanswerable": len(golden) - len(questions),
-            "n_by_type": {t: sum(q["type"] == t for q in questions) for t in TYPES},
-            "settings": {"index": index, "es_version": es.info()["version"]["number"], "docs_per_chunker": counts, "embed_model": model,
-                         "pool": POOL, "knn": {k: v for k, v in knn_clause([], "x").items() if k in ("k", "num_candidates")},
-                         "rrf_k": RRF_K, "hybrid_fused_list": HYBRID_TOP, "bm25_fields": BM25_FIELDS, "bm25_window": POOL, "ks": list(KS),
-                         "tiny_chunk_tokens": TINY, "bootstrap": {"n": BOOTSTRAP_N, "seed": BOOTSTRAP_SEED, "method": "percentile, resampling questions"},
-                         "index_options": "as built (effective bbq_hnsw, rescore oversample 3.0; eval/results/mapping.json)", "fusion": "python",
-                         "query_embeddings_api_calls_this_run": emb.calls, "query_embeddings_est_spend_usd": round(guard.spent, 8)}}
+    meta = make_meta(es, index, a.golden, golden, questions, model, emb, guard,
+                     index_options="as built (effective bbq_hnsw, rescore oversample 3.0; eval/results/mapping.json)")
     doc = {"meta": meta, "results": results, "paired": paired_all(results)}
     Path(a.out_json).write_text(json.dumps(doc, indent=1))
     Path(a.out_md).write_text(format_md(doc), encoding="utf8")

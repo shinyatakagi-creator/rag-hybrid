@@ -1,0 +1,579 @@
+{
+ "c009": {
+  "question": "Our cluster grows and shrinks its node count by itself, but the count is often wrong for the load. How can bad CPU and memory requests on Pods cause that?",
+  "expected": [
+   "concepts/cluster-administration/node-autoscaling"
+  ],
+  "by_chunker": {
+   "fixed": {
+    "bm25": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "reference/instrumentation/understand-psi-metrics",
+       "heading": "Understand Pressure Stall Information (PSI) Metrics",
+       "tokens": 381
+      },
+      {
+       "doc_id": "tasks/administer-cluster/cpu-management-policies",
+       "heading": "Control CPU Management Policies on the Node",
+       "tokens": 393
+      },
+      {
+       "doc_id": "tasks/administer-cluster/cpu-management-policies",
+       "heading": "Control CPU Management Policies on the Node",
+       "tokens": 369
+      }
+     ],
+     "pages": {
+      "concepts/cluster-administration/node-autoscaling": {
+       "best_chunk_rank": null,
+       "best_chunk": null,
+       "chunks_of_page_in_window": 0,
+       "answer_chunk": {
+        "heading": "Node Autoscaling",
+        "tokens": 390,
+        "text": "## Combine workload and Node autoscaling\n\n### Horizontal workload autoscaling {#horizontal-workload-autoscaling}\n\nNode autoscaling usually works in response to Pods\u2014it provisions new Nodes to accommodate\nunschedulable Pods, and then consolidates the Nodes once they're no longer needed.\n\n[Horizontal workload autoscaling](/docs/concepts/workloads/autoscaling#scaling-workloads-horizontally)\nautomatically scales the number of workload replicas to maintain a desired average resource\nutilization across the replicas. In other words, it automatically creates new Pods in response to\napplication load, and then removes the Pods once the load decreases.\n\nYou can use Node autoscaling together with horizo",
+        "rank_in_list": null,
+        "bm25_matched_terms": [
+         "can",
+         "cluster",
+         "it",
+         "load",
+         "node",
+         "pod",
+         "request"
+        ]
+       }
+      }
+     }
+    },
+    "dense": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "tasks/configure-pod-container/assign-cpu-resource",
+       "heading": "Assign CPU Resources to Containers and Pods",
+       "tokens": 398
+      },
+      {
+       "doc_id": "tasks/configure-pod-container/assign-memory-resource",
+       "heading": "Assign Memory Resources to Containers and Pods",
+       "tokens": 349
+      },
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "heading": "Resource Management for Pods and Containers",
+       "tokens": 398
+      }
+     ],
+     "pages": {
+      "concepts/cluster-administration/node-autoscaling": {
+       "best_chunk_rank": 73,
+       "best_chunk": [
+        "Node Autoscaling",
+        390
+       ],
+       "chunks_of_page_in_window": 6,
+       "answer_chunk": {
+        "heading": "Node Autoscaling",
+        "tokens": 390,
+        "text": "## Combine workload and Node autoscaling\n\n### Horizontal workload autoscaling {#horizontal-workload-autoscaling}\n\nNode autoscaling usually works in response to Pods\u2014it provisions new Nodes to accommodate\nunschedulable Pods, and then consolidates the Nodes once they're no longer needed.\n\n[Horizontal workload autoscaling](/docs/concepts/workloads/autoscaling#scaling-workloads-horizontally)\nautomatically scales the number of workload replicas to maintain a desired average resource\nutilization across the replicas. In other words, it automatically creates new Pods in response to\napplication load, and then removes the Pods once the load decreases.\n\nYou can use Node autoscaling together with horizo",
+        "rank_in_list": 73
+       }
+      }
+     }
+    }
+   },
+   "heading": {
+    "bm25": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "tasks/administer-cluster/node-overprovisioning",
+       "heading": "Overprovision Node Capacity For A Cluster > Set the desired replica count > Calculate the total reserved resources",
+       "tokens": 289
+      },
+      {
+       "doc_id": "concepts/workloads/pods/user-namespaces",
+       "heading": "User Namespaces > ID count for each of Pods",
+       "tokens": 178
+      },
+      {
+       "doc_id": "tasks/administer-cluster/cpu-management-policies",
+       "heading": "Control CPU Management Policies on the Node",
+       "tokens": 190
+      }
+     ],
+     "pages": {
+      "concepts/cluster-administration/node-autoscaling": {
+       "best_chunk_rank": null,
+       "best_chunk": null,
+       "chunks_of_page_in_window": 0,
+       "answer_chunk": {
+        "heading": "Node Autoscaling > Combine workload and Node autoscaling > Vertical workload autoscaling {#vertical-workload-autoscaling}",
+        "tokens": 230,
+        "text": "When using Node autoscaling, it's important to set Pod resource requests correctly. If the requests\nof a given Pod are too low, provisioning a new Node for it might not help the Pod actually run.\nIf the requests of a given Pod are too high, it might incorrectly prevent consolidating its Node.  \n[Vertical workload autoscaling](/docs/concepts/workloads/autoscaling#scaling-workloads-vertically)\nautomatically adjusts the resource requests of your Pods based on their historical resource usage.  \nYou can use Node autoscaling together with vertical workload autoscaling in order to adjust the\nresource requests of your Pods while preserving Node autoscaling capabilities in your cluster.  \nCaution:\nWh",
+        "rank_in_list": null,
+        "bm25_matched_terms": [
+         "and",
+         "can",
+         "cluster",
+         "it",
+         "node",
+         "pod",
+         "request"
+        ]
+       }
+      }
+     }
+    },
+    "dense": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "tasks/configure-pod-container/assign-cpu-resource",
+       "heading": "Assign CPU Resources to Containers and Pods > Motivation for CPU requests and limits",
+       "tokens": 129
+      },
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "heading": "Resource Management for Pods and Containers > Troubleshooting > My Pods are pending with event message `FailedScheduling`",
+       "tokens": 371
+      },
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "heading": "Resource Management for Pods and Containers > How Pods with resource requests are scheduled",
+       "tokens": 154
+      }
+     ],
+     "pages": {
+      "concepts/cluster-administration/node-autoscaling": {
+       "best_chunk_rank": 56,
+       "best_chunk": [
+        "Node Autoscaling > Node consolidation {#consolidation}",
+        539
+       ],
+       "chunks_of_page_in_window": 5,
+       "answer_chunk": {
+        "heading": "Node Autoscaling > Combine workload and Node autoscaling > Vertical workload autoscaling {#vertical-workload-autoscaling}",
+        "tokens": 230,
+        "text": "When using Node autoscaling, it's important to set Pod resource requests correctly. If the requests\nof a given Pod are too low, provisioning a new Node for it might not help the Pod actually run.\nIf the requests of a given Pod are too high, it might incorrectly prevent consolidating its Node.  \n[Vertical workload autoscaling](/docs/concepts/workloads/autoscaling#scaling-workloads-vertically)\nautomatically adjusts the resource requests of your Pods based on their historical resource usage.  \nYou can use Node autoscaling together with vertical workload autoscaling in order to adjust the\nresource requests of your Pods while preserving Node autoscaling capabilities in your cluster.  \nCaution:\nWh",
+        "rank_in_list": 59
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "c010": {
+  "question": "We pushed a new version of an agent that runs on every node, but on some nodes the new Pods can't start because those nodes are full. What should I do?",
+  "expected": [
+   "tasks/manage-daemon/update-daemon-set"
+  ],
+  "by_chunker": {
+   "fixed": {
+    "bm25": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "tasks/manage-daemon/pods-some-nodes",
+       "heading": "Running Pods on Only Some Nodes",
+       "tokens": 392
+      },
+      {
+       "doc_id": "tasks/manage-daemon/pods-some-nodes",
+       "heading": "Running Pods on Only Some Nodes",
+       "tokens": 184
+      },
+      {
+       "doc_id": "concepts/cluster-administration/logging",
+       "heading": "Logging Architecture",
+       "tokens": 334
+      }
+     ],
+     "pages": {
+      "tasks/manage-daemon/update-daemon-set": {
+       "best_chunk_rank": 72,
+       "best_chunk": [
+        "Perform a Rolling Update on a DaemonSet",
+        403
+       ],
+       "chunks_of_page_in_window": 2,
+       "answer_chunk": {
+        "heading": "Perform a Rolling Update on a DaemonSet",
+        "tokens": 403,
+        "text": "#### Declarative commands\n\nIf you update DaemonSets using\n[configuration files](/docs/tasks/manage-kubernetes-objects/declarative-config/),\nuse `kubectl apply`:\n\n```shell\nkubectl apply -f https://k8s.io/examples/controllers/fluentd-daemonset-update.yaml\n```\n\n#### Imperative commands\n\nIf you update DaemonSets using\n[imperative commands](/docs/tasks/manage-kubernetes-objects/imperative-command/),\nuse `kubectl edit` :\n\n```shell\nkubectl edit ds/fluentd-elasticsearch -n kube-system\n```\n\n##### Updating only the container image\n\nIf you only need to update the container image in the DaemonSet template, i.e.\n`.spec.template.spec.containers[*].image`, use `kubectl set image`:\n\n```shell\nkubectl set ima",
+        "rank_in_list": 72,
+        "bm25_matched_terms": [
+         "a",
+         "becaus",
+         "can't",
+         "new",
+         "node",
+         "on",
+         "pod",
+         "run",
+         "some"
+        ]
+       }
+      }
+     }
+    },
+    "dense": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "tasks/configure-pod-container/assign-pods-nodes-using-node-affinity",
+       "heading": "Assign Pods to Nodes using Node Affinity",
+       "tokens": 97
+      },
+      {
+       "doc_id": "reference/node/what-happens-on-restart",
+       "heading": "What Happens After A Node Restart",
+       "tokens": 83
+      },
+      {
+       "doc_id": "tasks/debug/debug-application/debug-running-pod",
+       "heading": "Debug Running Pods",
+       "tokens": 382
+      }
+     ],
+     "pages": {
+      "tasks/manage-daemon/update-daemon-set": {
+       "best_chunk_rank": null,
+       "best_chunk": null,
+       "chunks_of_page_in_window": 0,
+       "answer_chunk": {
+        "heading": "Perform a Rolling Update on a DaemonSet",
+        "tokens": 403,
+        "text": "#### Declarative commands\n\nIf you update DaemonSets using\n[configuration files](/docs/tasks/manage-kubernetes-objects/declarative-config/),\nuse `kubectl apply`:\n\n```shell\nkubectl apply -f https://k8s.io/examples/controllers/fluentd-daemonset-update.yaml\n```\n\n#### Imperative commands\n\nIf you update DaemonSets using\n[imperative commands](/docs/tasks/manage-kubernetes-objects/imperative-command/),\nuse `kubectl edit` :\n\n```shell\nkubectl edit ds/fluentd-elasticsearch -n kube-system\n```\n\n##### Updating only the container image\n\nIf you only need to update the container image in the DaemonSet template, i.e.\n`.spec.template.spec.containers[*].image`, use `kubectl set image`:\n\n```shell\nkubectl set ima",
+        "rank_in_list": null
+       }
+      }
+     }
+    }
+   },
+   "heading": {
+    "bm25": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "tasks/manage-daemon/pods-some-nodes",
+       "heading": "Running Pods on Only Some Nodes > Running Pods on only some Nodes > Step 1: Add labels to your nodes",
+       "tokens": 148
+      },
+      {
+       "doc_id": "tasks/manage-daemon/pods-some-nodes",
+       "heading": "Running Pods on Only Some Nodes > Running Pods on only some Nodes > Step 2: Create the manifest",
+       "tokens": 159
+      },
+      {
+       "doc_id": "tasks/manage-daemon/pods-some-nodes",
+       "heading": "Running Pods on Only Some Nodes > Running Pods on only some Nodes > Step 3: Create the DaemonSet",
+       "tokens": 233
+      }
+     ],
+     "pages": {
+      "tasks/manage-daemon/update-daemon-set": {
+       "best_chunk_rank": 6,
+       "best_chunk": [
+        "Perform a Rolling Update on a DaemonSet > Troubleshooting > DaemonSet rolling update is stuck",
+        342
+       ],
+       "chunks_of_page_in_window": 1,
+       "answer_chunk": {
+        "heading": "Perform a Rolling Update on a DaemonSet > Troubleshooting > DaemonSet rolling update is stuck",
+        "tokens": 342,
+        "text": "Sometimes, a DaemonSet rolling update may be stuck. Here are some possible\ncauses:  \n#### Some nodes run out of resources  \nThe rollout is stuck because new DaemonSet pods can't be scheduled on at least one\nnode. This is possible when the node is\n[running out of resources](/docs/concepts/scheduling-eviction/node-pressure-eviction/).  \nWhen this happens, find the nodes that don't have the DaemonSet pods scheduled on\nby comparing the output of `kubectl get nodes` and the output of:  \n```shell\nkubectl get pods -l name=fluentd-elasticsearch -o wide -n kube-system\n```  \nOnce you've found those nodes, delete some non-DaemonSet pods from the node to\nmake room for new DaemonSet pods.  \nNote:\nThis wi",
+        "rank_in_list": 6,
+        "bm25_matched_terms": [
+         "a",
+         "becaus",
+         "can't",
+         "new",
+         "node",
+         "on",
+         "pod",
+         "run",
+         "some",
+         "those"
+        ]
+       }
+      }
+     }
+    },
+    "dense": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "heading": "Resource Management for Pods and Containers > Troubleshooting > My Pods are pending with event message `FailedScheduling`",
+       "tokens": 371
+      },
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "heading": "Resource Management for Pods and Containers > Troubleshooting > My Pods are pending with event message `FailedScheduling`",
+       "tokens": 432
+      },
+      {
+       "doc_id": "concepts/configuration/manage-resources-containers",
+       "heading": "Resource Management for Pods and Containers > Troubleshooting > My Pods are pending with event message `FailedScheduling`",
+       "tokens": 400
+      }
+     ],
+     "pages": {
+      "tasks/manage-daemon/update-daemon-set": {
+       "best_chunk_rank": 132,
+       "best_chunk": [
+        "Perform a Rolling Update on a DaemonSet > Troubleshooting > DaemonSet rolling update is stuck",
+        342
+       ],
+       "chunks_of_page_in_window": 1,
+       "answer_chunk": {
+        "heading": "Perform a Rolling Update on a DaemonSet > Troubleshooting > DaemonSet rolling update is stuck",
+        "tokens": 342,
+        "text": "Sometimes, a DaemonSet rolling update may be stuck. Here are some possible\ncauses:  \n#### Some nodes run out of resources  \nThe rollout is stuck because new DaemonSet pods can't be scheduled on at least one\nnode. This is possible when the node is\n[running out of resources](/docs/concepts/scheduling-eviction/node-pressure-eviction/).  \nWhen this happens, find the nodes that don't have the DaemonSet pods scheduled on\nby comparing the output of `kubectl get nodes` and the output of:  \n```shell\nkubectl get pods -l name=fluentd-elasticsearch -o wide -n kube-system\n```  \nOnce you've found those nodes, delete some non-DaemonSet pods from the node to\nmake room for new DaemonSet pods.  \nNote:\nThis wi",
+        "rank_in_list": 132
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "c002": {
+  "question": "Checking live CPU and memory use per node fails, and the controller that grows and shrinks my workloads has stopped working too. What add-on supplies the numbers both rely on?",
+  "expected": [
+   "tasks/debug/debug-cluster/resource-usage-monitoring",
+   "tasks/debug/debug-cluster/resource-metrics-pipeline"
+  ],
+  "by_chunker": {
+   "fixed": {
+    "bm25": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "tasks/administer-cluster/cpu-management-policies",
+       "heading": "Control CPU Management Policies on the Node",
+       "tokens": 393
+      },
+      {
+       "doc_id": "tasks/administer-cluster/cpu-management-policies",
+       "heading": "Control CPU Management Policies on the Node",
+       "tokens": 369
+      },
+      {
+       "doc_id": "tasks/administer-cluster/cpu-management-policies",
+       "heading": "Control CPU Management Policies on the Node",
+       "tokens": 324
+      }
+     ],
+     "pages": {
+      "tasks/debug/debug-cluster/resource-usage-monitoring": {
+       "best_chunk_rank": null,
+       "best_chunk": null,
+       "chunks_of_page_in_window": 0,
+       "answer_chunk": {
+        "heading": "Tools for Monitoring Resources",
+        "tokens": 391,
+        "text": "metrics-server discovers all nodes on the cluster and\nqueries each node's\n[kubelet](/docs/reference/command-line-tools-reference/kubelet/) for CPU and\nmemory usage. The kubelet acts as a bridge between the Kubernetes master and\nthe nodes, managing the pods and containers running on a machine. The kubelet\ntranslates each pod into its constituent containers and fetches individual\ncontainer usage statistics from the container runtime through the container\nruntime interface. If you use a container runtime that uses Linux cgroups and\nnamespaces to implement containers, and the container runtime does not publish\nusage statistics, then the kubelet can look up those statistics directly\n(using code f",
+        "rank_in_list": null,
+        "bm25_matched_terms": [
+         "cpu",
+         "memori",
+         "node",
+         "us",
+         "work"
+        ]
+       }
+      },
+      "tasks/debug/debug-cluster/resource-metrics-pipeline": {
+       "best_chunk_rank": null,
+       "best_chunk": null,
+       "chunks_of_page_in_window": 0,
+       "answer_chunk": {
+        "heading": "Resource metrics pipeline",
+        "tokens": 365,
+        "text": "Figure 1. Resource Metrics Pipeline\n\nThe architecture components, from right to left in the figure, consist of the following:\n\n* [cAdvisor](https://github.com/google/cadvisor): Daemon for collecting, aggregating and exposing\n  container metrics included in Kubelet.\n* [kubelet](/docs/concepts/architecture/#kubelet): Node agent for managing container\n  resources. Resource metrics are accessible using the `/metrics/resource` and `/stats` kubelet\n  API endpoints.\n* [node level resource metrics](/docs/reference/instrumentation/node-metrics): API provided by the kubelet for discovering and retrieving\n  per-node summarized stats available through the `/metrics/resource` endpoint.\n* [metrics-server]",
+        "rank_in_list": null,
+        "bm25_matched_terms": [
+         "cpu",
+         "memori",
+         "node",
+         "per",
+         "us",
+         "work",
+         "workload"
+        ]
+       }
+      }
+     }
+    },
+    "dense": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "reference/instrumentation/metrics",
+       "heading": "Kubernetes Metrics Reference",
+       "tokens": 386
+      },
+      {
+       "doc_id": "tasks/debug/debug-cluster/_index",
+       "heading": "Troubleshooting Clusters",
+       "tokens": 398
+      },
+      {
+       "doc_id": "reference/instrumentation/metrics",
+       "heading": "Kubernetes Metrics Reference",
+       "tokens": 388
+      }
+     ],
+     "pages": {
+      "tasks/debug/debug-cluster/resource-usage-monitoring": {
+       "best_chunk_rank": 13,
+       "best_chunk": [
+        "Tools for Monitoring Resources",
+        391
+       ],
+       "chunks_of_page_in_window": 2,
+       "answer_chunk": {
+        "heading": "Tools for Monitoring Resources",
+        "tokens": 391,
+        "text": "metrics-server discovers all nodes on the cluster and\nqueries each node's\n[kubelet](/docs/reference/command-line-tools-reference/kubelet/) for CPU and\nmemory usage. The kubelet acts as a bridge between the Kubernetes master and\nthe nodes, managing the pods and containers running on a machine. The kubelet\ntranslates each pod into its constituent containers and fetches individual\ncontainer usage statistics from the container runtime through the container\nruntime interface. If you use a container runtime that uses Linux cgroups and\nnamespaces to implement containers, and the container runtime does not publish\nusage statistics, then the kubelet can look up those statistics directly\n(using code f",
+        "rank_in_list": 13
+       }
+      },
+      "tasks/debug/debug-cluster/resource-metrics-pipeline": {
+       "best_chunk_rank": 57,
+       "best_chunk": [
+        "Resource metrics pipeline",
+        393
+       ],
+       "chunks_of_page_in_window": 3,
+       "answer_chunk": {
+        "heading": "Resource metrics pipeline",
+        "tokens": 365,
+        "text": "Figure 1. Resource Metrics Pipeline\n\nThe architecture components, from right to left in the figure, consist of the following:\n\n* [cAdvisor](https://github.com/google/cadvisor): Daemon for collecting, aggregating and exposing\n  container metrics included in Kubelet.\n* [kubelet](/docs/concepts/architecture/#kubelet): Node agent for managing container\n  resources. Resource metrics are accessible using the `/metrics/resource` and `/stats` kubelet\n  API endpoints.\n* [node level resource metrics](/docs/reference/instrumentation/node-metrics): API provided by the kubelet for discovering and retrieving\n  per-node summarized stats available through the `/metrics/resource` endpoint.\n* [metrics-server]",
+        "rank_in_list": null
+       }
+      }
+     }
+    }
+   },
+   "heading": {
+    "bm25": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "tasks/administer-cluster/cpu-management-policies",
+       "heading": "Control CPU Management Policies on the Node",
+       "tokens": 190
+      },
+      {
+       "doc_id": "tasks/administer-cluster/cpu-management-policies",
+       "heading": "Control CPU Management Policies on the Node > Configuring CPU management policies",
+       "tokens": 140
+      },
+      {
+       "doc_id": "tasks/administer-cluster/cpu-management-policies",
+       "heading": "Control CPU Management Policies on the Node > Windows Support",
+       "tokens": 74
+      }
+     ],
+     "pages": {
+      "tasks/debug/debug-cluster/resource-usage-monitoring": {
+       "best_chunk_rank": null,
+       "best_chunk": null,
+       "chunks_of_page_in_window": 0,
+       "answer_chunk": {
+        "heading": "Tools for Monitoring Resources > Resource metrics pipeline",
+        "tokens": 303,
+        "text": "The resource metrics pipeline provides a limited set of metrics related to\ncluster components such as the\n[Horizontal Pod Autoscaler](/docs/tasks/run-application/horizontal-pod-autoscale/)\ncontroller, as well as the `kubectl top` utility.\nThese  metrics are collected by the lightweight, short-term, in-memory\n[metrics-server](https://github.com/kubernetes-sigs/metrics-server) and\nare exposed via the `metrics.k8s.io` API.  \nmetrics-server discovers all nodes on the cluster and\nqueries each node's\n[kubelet](/docs/reference/command-line-tools-reference/kubelet/) for CPU and\nmemory usage. The kubelet acts as a bridge between the Kubernetes master and\nthe nodes, managing the pods and containers ru",
+        "rank_in_list": null,
+        "bm25_matched_terms": [
+         "control",
+         "cpu",
+         "memori",
+         "node",
+         "us"
+        ]
+       }
+      },
+      "tasks/debug/debug-cluster/resource-metrics-pipeline": {
+       "best_chunk_rank": null,
+       "best_chunk": null,
+       "chunks_of_page_in_window": 0,
+       "answer_chunk": {
+        "heading": "Resource metrics pipeline",
+        "tokens": 339,
+        "text": "Figure 1. Resource Metrics Pipeline  \nThe architecture components, from right to left in the figure, consist of the following:  \n* [cAdvisor](https://github.com/google/cadvisor): Daemon for collecting, aggregating and exposing\ncontainer metrics included in Kubelet.\n* [kubelet](/docs/concepts/architecture/#kubelet): Node agent for managing container\nresources. Resource metrics are accessible using the `/metrics/resource` and `/stats` kubelet\nAPI endpoints.\n* [node level resource metrics](/docs/reference/instrumentation/node-metrics): API provided by the kubelet for discovering and retrieving\nper-node summarized stats available through the `/metrics/resource` endpoint.\n* [metrics-server](#metr",
+        "rank_in_list": null,
+        "bm25_matched_terms": [
+         "cpu",
+         "memori",
+         "node",
+         "per",
+         "us",
+         "work",
+         "workload"
+        ]
+       }
+      }
+     }
+    },
+    "dense": {
+     "window": 200,
+     "top3": [
+      {
+       "doc_id": "reference/instrumentation/metrics",
+       "heading": "Kubernetes Metrics Reference > Metrics (v1.37) > List of Alpha Kubernetes Metrics",
+       "tokens": 559
+      },
+      {
+       "doc_id": "tasks/debug/debug-cluster/_index",
+       "heading": "Troubleshooting Clusters > Listing your cluster > Example: debugging a down/unreachable node",
+       "tokens": 528
+      },
+      {
+       "doc_id": "tasks/debug/debug-cluster/_index",
+       "heading": "Troubleshooting Clusters > Listing your cluster > Example: debugging a down/unreachable node",
+       "tokens": 613
+      }
+     ],
+     "pages": {
+      "tasks/debug/debug-cluster/resource-usage-monitoring": {
+       "best_chunk_rank": 5,
+       "best_chunk": [
+        "Tools for Monitoring Resources > Resource metrics pipeline",
+        303
+       ],
+       "chunks_of_page_in_window": 2,
+       "answer_chunk": {
+        "heading": "Tools for Monitoring Resources > Resource metrics pipeline",
+        "tokens": 303,
+        "text": "The resource metrics pipeline provides a limited set of metrics related to\ncluster components such as the\n[Horizontal Pod Autoscaler](/docs/tasks/run-application/horizontal-pod-autoscale/)\ncontroller, as well as the `kubectl top` utility.\nThese  metrics are collected by the lightweight, short-term, in-memory\n[metrics-server](https://github.com/kubernetes-sigs/metrics-server) and\nare exposed via the `metrics.k8s.io` API.  \nmetrics-server discovers all nodes on the cluster and\nqueries each node's\n[kubelet](/docs/reference/command-line-tools-reference/kubelet/) for CPU and\nmemory usage. The kubelet acts as a bridge between the Kubernetes master and\nthe nodes, managing the pods and containers ru",
+        "rank_in_list": 5
+       }
+      },
+      "tasks/debug/debug-cluster/resource-metrics-pipeline": {
+       "best_chunk_rank": 43,
+       "best_chunk": [
+        "Resource metrics pipeline > Metrics API",
+        582
+       ],
+       "chunks_of_page_in_window": 5,
+       "answer_chunk": {
+        "heading": "Resource metrics pipeline",
+        "tokens": 339,
+        "text": "Figure 1. Resource Metrics Pipeline  \nThe architecture components, from right to left in the figure, consist of the following:  \n* [cAdvisor](https://github.com/google/cadvisor): Daemon for collecting, aggregating and exposing\ncontainer metrics included in Kubelet.\n* [kubelet](/docs/concepts/architecture/#kubelet): Node agent for managing container\nresources. Resource metrics are accessible using the `/metrics/resource` and `/stats` kubelet\nAPI endpoints.\n* [node level resource metrics](/docs/reference/instrumentation/node-metrics): API provided by the kubelet for discovering and retrieving\nper-node summarized stats available through the `/metrics/resource` endpoint.\n* [metrics-server](#metr",
+        "rank_in_list": 174
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

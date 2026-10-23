@@ -68,11 +68,16 @@ def print_plan(p: dict, model: str) -> None:
           f"MAX_SPEND_USD=${p['max_spend_usd']}  within budget={p['within_budget']}")
 
 
-def create_index(es: Elasticsearch, index: str, recreate: bool) -> None:
+def create_index(es: Elasticsearch, index: str, recreate: bool, index_options: dict | None = None) -> None:
+    """`index_options` (e.g. {"type": "hnsw", "m": 16, "ef_construction": 100}) sets the embedding field's index_options
+    explicitly; None leaves the ES default (bbq_hnsw for 1536 dims on ES 9.5), which is what rag-docs uses."""
     if recreate and es.indices.exists(index=index):
         es.indices.delete(index=index)
     if not es.indices.exists(index=index):
-        es.indices.create(index=index, mappings=MAPPING, settings=SETTINGS)
+        mappings = json.loads(json.dumps(MAPPING))
+        if index_options:
+            mappings["properties"]["embedding"]["index_options"] = index_options
+        es.indices.create(index=index, mappings=mappings, settings=SETTINGS)
 
 
 def bulk_index(es: Elasticsearch, index: str, chunks_by_name: dict, cache: EmbedCache, model: str) -> int:
@@ -116,6 +121,7 @@ def main(argv=None) -> int:
     ap.add_argument("--mapping-out", default="eval/results/mapping.json")
     ap.add_argument("--dry-run", action="store_true", help="print the plan and exit; no API call")
     ap.add_argument("--yes", action="store_true", help="skip the confirmation prompt")
+    ap.add_argument("--index-options", help='JSON for the embedding field index_options, e.g. \'{"type":"hnsw","m":16,"ef_construction":100}\'; default: ES default')
     ap.add_argument("--recreate", action="store_true", help="drop and recreate the index first")
     a = ap.parse_args(argv)
 
@@ -160,7 +166,7 @@ def main(argv=None) -> int:
         print("embedding calls made: 0 (everything cached)")
 
     es = Elasticsearch(os.environ.get("ES_URL", "http://127.0.0.1:9200"))
-    create_index(es, index, a.recreate)
+    create_index(es, index, a.recreate, json.loads(a.index_options) if a.index_options else None)
     n = bulk_index(es, index, chunks_by_name, cache, model)
     print(f"bulk indexed {n} docs into {index}")
     good = report_counts(es, index, chunks_by_name)

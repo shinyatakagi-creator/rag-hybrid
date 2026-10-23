@@ -34,12 +34,19 @@ The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
 Headline (read the intervals, n = 26): overall Recall@10 fixed bm25/dense/hybrid 0.615 / 0.865 / 0.788, heading 0.673 / 0.878 / 0.827; exact_term and mixed are near ceiling for every row; the difference is conceptual (n = 10), where bm25 is near 0 and dense beats hybrid (hybrid recall@10 0.45 fixed / 0.55 heading vs dense 0.65 / 0.68). Hybrid does not beat dense overall on this set. Full tables and per-question ranks are in the `.md`. No README claim yet (checkpoint 5).
 
+## Sensitivity analyses (2026-10-23; reported as sensitivity, not tuning: there is no held-out set; the baseline above stays the headline)
+Code `eval/sensitivity.py` (`bare-term`, `rrf-weights`, `index-options`), `eval/failure_analysis.py`; each result has its own file with settings in `eval/results/`. The golden set was not changed.
+- **Bare-term diagnostic** (`bare_term.json/.md`; the exact term alone as the query for the 16 exact_term + mixed questions, 16 queries, 81 tokens, about $0.0000016): bm25 and hybrid hold Recall@10 at 0.94-1.00 (heading/bm25 and heading/hybrid 1.000), dense falls to 0.66 (fixed) / 0.72 (heading); MRR is lower for every row than with the full question (bm25 0.65 / 0.62, hybrid 0.49 / 0.61, dense 0.33 / 0.34). BM25 lists are exhausted for 9 of 16 queries (rare identifiers) yet still contain the expected doc every time.
+- **Weighted RRF** (`rrf_weights.json/.md`; dense weight 1 / 1.5 / 2, bm25 weight 1; weight 1 reproduces the baseline hybrid exactly): all weights reported, none chosen. Overall hybrid Recall@10 0.788 / 0.821 / 0.821 (fixed) and 0.827 / 0.865 / 0.865 (heading); the movement is in conceptual questions; intervals overlap heavily at n = 26.
+- **index_options** (`index_options.json/.md`; `rag-docs-hnsw` = explicit hnsw m16 / ef_construction 100, built from the cache with 0 embedding calls, mapping in `mapping_hnsw.json`; **kept for now**, delete it with `curl -X DELETE localhost:9200/rag-docs-hnsw` when no longer needed): dense and hybrid rows are identical to bbq_hnsw (top-10 chunk overlap 1.000 for dense, 0.992 / 1.000 for hybrid; one question's first-rank changes, fixed hybrid).
+- **Failure analysis** (`failure_analysis.md`): c009, c010, c002 are hard conceptual questions whose answer is one sentence inside a longer section and whose wording avoids the sentence's key nouns; not golden-set errors.
+
 ## Next steps
 1. `eval/answer_eval.py`, then the checkpoint-4 sampler (blind labelling, stratified: every `partial` and `no` plus random `yes` to make 25).
-2. Only after you decide: the pool sweep 50/100/200 and the native-RRF cross-check (checkpoint 3: you start the trial licence). Neither has been run.
+2. Native-RRF cross-check only if you want it (checkpoint 3: you start the trial licence); the pool sweep 50/100/200 has not been run.
 3. Phase 8: API, Docker, small query-embedding cache. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
 
-## Spend so far: about $0.2895 of the $5 limit (plus about $0.00001 for the 26 baseline query embeddings)
+## Spend so far: about $0.2895 of the $5 limit (plus about $0.000015 for the 26 baseline and 16 bare-term query embeddings)
 | Item | Cost |
 |---|---|
 | Embeddings: corpus (2,750,672 tokens) + two re-embeds (66,058 and 234,612) + queries (~652, estimated) | $0.0610 |
