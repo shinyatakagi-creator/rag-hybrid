@@ -1,21 +1,22 @@
+HTML entities decoded in prose: 1,281; left untouched inside code (fenced or inline): 109
 What's-next sections removed in the loader: 281 (30,606 tokens)
-pages=502  tokens raw=1,481,756 cleaned=1,270,948
+pages=502  tokens raw=1,481,756 cleaned=1,266,484
 unknown shortcodes stripped: {'api-reference': 13, 'example': 4, 'link': 1, 'page-api-reference': 1, 'cve-feed': 1, 'pageinfo': 1, 'legacy-repos-deprecation': 3}  missing refs: []
 
 [fixed] -> data/chunks/fixed.jsonl
 {
- "chunks": 4087,
+ "chunks": 4072,
  "docs": 477,
  "tokens_min": 3,
- "tokens_median": 367,
+ "tokens_median": 367.0,
  "tokens_max": 408,
- "tokens_total": 1371872,
+ "tokens_total": 1366908,
  "over_800": 0,
- "under_100": 125,
- "unbalanced_fence": 206,
+ "under_100": 128,
+ "unbalanced_fence": 207,
  "table_without_header": 15,
- "title_only_heading_path": 4087,
- "under_100_share": 0.0306,
+ "title_only_heading_path": 4072,
+ "under_100_share": 0.0314,
  "table_split_across_chunks": 16,
  "shortcode_shaped_fragments_anywhere": 2,
  "strict_fragments_total": 55,
@@ -40,25 +41,25 @@ unknown shortcodes stripped: {'api-reference': 13, 'example': 4, 'link': 1, 'pag
       54  concepts/workloads/controllers/job
       54  reference/using-api/api-concepts
       53  tasks/extend-kubernetes/custom-resources/custom-resource-definitions
-      43  reference/config-api/kubeadm-config.v1beta4
-      43  reference/config-api/kubelet-config.v1beta1
       42  concepts/workloads/controllers/deployment
+      41  reference/config-api/kubeadm-config.v1beta4
+      41  reference/config-api/kubelet-config.v1beta1
       40  reference/access-authn-authz/extensible-admission-controllers
 
 [heading] -> data/chunks/heading.jsonl
 {
- "chunks": 4528,
+ "chunks": 4527,
  "docs": 477,
  "tokens_min": 17,
- "tokens_median": 245.0,
+ "tokens_median": 245,
  "tokens_max": 649,
- "tokens_total": 1310904,
+ "tokens_total": 1306422,
  "over_800": 0,
- "under_100": 409,
+ "under_100": 412,
  "unbalanced_fence": 0,
  "table_without_header": 0,
  "title_only_heading_path": 221,
- "under_100_share": 0.0903,
+ "under_100_share": 0.091,
  "table_split_across_chunks": 6,
  "shortcode_shaped_fragments_anywhere": 2,
  "strict_fragments_total": 55,

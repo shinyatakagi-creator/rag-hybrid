@@ -119,6 +119,65 @@ def test_load_corpus_strips_whats_next_for_every_page(tmp_path):
     assert len(cleaner.whats_next_removed) == 1
 
 
+def clean(text, tmp_path):
+    c = Cleaner(tmp_path)
+    return c.clean(text, tmp_path), c
+
+
+def test_entities_in_prose_are_decoded(tmp_path):
+    out, c = clean("Say &quot;hi&quot; &amp; use &lt;name&gt; and &#34;x&#34; &#x2713; ok&nbsp;now", tmp_path)
+    assert out == 'Say "hi" & use <name> and "x" ✓ ok now' and c.entities_decoded == 9 and c.entities_left_in_code == 0
+
+
+def test_entities_inside_fenced_code_are_left_alone_in_every_fence_style(tmp_path):
+    for fence in ("```", "~~~", "    ```", "- item\n\n    ```", "````"):
+        text = f"before &quot;a&quot;\n{fence}yaml\nkey: &quot;x&quot; &lt;y&gt;\n{fence.strip()}\nafter &amp;"
+        out, c = clean(text, tmp_path)
+        assert "key: &quot;x&quot; &lt;y&gt;" in out, fence
+        assert 'before "a"' in out and "after &" in out, fence
+        assert c.entities_left_in_code == 4 and c.entities_decoded == 3, (fence, c.entities_left_in_code)
+
+
+def test_entities_inside_an_unclosed_fence_are_left_alone(tmp_path):
+    out, c = clean("prose &amp; more\n```go\nx := &quot;a&quot;\nstill code &lt;", tmp_path)
+    assert out.startswith("prose & more") and "x := &quot;a&quot;" in out and "still code &lt;" in out
+
+
+def test_entities_inside_inline_code_spans_are_left_alone(tmp_path):
+    out, c = clean("use `&lt;name&gt;` or ``&quot;x&quot;`` here &amp; there, and <code>&amp;y</code> too", tmp_path)
+    assert out == "use `&lt;name&gt;` or ``&quot;x&quot;`` here & there, and `&amp;y` too"
+    assert c.entities_decoded == 1 and c.entities_left_in_code == 5  # &lt; &gt; &quot; &quot; &amp;
+
+
+def test_a_decoded_angle_bracket_is_not_then_stripped_as_a_tag(tmp_path):
+    out, _ = clean("write &lt;div&gt;text&lt;/div&gt; literally", tmp_path)
+    assert out == "write <div>text</div> literally"
+
+
+def test_entities_are_decoded_exactly_once_even_through_includes(tmp_path):
+    (tmp_path / "includes").mkdir()
+    (tmp_path / "includes" / "snip.md").write_text("literal &amp;lt; here", encoding="utf8")
+    out, c = clean('{{< include "snip.md" >}} and &amp;lt; again', tmp_path)
+    assert out == "literal &lt; here and &lt; again"  # &amp;lt; -> &lt; once, never on to <
+    assert c.entities_decoded == 2
+
+
+def test_unknown_names_and_bare_ampersands_are_not_entities(tmp_path):
+    out, c = clean("a &notanentity; b & c &amp d", tmp_path)
+    assert out == "a &notanentity; b & c &amp d" and c.entities_decoded == 0
+
+
+def test_uppercase_layout_tags_and_stray_closing_br_are_stripped_but_not_in_code(tmp_path):
+    out, _ = clean("`name` <B>[Required]</B> text</br>next <SPAN class='x'>kept words</SPAN>\n\n```html\n<B>code</B>\n```", tmp_path)
+    assert "<B>" not in out.split("```")[0] and "[Required]" in out and "kept words" in out and "</br>" not in out
+    assert "<B>code</B>" in out  # untouched inside the fence
+
+
+def test_layout_tags_inside_an_indented_code_block_are_no_longer_stripped(tmp_path):
+    out, _ = clean("1. step\n\n    ```html\n    <span>keep me</span>\n    ```\n\nand <span>strip me</span>", tmp_path)
+    assert "<span>keep me</span>" in out and "strip me" in out and "<span>strip me" not in out
+
+
 def test_glossary_tooltip_becomes_plain_text(tmp_path):
     t = {d.doc_id: d for d in load_corpus(make_corpus(tmp_path))}["concepts/pods/_index"].text
     assert t == "A Pod runs containers."

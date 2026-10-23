@@ -28,7 +28,7 @@ Phases 0-6 are built; Phase 7 (eval) has not been started. Run `git log --onelin
 
 ## Decisions / work pending from you
 - **Golden set (checkpoint 2):** you write 10 `exact_term` and 5 `unanswerable` questions into `eval/golden_owner.jsonl` (format and helpers: `eval/GOLDEN_README.md`; check with `python -m eval.golden_check eval/golden_owner.jsonl`; page list `eval/doc_ids.tsv`; term check `python -m eval.term_stats`). I draft `conceptual` (22) and `mixed` (16) with `python -m eval.draft_questions` **once you approve the cost** (dry run: about $0.22 typical, $0.64 worst case, 38 drafts on Sonnet 5.5), then stop for you to choose the `expected_doc_ids`. No retrieval eval and no answer generation until the golden set is final.
-- **HTML entities in chunk text** (decision for you): about 4% of chunks (38 docs, mostly generated `reference/config-api` pages) contain raw `&quot;` / `&#34;` / `&lt;`. Recommended: decode them in the loader, re-embed the ~160 changed chunks (a fraction of a cent) and re-index *before* the golden set is final. Details in `NOTES.md` (Phase 7a).
+- **HTML entities in chunk text** (approved 2026-10-24): decoding outside code is implemented and the chunk files are regenerated (1,281 decoded, 109 left inside code; also fixes indented-fence detection and uppercase `<B>` tags, see `NOTES.md` Phase 7a). **The index still holds the old chunks until you approve the re-embed dry-run and I re-index.** Draft questions wait for that.
 - **Native RRF (checkpoint 3):** you start the trial licence (`POST _license/start_trial?acknowledge=true`); the cluster is on the basic licence.
 
 ## Next step

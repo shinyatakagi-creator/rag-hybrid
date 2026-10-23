@@ -1,7 +1,7 @@
 {
  "pages": 502,
  "corpus_tokens_raw": 1481756,
- "corpus_tokens_cleaned": 1270948,
+ "corpus_tokens_cleaned": 1266484,
  "unknown_shortcodes": {
   "api-reference": 13,
   "example": 4,
@@ -14,18 +14,20 @@
  "missing_refs": [],
  "whats_next_sections_removed": 281,
  "whats_next_tokens_removed": 30606,
+ "entities_decoded": 1281,
+ "entities_left_in_code": 109,
  "fixed": {
-  "chunks": 4087,
+  "chunks": 4072,
   "docs": 477,
   "tokens_min": 3,
-  "tokens_median": 367,
+  "tokens_median": 367.0,
   "tokens_max": 408,
-  "tokens_total": 1371872,
+  "tokens_total": 1366908,
   "over_800": 0,
-  "under_100": 125,
-  "unbalanced_fence": 206,
+  "under_100": 128,
+  "unbalanced_fence": 207,
   "table_without_header": 15,
-  "title_only_heading_path": 4087,
+  "title_only_heading_path": 4072,
   "top_docs_by_chunks": [
    [
     "reference/instrumentation/metrics",
@@ -52,23 +54,23 @@
     53
    ],
    [
+    "concepts/workloads/controllers/deployment",
+    42
+   ],
+   [
     "reference/config-api/kubeadm-config.v1beta4",
-    43
+    41
    ],
    [
     "reference/config-api/kubelet-config.v1beta1",
-    43
-   ],
-   [
-    "concepts/workloads/controllers/deployment",
-    42
+    41
    ],
    [
     "reference/access-authn-authz/extensible-admission-controllers",
     40
    ]
   ],
-  "under_100_share": 0.0306,
+  "under_100_share": 0.0314,
   "table_split_across_chunks": 16,
   "shortcode_shaped_fragments_anywhere": 2,
   "strict_fragments_total": 55,
@@ -87,14 +89,14 @@
   ]
  },
  "heading": {
-  "chunks": 4528,
+  "chunks": 4527,
   "docs": 477,
   "tokens_min": 17,
-  "tokens_median": 245.0,
+  "tokens_median": 245,
   "tokens_max": 649,
-  "tokens_total": 1310904,
+  "tokens_total": 1306422,
   "over_800": 0,
-  "under_100": 409,
+  "under_100": 412,
   "unbalanced_fence": 0,
   "table_without_header": 0,
   "title_only_heading_path": 221,
@@ -140,7 +142,7 @@
     41
    ]
   ],
-  "under_100_share": 0.0903,
+  "under_100_share": 0.091,
   "table_split_across_chunks": 6,
   "shortcode_shaped_fragments_anywhere": 2,
   "strict_fragments_total": 55,

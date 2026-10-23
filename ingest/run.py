@@ -67,7 +67,10 @@ def main() -> None:
         "missing_refs": cleaner.missing,
         "whats_next_sections_removed": len(cleaner.whats_next_removed),
         "whats_next_tokens_removed": sum(ntok(s) for s in cleaner.whats_next_removed),
+        "entities_decoded": cleaner.entities_decoded,
+        "entities_left_in_code": cleaner.entities_left_in_code,
     }
+    print(f"HTML entities decoded in prose: {stats['entities_decoded']:,}; left untouched inside code (fenced or inline): {stats['entities_left_in_code']:,}")
     print(f"What's-next sections removed in the loader: {stats['whats_next_sections_removed']} "
           f"({stats['whats_next_tokens_removed']:,} tokens)")
     print(f"pages={stats['pages']}  tokens raw={stats['corpus_tokens_raw']:,} cleaned={stats['corpus_tokens_cleaned']:,}")

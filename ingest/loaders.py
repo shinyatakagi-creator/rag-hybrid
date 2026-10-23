@@ -1,4 +1,6 @@
 """Kubernetes docs markdown -> cleaned Doc records (front matter, Hugo shortcodes, includes resolved)."""
+import html
+import html.entities
 import re
 from collections import Counter
 from dataclasses import dataclass
@@ -27,7 +29,51 @@ _FM = re.compile(r"\A---\n(.*?)\n---[ \t]*(?:\n|\Z)", re.S)
 _ATTR = re.compile(r'(\w+)="([^"]*)"')
 def _sc(inner: str) -> str:
     return r"\{\{[<%]\s*" + inner + r"\s*[>%]\}\}"
-_FENCE_SPLIT = re.compile(r"(^```.*?^```[^\n]*$)", re.S | re.M)
+# A fenced block may be indented (list items: 1,456 of the 8,158 fence lines in the corpus) and may be left unclosed.
+_FENCE_RE = re.compile(r"^[ \t]*(```|~~~)[^\n]*(?:\n.*?(?:^[ \t]*\1[`~]*[ \t]*$|\Z)|\Z)", re.S | re.M)
+_INLINE_CODE_RE = re.compile(r"(`+)(?!`)[^\n]*?(?<!`)\1(?!`)")  # `x` or ``x`` on one line
+_ENTITY_RE = re.compile(r"&(?:#\d+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]{1,31});")
+
+
+def split_code(text: str, pattern: re.Pattern = _FENCE_RE) -> list[tuple[str, bool]]:
+    """Cut text into [(segment, is_code)] on `pattern` matches (fenced blocks by default); segments concatenate back to text."""
+    out, pos = [], 0
+    for m in pattern.finditer(text):
+        if m.start() > pos:
+            out.append((text[pos : m.start()], False))
+        out.append((m.group(0), True))
+        pos = m.end()
+    if pos < len(text):
+        out.append((text[pos:], False))
+    return out
+
+
+def _decode_one(entity: str) -> str | None:
+    """The character for one `&...;` token, or None if it is not a real entity. Named entities are looked up exactly in the
+    HTML5 table: html.unescape alone would turn the made-up `&notanentity;` into `¬anentity;` (legacy `&not` prefix)."""
+    if entity[1] == "#":
+        return html.unescape(entity) if html.unescape(entity) != entity else None
+    return html.entities.html5.get(entity[1:])
+
+
+def count_entities(text: str) -> int:
+    return sum(1 for m in _ENTITY_RE.finditer(text) if _decode_one(m.group(0)) is not None)
+
+
+def decode_entities(text: str) -> tuple[str, int]:
+    """Decode every real entity in `text` (html.unescape semantics, exact names only); a non-breaking space becomes a plain
+    space. Returns (text, how many were decoded)."""
+    n = 0
+
+    def sub(m: re.Match) -> str:
+        nonlocal n
+        d = _decode_one(m.group(0))
+        if d is None:
+            return m.group(0)
+        n += 1
+        return d.replace("\xa0", " ")
+
+    return _ENTITY_RE.sub(sub, text), n
 
 
 @dataclass
@@ -45,6 +91,8 @@ class Cleaner:
         self.root = Path(root)
         self.unknown: Counter = Counter()
         self.whats_next_removed: list[str] = []
+        self.entities_decoded = 0  # HTML entities turned into characters (prose only)
+        self.entities_left_in_code = 0  # entities inside fenced code or inline code spans, deliberately untouched
         self.missing: list[str] = []
         self.glossary = self._load_glossary()
 
@@ -147,20 +195,36 @@ class Cleaner:
         # closing tags: highlight/mermaid end a fence, everything else disappears
         text = re.sub(_sc(r"/\s*(?:highlight|mermaid)"), "```", text)  # `{{</ mermaid >}}` has a space after the slash
         text = re.sub(r"\{\{[<%]\s*/\s*[a-zA-Z_-]+\s*[>%]\}\}", "", text)
-        return self._strip_html(text)
+        return self._strip_html(text, decode=(depth == 0))
 
-    @staticmethod
-    def _strip_html(text: str) -> str:
-        """Drop layout HTML outside code fences, keeping the text."""
-        parts = _FENCE_SPLIT.split(text)
-        for i in range(0, len(parts), 2):
-            s = parts[i]
-            s = re.sub(r"</?code>", "`", s)
-            s = re.sub(r"<br\s*/?>|</(?:p|tr|li|div|table|thead|tbody)>", "\n", s)
-            s = re.sub(r"</?(?:span|div|label|td|th|tr|table|thead|tbody|p|ul|ol|li|a|b|i|em|strong|pre|sup|sub|small|center|img|hr)(?:\s[^<>]*)?/?>", " ", s)
-            parts[i] = s
-        text = "".join(parts)
-        return re.sub(r"\n{3,}", "\n\n", re.sub(r"[ \t]+\n", "\n", text)).strip()
+    def _strip_html(self, text: str, decode: bool = False) -> str:
+        """Drop layout HTML outside code fences, keeping the text. With decode=True (the final, top-level pass only,
+        so nothing is decoded twice) also html.unescape entities outside fenced blocks AND inline code spans, last of
+        all so a decoded `&lt;div&gt;` is not mistaken for a tag. Entities left in code are counted, not changed."""
+        out = []
+        for seg, is_fence in split_code(text):
+            if is_fence:
+                if decode:
+                    self.entities_left_in_code += count_entities(seg)
+                out.append(seg)
+                continue
+            seg = re.sub(r"</?code>", "`", seg, flags=re.I)
+            seg = re.sub(r"<br\s*/?>|</br>|</(?:p|tr|li|div|table|thead|tbody)>", "\n", seg, flags=re.I)
+            # case-insensitive: the generated config-API pages use <B>[Required]</B> (1,498 tags in 294 chunks before this)
+            seg = re.sub(r"</?(?:span|div|label|td|th|tr|table|thead|tbody|p|ul|ol|li|a|b|i|em|strong|pre|sup|sub|small|center|img|hr)(?:\s[^<>]*)?/?>", " ", seg, flags=re.I)
+            if decode:
+                pieces = []
+                for sub, is_inline in split_code(seg, _INLINE_CODE_RE):
+                    if is_inline:
+                        self.entities_left_in_code += count_entities(sub)
+                        pieces.append(sub)
+                    else:
+                        d, n = decode_entities(sub)
+                        self.entities_decoded += n
+                        pieces.append(d)
+                seg = "".join(pieces)
+            out.append(seg)
+        return re.sub(r"\n{3,}", "\n\n", re.sub(r"[ \t]+\n", "\n", "".join(out))).strip()
 
 
 # CommonMark allows an ATX heading to be indented by up to 3 spaces (one page has ` ## What's next`)
