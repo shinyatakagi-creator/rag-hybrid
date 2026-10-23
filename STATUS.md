@@ -2,7 +2,7 @@
 
 The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
-**Current phase: Phase 7 is done (baseline, sensitivity, native-RRF cross-check, answer eval, correctness check; checkpoints 2, 3 and 4 closed); Phase 8 (serving) is in progress. The golden set is FINAL and frozen.** `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last full test run: 312 passed (unchanged by the Docker work).
+**Current phase: Phase 8 is COMPLETE (API, serving query cache, Docker Compose, clean-clone check; last commit before this update `507a266`). Phases 0-7 and checkpoints 2, 3, 4 are closed; the golden set is FINAL and frozen. We are at checkpoint 5, part 1: writing `README.md` (not started).** `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last full test run: 312 passed. Total API spend about $1.11 of the $5 limit.
 
 ## Phases done
 
@@ -91,9 +91,23 @@ No reference answers or golden-set items were changed by these decisions (the m0
 ## Phase 8 step 4 done (2026-10-24): the clean-clone check passed
 Details in `eval/results/clean_clone_check.md` and NOTES.md. A fresh clone followed `docs/SETUP.md` end to end (venv, pinned corpus fetch with fail-loud checks, ES, `ingest.run`, paid `ingest.index` for $0.0534 exactly as estimated, retrieval eval, `pytest` 312 passed, API image build). Baseline reproduced: BM25 rows identical (equal-score tie order only); dense/hybrid 1 of 104 ranks moved; all headline numbers within the baseline's intervals. `rag-docs` untouched (8,599); the test index and the clone were deleted; git status in the clone showed no data, `.env` or cache files. Compose project name now fixed (`name: rag-hybrid`) and host ports configurable. No `/ask` was run in the clone.
 
-## Next steps
-1. (Open, optional) the spot-check of `correctness_review.md` was not done; see the README limitations above. No reference correction for m007/c007 has been made.
-2. Checkpoint 5: README results and CV bullet, only after you have seen the saved eval outputs.
+## Checkpoint 5, part 1: README rules (owner decisions, 2026-10-24; `README.md` is NOT written yet)
+**Rules for the README:**
+- Every number comes from a saved file in `eval/results/` through `scripts/make_readme_tables.py` (to be written), and the README ships with a **numbers audit** (each figure traced to its source file and field). No number typed by hand.
+- Sample size n and 95% intervals next to every figure.
+- The retrieval **baseline is the headline**; the bare-term, weighted-RRF, index_options and failure analyses are **sensitivity analyses on a frozen golden set** (30 questions, no held-out set), not tuning.
+- **No claim that hybrid beats dense** (on this set it does not: see the baseline). **No claim that the verifier is accurate.** **No correctness headline figures** (the correctness check is unvalidated; if mentioned, label it unvalidated and name m007 and c007). **No "production-grade".**
+- **Limitations kept verbatim** from "README limitations" above (Phase 6 spot-check not achieved; correctness check unvalidated), plus the checkpoint-4 closure text (three human labelling rounds failed their own controls; mutation set is a dev set built from the verifier's own earlier failures; faithfulness numbers are verifier outputs).
+**README facts to carry:**
+- Reproducibility is at **document level**: Elasticsearch breaks equal-score ties by internal document id (indexing order), so chunk order among exact ties can differ; the clean-clone check reproduced BM25 exactly and moved 1 of 104 dense/hybrid ranks (`eval/results/clean_clone_check.md`).
+- Total spend is about **$1.1**, not the ledger's $1.0776: the clean-clone embedding ($0.0534) ran from the host and is outside the ledger.
+- **Two ledgers exist** (the Docker volume `rag-hybrid_apidata` and the host `data/api/spend_ledger.json`); **Docker is the supported mode** (`docs/SETUP.md`).
+
+## Next steps (after the README is written)
+1. Write `scripts/make_readme_tables.py` and `README.md` per the rules above (checkpoint 5 part 1); the CV bullet only after you have seen the saved eval outputs.
+2. `scripts/demo.sh` (free: bm25 `/search` and the like, no `/ask`).
+3. Publish check: scan git history for keys, check commit author name/email, add `LICENSE`. **You push yourself; no git remote has been added.**
+4. (Open, optional) the spot-check of `correctness_review.md` was not done; no reference correction for m007/c007 has been made.
 
 ## Spend so far: about $1.11 of the $5 limit ($0.2895 earlier phases, $0.7295 answer eval, $0.0073 correctness check, $0.0276 first live API calls, $0.0534 clean-clone embedding, about $0.00003 for query embeddings; the table below covers only the first $0.2895)
 | Item | Cost |
