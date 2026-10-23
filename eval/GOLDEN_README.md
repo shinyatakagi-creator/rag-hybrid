@@ -16,6 +16,7 @@ the checker on purpose).
 | `expected_doc_ids` | 1-3 `doc_id`s of the pages that answer it; `[]` for `unanswerable` |
 | `reference_answer` | one or two sentences, from the pages; `""` is fine for `unanswerable` |
 | `answerable` | `true`, except `false` for `unanswerable` |
+| `note` | optional free text. 1-3 expected docs is the plan; more than 3 gives a *warning* (not an error), and a non-empty `note` saying why silences it. At least 1 expected doc is still required for answerable questions |
 
 **Types.** `exact_term`: the question contains an exact flag, field name, command or error string that appears in the
 docs (BM25 should do well). `conceptual`: everyday words, avoiding the page's own vocabulary (dense should do well).
@@ -44,7 +45,7 @@ the interesting ones sit next to the corpus (for example a kubelet flag default,
 python -m eval.term_stats --term=--max-requests-inflight --term=maxUnavailable --show 10
 python -m eval.term_stats -- --max-requests-inflight
 
-# validate your file: format, known doc_ids with chunks, 1-3 expected docs, counts against the 10/20/15/5 plan
+# validate your file: format, known doc_ids with chunks, at least 1 expected doc (warning above 3), counts against the 10/20/15/5 plan
 python -m eval.golden_check eval/golden_owner.jsonl
 ```
 

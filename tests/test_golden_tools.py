@@ -81,16 +81,18 @@ def good(**kw):
 
 
 def test_a_valid_answerable_and_unanswerable_line_pass():
-    assert check_line(good(), DOCS) == []
-    assert check_line(good(id="u01", type="unanswerable", expected_doc_ids=[], reference_answer="", answerable=False), DOCS) == []
-    assert check_line(good(expected_doc_ids=["concepts/policy/pid-limiting", "concepts/workloads/pods/_index"]), DOCS) == []
+    assert check_line(good(), DOCS) == ([], [])
+    assert check_line(good(id="u01", type="unanswerable", expected_doc_ids=[], reference_answer="", answerable=False), DOCS) == ([], [])
+    assert check_line(good(expected_doc_ids=["concepts/policy/pid-limiting", "concepts/workloads/pods/_index"]), DOCS) == ([], [])
+    assert check_line(good(note="why this is the right page"), DOCS) == ([], [])  # the optional note field is accepted
 
 
 @pytest.mark.parametrize("bad,fragment", [
     (good(expected_doc_ids=["concepts/nope"]), "not an indexed page"),
     (good(expected_doc_ids=["tasks/job/_index"]), "no chunks"),
-    (good(expected_doc_ids=[]), "needs 1-3"),
-    (good(expected_doc_ids=["a", "b", "c", "d"]), "needs 1-3"),
+    (good(expected_doc_ids=[]), "at least 1 expected doc"),
+    (good(note=5), "note must be a string"),
+    (good(other="x"), "keys must be"),
     (good(expected_doc_ids=["concepts/policy/pid-limiting"] * 2), "duplicates"),
     (good(type="weird"), "not in"),
     (good(answerable=False), "answerable=true"),
@@ -100,15 +102,52 @@ def test_a_valid_answerable_and_unanswerable_line_pass():
     (good(question="short"), "at least 8"),
     (good(id="has space"), "id must be"),
     (good(question="REPLACE: write me"), "REPLACE"),
-    ({k: v for k, v in good().items() if k != "type"}, "keys must be exactly"),
+    ({k: v for k, v in good().items() if k != "type"}, "missing ['type']"),
 ])
 def test_bad_lines_are_reported(bad, fragment):
-    assert any(fragment in e for e in check_line(bad, DOCS)), check_line(bad, DOCS)
+    errs, _ = check_line(bad, DOCS)
+    assert any(fragment in e for e in errs), errs
+
+
+MANY = {f"p/{i}": {"doc_id": f"p/{i}", "chunks_fixed": 1, "chunks_heading": 1} for i in range(6)}
+
+
+def test_more_than_three_expected_docs_is_a_warning_not_an_error():
+    errs, warns = check_line(good(expected_doc_ids=[f"p/{i}" for i in range(4)]), MANY)
+    assert errs == [] and len(warns) == 1 and "4 expected docs" in warns[0] and "note" in warns[0]
+
+
+@pytest.mark.parametrize("note", ["these four pages each cover one step", "x"])
+def test_a_non_empty_note_silences_the_expected_docs_warning(note):
+    assert check_line(good(expected_doc_ids=[f"p/{i}" for i in range(5)], note=note), MANY) == ([], [])
+
+
+@pytest.mark.parametrize("note", ["", "   "])
+def test_an_empty_note_does_not_silence_it(note):
+    errs, warns = check_line(good(expected_doc_ids=[f"p/{i}" for i in range(4)], note=note), MANY)
+    assert errs == [] and warns
+
+
+def test_zero_expected_docs_for_an_answerable_question_stays_an_error_even_with_a_note():
+    errs, _ = check_line(good(expected_doc_ids=[], note="n/a"), MANY)
+    assert any("at least 1" in e for e in errs)
 
 
 def test_file_check_counts_types_flags_duplicates_and_bad_json(tmp_path):
     p = tmp_path / "g.jsonl"
     p.write_text("\n".join([json.dumps(good()), json.dumps(good()), "{not json", json.dumps(good(id="m1", type="mixed"))]), encoding="utf8")
-    errors, counts, summary = check_file(str(p), ROWS)
+    errors, counts, summary, warnings = check_file(str(p), ROWS)
     assert any("duplicate id" in e for e in errors[2]) and "invalid JSON" in errors[3][0] and 4 not in errors
-    assert counts["exact_term"] == 2 and counts["mixed"] == 1 and "exact_term: 2 (plan 10)" in summary
+    assert counts["exact_term"] == 2 and counts["mixed"] == 1 and "exact_term: 2 (plan 10)" in summary and warnings == {}
+
+
+def test_warnings_do_not_fail_the_check_command(tmp_path, capsys):
+    rows = [{"doc_id": f"p/{i}", "url": "u", "title": "t", "chunks_fixed": 1, "chunks_heading": 1} for i in range(5)]
+    from eval import docids
+    from eval.golden_check import main
+    docids.write_list(rows, str(tmp_path / "ids.tsv"))
+    p = tmp_path / "g.jsonl"
+    p.write_text(json.dumps(good(expected_doc_ids=[f"p/{i}" for i in range(4)])) + "\n", encoding="utf8")
+    assert main([str(p), "--doc-list", str(tmp_path / "ids.tsv")]) == 0  # exit 0: only a warning
+    out = capsys.readouterr().out
+    assert "warning" in out and "1 warning(s)" in out and "ERROR" not in out
