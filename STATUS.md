@@ -2,7 +2,7 @@
 
 The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
-**Current phase: Phase 7 is done (baseline, sensitivity, native-RRF cross-check, answer eval, correctness check; checkpoints 2, 3 and 4 closed); Phase 8 (serving) is in progress. The golden set is FINAL and frozen.** `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last full test run: 279 passed.
+**Current phase: Phase 7 is done (baseline, sensitivity, native-RRF cross-check, answer eval, correctness check; checkpoints 2, 3 and 4 closed); Phase 8 (serving) is in progress. The golden set is FINAL and frozen.** `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last full test run: 312 passed.
 
 ## Phases done
 
@@ -82,9 +82,12 @@ No reference answers or golden-set items were changed by these decisions (the m0
 ## Phase 8 step 1 done: serving query-embedding cache (2026-10-24)
 `rag/query_cache.py` (sqlite, `data/embed_cache/<model>.queries.sqlite`, key = sha256(model + dims + exact text), float64 blobs, ingestion cache read-only) used by `QueryEmbedder` in `rag/retrieve.py`; `legacy_fallback=False` is the mode for the API (step 2, not started). Tests: `tests/test_query_cache.py`. The baseline eval reproduces exactly with 0 paid calls and an untouched ingestion file (details in NOTES.md). Run `python -m rag.query_cache warm` (and `--field exact_term`) once if you want the golden vectors in the serving cache up front.
 
+## Phase 8 step 2 done (not yet run live): the FastAPI app (2026-10-24)
+`api/main.py`, `api/service.py`, `api/ledger.py`, `api/dryrun.py`; tests with fakes only (312 passed in total). Bound to 127.0.0.1. Details, the spend-control design and the safety rules are in NOTES.md. **No live call has been made.** Dry-run (`python -m api.dryrun`): one live `/search` (dense/hybrid, uncached query) costs about $0.0000002 (the query embedding); one live `/ask` costs about $0.013 typical (answer about $0.012, verification about $0.0005, embedding about $0.0000002), with at most about $0.050 reserved at once and an absolute worst case of about $0.053; a refusal about $0.011. The ledger starts at $0 (seed it with `python -m api.ledger seed 1.03` to count the earlier eval spend). Waiting for your approval before any live call.
+
 ## Next steps
 1. (Open, optional) the spot-check of `correctness_review.md` was not done; see the README limitations above. No reference correction for m007/c007 has been made.
-2. Phase 8 step 2: the FastAPI app (`/search`, `/ask`) with the serving cache in `legacy_fallback=False` mode, then Docker. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
+2. Phase 8: approve and run one live `/search` and one live `/ask`; then Docker (compose for the API) and the fresh-clone check from the guide. Checkpoint 5: README results and CV bullet only after you have seen the saved eval outputs.
 
 ## Spend so far: about $0.2895 of the $5 limit (plus about $0.000015 for the baseline and bare-term query embeddings and $0.7295 for the answer eval, plus $0.0073 for the correctness check, so about $1.03 in total)
 | Item | Cost |
