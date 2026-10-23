@@ -1,0 +1,46 @@
+{
+ "controls": {
+  "n": 6,
+  "mislabelled": 4,
+  "valid_round": false,
+  "detail": {
+   "M01": {
+    "source": "C04",
+    "kind": "control_correct",
+    "expected": "supported",
+    "owner": "supported"
+   },
+   "M02": {
+    "source": "M10",
+    "kind": "control_wrong",
+    "expected": "unsupported",
+    "owner": "unsupported"
+   },
+   "M04": {
+    "source": "M01",
+    "kind": "control_wrong",
+    "expected": "unsupported",
+    "owner": "supported"
+   },
+   "M11": {
+    "source": "C05",
+    "kind": "control_correct",
+    "expected": "supported",
+    "owner": "partial"
+   },
+   "M19": {
+    "source": "C02",
+    "kind": "control_correct",
+    "expected": "supported",
+    "owner": "partial"
+   },
+   "M22": {
+    "source": "M06",
+    "kind": "control_wrong",
+    "expected": "unsupported",
+    "owner": "partial"
+   }
+  }
+ },
+ "note": "4 of 6 controls mislabelled (more than 1): round INVALID for judging the verifier; redo. No verifier statistics reported."
+}
