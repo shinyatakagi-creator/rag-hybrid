@@ -116,7 +116,7 @@ Measured in the answer evaluation (claude-sonnet-5-5 + claude-haiku-5-5, both co
 - **Two spend ledgers exist** (Docker volume `rag-hybrid_apidata` and host `data/api/spend_ledger.json`); Docker is the supported mode. The limit is per ledger, not global.
 
 ## Reproduce
-Follow [`docs/SETUP.md`](docs/SETUP.md) (pinned dependencies, corpus fetch with checks, paid embedding step about $0.05, then `pytest`). Corpus: [kubernetes/website](https://github.com/kubernetes/website) at commit `6c42e266fcc1f0e0edd4805baea904e1b3cbaf9c`, CC BY 4.0, paths `content/en/docs/{concepts,tasks,reference}` (scope in [`docs/CORPUS.md`](docs/CORPUS.md)). Build spec: [`docs/BUILD_GUIDE.md`](docs/BUILD_GUIDE.md). Decisions and deviations: [`NOTES.md`](NOTES.md).
+Follow [`docs/SETUP.md`](docs/SETUP.md) (pinned dependencies, corpus fetch with checks, paid embedding step about $0.05, then `pytest`). Corpus: [kubernetes/website](https://github.com/kubernetes/website) at commit `6c42e266fcc1f0e0edd4805baea904e1b3cbaf9c`, CC BY 4.0, paths `content/en/docs/{concepts,tasks,reference}` (scope in [`docs/CORPUS.md`](docs/CORPUS.md)). Build spec: [`docs/BUILD_GUIDE.md`](docs/BUILD_GUIDE.md). Decisions and deviations: [`NOTES.md`](NOTES.md). Code is MIT-licensed; the Kubernetes documentation is CC BY 4.0, fetched at the pinned commit and not redistributed in this repo.
 
 ## Next steps
 Reranker on the top 50, query rewriting, a held-out question set with near-miss unanswerables, a human-validated verifier, and hooking this in as the `search_kb` tool of a support agent.

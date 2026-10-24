@@ -408,7 +408,7 @@ Measured in the answer evaluation ({P['am']} + {P['vm']}, both configs): {P['a_n
 - **Two spend ledgers exist** (Docker volume `rag-hybrid_apidata` and host `data/api/spend_ledger.json`); Docker is the supported mode. The limit is per ledger, not global.
 
 ## Reproduce
-Follow [`docs/SETUP.md`](docs/SETUP.md) (pinned dependencies, corpus fetch with checks, paid embedding step about {P['t_cost005']}, then `pytest`). Corpus: [kubernetes/website](https://github.com/kubernetes/website) at commit `{P['sha']}`, CC BY {P['t_ccby']}, paths `content/en/docs/{{concepts,tasks,reference}}` (scope in [`docs/CORPUS.md`](docs/CORPUS.md)). Build spec: [`docs/BUILD_GUIDE.md`](docs/BUILD_GUIDE.md). Decisions and deviations: [`NOTES.md`](NOTES.md).
+Follow [`docs/SETUP.md`](docs/SETUP.md) (pinned dependencies, corpus fetch with checks, paid embedding step about {P['t_cost005']}, then `pytest`). Corpus: [kubernetes/website](https://github.com/kubernetes/website) at commit `{P['sha']}`, CC BY {P['t_ccby']}, paths `content/en/docs/{{concepts,tasks,reference}}` (scope in [`docs/CORPUS.md`](docs/CORPUS.md)). Build spec: [`docs/BUILD_GUIDE.md`](docs/BUILD_GUIDE.md). Decisions and deviations: [`NOTES.md`](NOTES.md). Code is MIT-licensed; the Kubernetes documentation is CC BY {P['t_ccby']}, fetched at the pinned commit and not redistributed in this repo.
 
 ## Next steps
 Reranker on the top {P['t_top50']}, query rewriting, a held-out question set with near-miss unanswerables, a human-validated verifier, and hooking this in as the `search_kb` tool of a support agent.

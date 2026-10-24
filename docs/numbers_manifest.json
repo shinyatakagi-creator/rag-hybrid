@@ -3729,12 +3729,21 @@
   },
   {
    "kind": "typed",
+   "source": "docs/CORPUS.md",
+   "key": "",
+   "label": "CC BY licence version",
+   "text": "4.0",
+   "start": 15788,
+   "end": 15791
+  },
+  {
+   "kind": "typed",
    "source": "docs/BUILD_GUIDE.md Stretch",
    "key": "",
    "label": "reranker candidate depth (a proposal, not a result)",
    "text": "50",
-   "start": 15763,
-   "end": 15765
+   "start": 15893,
+   "end": 15895
   }
  ]
 }

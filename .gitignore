@@ -7,4 +7,5 @@ data/
 # embedding cache (lives under data/ by default; listed explicitly in case it moves)
 embed_cache/
 *.embcache.jsonl
+*.sqlite
 .DS_Store

@@ -2,7 +2,7 @@
 
 Generated from `docs/numbers_manifest.json` by `scripts/make_readme_tables.py`. Every digit in `README.md` lies inside one of the spans recorded in that manifest; `tests/test_readme_numbers.py` enforces it.
 
-415 recorded spans in README.md: 358 from result files, 30 computed from them, 12 from prose docs, 15 typed constants.
+416 recorded spans in README.md: 358 from result files, 30 computed from them, 12 from prose docs, 16 typed constants.
 
 ## 1. From result files (and values computed from them)
 
@@ -365,5 +365,5 @@ Generated from `docs/numbers_manifest.json` by `scripts/make_readme_tables.py`. 
 | 1 | human labelling round that had no controls | STATUS.md 'Checkpoint 4: CLOSED' | 1 |
 | 2 and 3 | human labelling rounds that failed their pre-registered controls | STATUS.md 'Checkpoint 4: CLOSED' | 1 |
 | $0.05 | approximate paid embedding step | docs/SETUP.md cost table | 1 |
-| 4.0 | CC BY licence version | docs/CORPUS.md | 1 |
+| 4.0 | CC BY licence version | docs/CORPUS.md | 2 |
 | 50 | reranker candidate depth (a proposal, not a result) | docs/BUILD_GUIDE.md Stretch | 1 |
