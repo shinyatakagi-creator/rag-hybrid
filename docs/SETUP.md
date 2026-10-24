@@ -15,6 +15,7 @@ prints an estimate first; nothing in this guide calls a paid API without it.
 - Python 3.12 and git.
 - An OpenAI API key (embeddings) and an Anthropic API key (answers and verification). Set a spend limit on both accounts as well.
 - Internet access (GitHub for the corpus, PyPI, the two providers).
+- **Security:** the API has no authentication, no TLS and no rate limiting beyond the spend ledger, and Elasticsearch runs with its security features off. Both are meant for localhost only: Compose publishes them on 127.0.0.1, and `/ask` spends your API credits. Do not expose ports 8000 or 9200 to a network or the internet. If you need remote access, put an authenticating reverse proxy in front and keep the spend limit.
 
 ## 2. Clone and configure
 ```bash

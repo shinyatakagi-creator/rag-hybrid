@@ -3706,8 +3706,8 @@
    "key": "",
    "label": "approximate paid embedding step",
    "text": "$0.05",
-   "start": 15366,
-   "end": 15371
+   "start": 15892,
+   "end": 15897
   },
   {
    "kind": "doc",
@@ -3715,8 +3715,8 @@
    "key": "",
    "label": "pinned corpus commit (regex-read by this script)",
    "text": "6c42e266fcc1f0e0edd4805baea904e1b3cbaf9c",
-   "start": 15468,
-   "end": 15508
+   "start": 15994,
+   "end": 16034
   },
   {
    "kind": "typed",
@@ -3724,8 +3724,8 @@
    "key": "",
    "label": "CC BY licence version",
    "text": "4.0",
-   "start": 15517,
-   "end": 15520
+   "start": 16043,
+   "end": 16046
   },
   {
    "kind": "typed",
@@ -3733,8 +3733,8 @@
    "key": "",
    "label": "CC BY licence version",
    "text": "4.0",
-   "start": 15788,
-   "end": 15791
+   "start": 16314,
+   "end": 16317
   },
   {
    "kind": "typed",
@@ -3742,8 +3742,8 @@
    "key": "",
    "label": "reranker candidate depth (a proposal, not a result)",
    "text": "50",
-   "start": 15893,
-   "end": 15895
+   "start": 16419,
+   "end": 16421
   }
  ]
 }
