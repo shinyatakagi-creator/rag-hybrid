@@ -19,7 +19,7 @@ This file is the spec. Build the repo described below in a new directory `rag-hy
 2. Golden set: Claude Code may draft candidate questions, but the owner reviews them and chooses the final expected `doc_id`s. Stop after drafting.
 3. Native RRF cross-check: the owner starts the 30-day trial licence (`POST _license/start_trial?acknowledge=true`). Do not attempt it yourself.
 4. Verifier spot-check: print 25 sampled verifier judgements (sentence, chunk, verdict) for the owner to label by hand, then compute agreement from his labels.
-5. README results and CV bullet: fill in only after the owner has seen the saved eval outputs.
+5. README results: fill in only after the owner has seen the saved eval outputs.
 
 **Configuration (`.env.example`)**
 ```
@@ -67,17 +67,17 @@ pytest
 
 ---
 
-Source: slide "Project 6" (repo/README name it Project 08 so it doesn't clash with support-agent, which is Project 06, and voice agent, which is 07). No overlap with Projects 01-05.
+Source: a project brief for a RAG pipeline with hybrid search.
 
-Overlap note: your support-agent has a KB search tool. Build this as a standalone retrieval service, then have support-agent call it later as a follow-up commit. That turns two projects into one coherent story instead of two separate KB searches.
+Possible extension: use this service as the knowledge-base search tool of a support agent.
 
 A RAG system that ingests a docs corpus, indexes it for both keyword (BM25) and dense vector search, fuses the results, generates answers with inline citations, and verifies each citation actually supports the sentence it's attached to.
 
-Target: finishable on a local laptop in about a week of evenings, public GitHub repo, and a CV bullet backed by your own eval numbers.
+Target: finishable on a local laptop in about a week of evenings, as a public GitHub repo whose results are backed by its own eval numbers.
 
 ## Key adaptation: use Elasticsearch for both retrievers
 
-The slide splits sparse and dense across rank_bm25 and a vector DB. Elasticsearch does BM25 and kNN in one index. You know the engine inside out, so this is where you can show depth the average candidate can't: mappings, analyzers, `num_candidates` tuning, and why RRF beats score normalisation. Keep a short section in the README explaining why you didn't use Chroma + rank_bm25.
+The slide splits sparse and dense across rank_bm25 and a vector DB. Elasticsearch does BM25 and kNN in one index, which makes it possible to cover mappings, analyzers, `num_candidates` tuning, and why RRF beats score normalisation. Keep a short section in the README explaining why Chroma + rank_bm25 was not used.
 
 ## Licence gotcha: the native RRF retriever needs Enterprise
 
@@ -90,7 +90,7 @@ So the plan is:
 
 ## Ground rules
 
-- Public docs you're allowed to index. Corpus: Kubernetes docs (`kubernetes/website`, CC BY 4.0, all markdown). Lots of exact terms (flags, field names, error strings) for the BM25-wins questions and lots of conceptual pages for the dense-wins ones. Avoid Elastic's own docs; indexing your employer's content in a job-search project looks odd.
+- Public docs you're allowed to index. Corpus: Kubernetes docs (`kubernetes/website`, CC BY 4.0, all markdown). Lots of exact terms (flags, field names, error strings) for the BM25-wins questions and lots of conceptual pages for the dense-wins ones. Avoid Elastic's own docs, so the corpus stays independent of the engine under test.
 - Pin the corpus: clone `kubernetes/website` at a fixed commit, record the SHA in `data/CORPUS.md`, and index only `content/en/docs/concepts`, `content/en/docs/tasks` and `content/en/docs/reference` (skip generated API reference pages if the count goes over about 500 pages). The golden set depends on this staying fixed. Add attribution (CC BY 4.0, source repo and SHA) to the README.
 - Secrets in `.env`, with a `.env.example` committed. Spend limit set on the API keys.
 - Pin dependency versions and the ES image tag.
@@ -302,9 +302,9 @@ Also report the table split by question type (exact-term vs conceptual) so the h
 - Demo: an exact error-string question where dense misses and hybrid gets it, then a paraphrased question where BM25 misses and hybrid gets it (record a short GIF or video for the README)
 - README: results table, chunking findings, why ES over Chroma + rank_bm25, the RRF licence note and native-vs-Python cross-check, `index_options` finding, cost per question, known limits
 
-## CV bullet (fill in from your own eval only)
+## Results summary (fill in from your own eval only)
 
-> Built a hybrid-search RAG service on Elasticsearch (BM25 + kNN with reciprocal rank fusion) over [corpus], with heading-aware chunking and citation verification. On a 50-question golden set, hybrid reached [X] recall@5 and [Y] MRR versus [A]/[B] for BM25 and [C]/[D] for dense; verification flagged [Z]% of unsupported sentences. Cost [N] cents per answered question.
+> A hybrid-search RAG service on Elasticsearch (BM25 + kNN with reciprocal rank fusion) over [corpus], with heading-aware chunking and citation verification. On a 50-question golden set, hybrid reached [X] recall@5 and [Y] MRR versus [A]/[B] for BM25 and [C]/[D] for dense; verification flagged [Z]% of unsupported sentences. Cost [N] cents per answered question.
 
 If hybrid doesn't win on some slice, report it anyway and say what you changed. "Dense lost on exact terms, here's why" reads better than a clean sweep.
 

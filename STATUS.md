@@ -104,7 +104,7 @@ Details in `eval/results/clean_clone_check.md` and NOTES.md. A fresh clone follo
 - **Two ledgers exist** (the Docker volume `rag-hybrid_apidata` and the host `data/api/spend_ledger.json`); **Docker is the supported mode** (`docs/SETUP.md`).
 
 ## Next steps (after the README is written)
-1. Write `scripts/make_readme_tables.py` and `README.md` per the rules above (checkpoint 5 part 1); the CV bullet only after you have seen the saved eval outputs.
+1. Write `scripts/make_readme_tables.py` and `README.md` per the rules above (checkpoint 5 part 1); the results summary only after you have seen the saved eval outputs.
 2. `scripts/demo.sh` (free: bm25 `/search` and the like, no `/ask`).
 3. Publish check: scan git history for keys, check commit author name/email, add `LICENSE`. **You push yourself; no git remote has been added.**
 4. (Open, optional) the spot-check of `correctness_review.md` was not done; no reference correction for m007/c007 has been made.
