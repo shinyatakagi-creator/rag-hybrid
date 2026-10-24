@@ -9,3 +9,5 @@ embed_cache/
 *.embcache.jsonl
 *.sqlite
 .DS_Store
+# the owner's pre-rewrite golden set, kept locally as a record
+eval/golden_owner.v1.jsonl
