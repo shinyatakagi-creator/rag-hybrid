@@ -77,7 +77,7 @@ Target: finishable on a local laptop in about a week of evenings, as a public Gi
 
 ## Key adaptation: use Elasticsearch for both retrievers
 
-The slide splits sparse and dense across rank_bm25 and a vector DB. Elasticsearch does BM25 and kNN in one index, which makes it possible to cover mappings, analyzers, `num_candidates` tuning, and why RRF beats score normalisation. Keep a short section in the README explaining why Chroma + rank_bm25 was not used.
+The brief splits sparse and dense across rank_bm25 and a vector DB. Elasticsearch does BM25 and kNN in one index, which makes it possible to cover mappings, analyzers, `num_candidates` tuning, and why RRF beats score normalisation. Keep a short section in the README explaining why Chroma + rank_bm25 was not used.
 
 ## Licence gotcha: the native RRF retriever needs Enterprise
 
@@ -85,7 +85,7 @@ The `rrf` retriever (and the `linear` retriever) is Enterprise-gated. On a fresh
 
 So the plan is:
 1. **Default path: your own Python RRF** (Phase 4). Runs on any licence, so anyone cloning the repo can run it.
-2. **Cross-check: native `rrf` retriever** on a 30-day trial (`POST _license/start_trial?acknowledge=true`, once per major version). Run both on the golden set and confirm the rankings match. Explaining why your fusion matches Elasticsearch's, and why the licence gating matters for a portable repo, is a strong README section and interview answer.
+2. **Cross-check: native `rrf` retriever** on a 30-day trial (`POST _license/start_trial?acknowledge=true`, once per major version). Run both on the golden set and confirm the rankings match. Explaining why your fusion matches Elasticsearch's, and why the licence gating matters for a portable repo, is a strong README section.
 3. Make fusion switchable in config (`FUSION=python|native`) and default to `python`.
 
 ## Ground rules
@@ -97,7 +97,7 @@ So the plan is:
 
 ## Stack (adapted)
 
-| Component | Slide | Use | Why |
+| Component | Brief | Use | Why |
 |---|---|---|---|
 | Language | Python 3.11+ | Same | |
 | Embeddings | OpenAI text-embedding-3-small | Same | Cheap, 1536 dims, matches the mapping below |
@@ -311,7 +311,7 @@ If hybrid doesn't win on some slice, report it anyway and say what you changed. 
 ## Stretch (after the core is done)
 
 - Hook into support-agent as its `search_kb` tool and rerun that project's evals
-- The slide's stack (Chroma or Qdrant + rank_bm25) on the same chunks and golden set, compared against ES hybrid
+- The brief's stack (Chroma or Qdrant + rank_bm25) on the same chunks and golden set, compared against ES hybrid
 - Reranker on the top 50 (a cross-encoder) and its effect on MRR
 - Query rewriting for multi-part questions
 - HTML loader
