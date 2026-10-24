@@ -14,7 +14,8 @@ from rag.query_cache import QueryCache
 from rag.retrieve import QueryEmbedder
 
 EMBED_MODEL = "text-embedding-3-small"
-SECRET = "sk-ant-SECRETKEY123"
+SECRET = "sk-ant-" + "x" * 12  # built at runtime so no key-shaped literal is committed
+OPENAI_SECRET = "sk-proj-" + "y" * 12
 SECRET_PATH = "/Users/someone/private/.env"
 
 
@@ -236,7 +237,7 @@ def test_ask_budget_left_for_the_answer_but_not_the_verification_returns_it_unve
 # -- safety --------------------------------------------------------------------------------------------------------------
 def test_errors_never_leak_secrets_paths_or_exception_text(env, monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", SECRET)
-    monkeypatch.setenv("OPENAI_API_KEY", "sk-proj-OPENAISECRET")
+    monkeypatch.setenv("OPENAI_API_KEY", OPENAI_SECRET)
     boom = RuntimeError(f"401 invalid key {SECRET} read from {SECRET_PATH}")
     env.svc._client = FakeAnthropic(GOOD, fail=boom)
     r = post(env, "/ask", {"query": "what is a pod"})
@@ -250,7 +251,7 @@ def test_errors_never_leak_secrets_paths_or_exception_text(env, monkeypatch):
     r3 = post(env, "/search", {"query": "uncached for embedding failure", "mode": "dense"})
     assert r3.status_code == 502 and r3.json()["error"]["code"] == "embedding_unavailable"
     blob = r.text + r2.text + r3.text + "".join(p.read_text() for p in (env.tmp / "apilog").glob("*.jsonl"))
-    for secret in (SECRET, "OPENAISECRET", SECRET_PATH, "/Users/", ".env", "Traceback"):
+    for secret in (SECRET, OPENAI_SECRET, SECRET_PATH, "/Users/", ".env", "Traceback"):
         assert secret not in blob
     assert env.ledger.status()["open_reservations"] == 0  # a failed call leaves no reservation behind
 
