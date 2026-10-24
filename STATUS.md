@@ -2,7 +2,7 @@
 
 The build guide (spec and handover rules) is `docs/BUILD_GUIDE.md`.
 
-**Current phase: Phase 8 is COMPLETE (API, serving query cache, Docker Compose, clean-clone check; last commit before this update `507a266`). Phases 0-7 and checkpoints 2, 3, 4 are closed; the golden set is FINAL and frozen. We are at checkpoint 5, part 1: writing `README.md` (not started).** `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last full test run: 312 passed. Total API spend about $1.11 of the $5 limit.
+**Current phase: Phase 8 is COMPLETE (API, serving query cache, Docker Compose, clean-clone check; clean-clone check passed in `507a266`; the README rules below were recorded in `57f3f37`; no git remote has been added). Phases 0-7 and checkpoints 2, 3, 4 are closed; the golden set is FINAL and frozen. We are at checkpoint 5, part 1: writing `README.md` (not started).** `NOTES.md` has every deviation from the guide; `eval/GOLDEN_README.md` explains the golden-set tools. Last full test run: 312 passed. Total API spend about $1.11 of the $5 limit.
 
 ## Phases done
 
@@ -74,8 +74,8 @@ Checkpoint 4 is CLOSED. Human labelling of the verifier was attempted three time
 Round 3 details for the record: interactive tool `eval/checkpoint4_round3.py` (calibration warm-up, fresh controls K1-K6, labels written by the tool); its labels (`labels.jsonl`, `practice_log.jsonl`) and `agreement.json` (controls only) are committed as saved. Nothing else was computed from the owner's labels.
 
 ## README limitations (owner decisions, 2026-10-24; use these words)
-- "Phase 6 owner spot-check of the verifier was not achieved (three human labelling rounds failed their own controls)."
-- "The correctness check against reference answers is unvalidated: the owner spot-check of the review file was not done, and m007 and c007 are flagged as possibly 'reference too narrow'. Do not use correctness figures as a headline result; if mentioned, label them unvalidated and name m007 and c007."
+- "The verifier was not validated against human judgement: hand labelling was attempted three times and each attempt failed its own control checks, so no human-labelled accuracy is reported."
+- "Answers were compared with the reference answers by an automated judge only, and nobody has reviewed its output by hand, so that check is unvalidated and no correctness figures are reported. The judge flagged the answers to m007 and c007 as contradicting their references; those references may be too narrow."
 - Plus the earlier ones: the verifier mutation set is a dev set built from the verifier's own earlier failures; faithfulness numbers are verifier outputs; n is small (26 answerable questions); no held-out set, so all sensitivity runs are sensitivity analyses, not tuning.
 No reference answers or golden-set items were changed by these decisions (the m007/c007 correction is not made: the owner's spot-check marks were never received).
 

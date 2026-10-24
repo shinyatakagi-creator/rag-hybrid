@@ -1,0 +1,3740 @@
+{
+ "readme": "README.md",
+ "occurrences": [
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "pages",
+   "label": "",
+   "text": "502",
+   "start": 105,
+   "end": 108
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "fixed > docs",
+   "label": "",
+   "text": "477",
+   "start": 141,
+   "end": 144
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 652,
+   "end": 654
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/native_rrf_check.json",
+   "key": "meta > es_version",
+   "label": "",
+   "text": "9.5.5",
+   "start": 977,
+   "end": 982
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "fixed > chunks",
+   "label": "",
+   "text": "4,072",
+   "start": 1076,
+   "end": 1081
+  },
+  {
+   "kind": "typed",
+   "source": "docs/BUILD_GUIDE.md Phase 1",
+   "key": "",
+   "label": "fixed chunker target tokens",
+   "text": "400",
+   "start": 1090,
+   "end": 1093
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "heading > chunks",
+   "label": "",
+   "text": "4,527",
+   "start": 1131,
+   "end": 1136
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/mapping.json",
+   "key": "mapping > rag-docs > mappings > properties > embedding > dims",
+   "label": "",
+   "text": "1536",
+   "start": 1163,
+   "end": 1167
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > embed_model",
+   "label": "",
+   "text": "text-embedding-3-small",
+   "start": 1187,
+   "end": 1209
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/mapping.json",
+   "key": "mapping > rag-docs > mappings > properties > embedding > index_options > type",
+   "label": "effective index_options",
+   "text": "bbq_hnsw",
+   "start": 1243,
+   "end": 1251
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > bm25_fields[0]",
+   "label": "BM25 field boost",
+   "text": "title^2",
+   "start": 1302,
+   "end": 1309
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > bm25_fields[1]",
+   "label": "BM25 field boost",
+   "text": "heading_path^1.5",
+   "start": 1313,
+   "end": 1329
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > bm25_fields[2]",
+   "label": "BM25 field boost",
+   "text": "content",
+   "start": 1333,
+   "end": 1340
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > rrf_k",
+   "label": "",
+   "text": "60",
+   "start": 1386,
+   "end": 1388
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > pool",
+   "label": "",
+   "text": "200",
+   "start": 1403,
+   "end": 1406
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > context > max_chunks",
+   "label": "",
+   "text": "8",
+   "start": 1462,
+   "end": 1463
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > context > per_doc",
+   "label": "",
+   "text": "2",
+   "start": 1476,
+   "end": 1477
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > answer_model",
+   "label": "",
+   "text": "claude-sonnet-5-5",
+   "start": 1492,
+   "end": 1509
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > verifier_model",
+   "label": "",
+   "text": "claude-haiku-5-5",
+   "start": 1617,
+   "end": 1633
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > rubric",
+   "label": "",
+   "text": "claims-v2",
+   "start": 1710,
+   "end": 1719
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > exact_term",
+   "label": "",
+   "text": "8",
+   "start": 2136,
+   "end": 2137
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > mixed",
+   "label": "",
+   "text": "8",
+   "start": 2150,
+   "end": 2151
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > conceptual",
+   "label": "",
+   "text": "10",
+   "start": 2169,
+   "end": 2171
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > n",
+   "label": "",
+   "text": "16",
+   "start": 2188,
+   "end": 2190
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/bm25 > slices > exact_term > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2249,
+   "end": 2254
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/bm25 > slices > exact_term > mrr",
+   "label": "",
+   "text": "0.875",
+   "start": 2257,
+   "end": 2262
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/bm25 > slices > mixed > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2265,
+   "end": 2270
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/bm25 > slices > mixed > mrr",
+   "label": "",
+   "text": "0.889",
+   "start": 2273,
+   "end": 2278
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/bm25 > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.000",
+   "start": 2281,
+   "end": 2286
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/bm25 > slices > conceptual > mrr",
+   "label": "",
+   "text": "0.028",
+   "start": 2289,
+   "end": 2294
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/bm25 > slices > bare_term > recall@10",
+   "label": "",
+   "text": "0.938",
+   "start": 2297,
+   "end": 2302
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/bm25 > slices > bare_term > mrr",
+   "label": "",
+   "text": "0.651",
+   "start": 2305,
+   "end": 2310
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > exact_term > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2342,
+   "end": 2347
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > exact_term > mrr",
+   "label": "",
+   "text": "0.854",
+   "start": 2350,
+   "end": 2355
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > mixed > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2358,
+   "end": 2363
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > mixed > mrr",
+   "label": "",
+   "text": "0.838",
+   "start": 2366,
+   "end": 2371
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.650",
+   "start": 2374,
+   "end": 2379
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > conceptual > mrr",
+   "label": "",
+   "text": "0.347",
+   "start": 2382,
+   "end": 2387
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > bare_term > recall@10",
+   "label": "",
+   "text": "0.656",
+   "start": 2390,
+   "end": 2395
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > bare_term > mrr",
+   "label": "",
+   "text": "0.331",
+   "start": 2398,
+   "end": 2403
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > exact_term > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2436,
+   "end": 2441
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > exact_term > mrr",
+   "label": "",
+   "text": "0.938",
+   "start": 2444,
+   "end": 2449
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > mixed > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2452,
+   "end": 2457
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > mixed > mrr",
+   "label": "",
+   "text": "0.854",
+   "start": 2460,
+   "end": 2465
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.450",
+   "start": 2468,
+   "end": 2473
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > conceptual > mrr",
+   "label": "",
+   "text": "0.129",
+   "start": 2476,
+   "end": 2481
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > bare_term > recall@10",
+   "label": "",
+   "text": "0.938",
+   "start": 2484,
+   "end": 2489
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > bare_term > mrr",
+   "label": "",
+   "text": "0.487",
+   "start": 2492,
+   "end": 2497
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/bm25 > slices > exact_term > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2530,
+   "end": 2535
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/bm25 > slices > exact_term > mrr",
+   "label": "",
+   "text": "0.854",
+   "start": 2538,
+   "end": 2543
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/bm25 > slices > mixed > recall@10",
+   "label": "",
+   "text": "0.875",
+   "start": 2546,
+   "end": 2551
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/bm25 > slices > mixed > mrr",
+   "label": "",
+   "text": "0.760",
+   "start": 2554,
+   "end": 2559
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/bm25 > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.250",
+   "start": 2562,
+   "end": 2567
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/bm25 > slices > conceptual > mrr",
+   "label": "",
+   "text": "0.072",
+   "start": 2570,
+   "end": 2575
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/bm25 > slices > bare_term > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2578,
+   "end": 2583
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/bm25 > slices > bare_term > mrr",
+   "label": "",
+   "text": "0.619",
+   "start": 2586,
+   "end": 2591
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > exact_term > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2625,
+   "end": 2630
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > exact_term > mrr",
+   "label": "",
+   "text": "0.729",
+   "start": 2633,
+   "end": 2638
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > mixed > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2641,
+   "end": 2646
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > mixed > mrr",
+   "label": "",
+   "text": "0.826",
+   "start": 2649,
+   "end": 2654
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.683",
+   "start": 2657,
+   "end": 2662
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > conceptual > mrr",
+   "label": "",
+   "text": "0.393",
+   "start": 2665,
+   "end": 2670
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > bare_term > recall@10",
+   "label": "",
+   "text": "0.719",
+   "start": 2673,
+   "end": 2678
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > bare_term > mrr",
+   "label": "",
+   "text": "0.344",
+   "start": 2681,
+   "end": 2686
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > exact_term > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2721,
+   "end": 2726
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > exact_term > mrr",
+   "label": "",
+   "text": "0.875",
+   "start": 2729,
+   "end": 2734
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > mixed > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2737,
+   "end": 2742
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > mixed > mrr",
+   "label": "",
+   "text": "0.906",
+   "start": 2745,
+   "end": 2750
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.550",
+   "start": 2753,
+   "end": 2758
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > conceptual > mrr",
+   "label": "",
+   "text": "0.240",
+   "start": 2761,
+   "end": 2766
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > bare_term > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 2769,
+   "end": 2774
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > bare_term > mrr",
+   "label": "",
+   "text": "0.610",
+   "start": 2777,
+   "end": 2782
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/bm25 > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.000",
+   "start": 2922,
+   "end": 2927
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/bm25 > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.250",
+   "start": 2940,
+   "end": 2945
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > bare_term > recall@10",
+   "label": "",
+   "text": "0.656",
+   "start": 3066,
+   "end": 3071
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > bare_term > recall@10",
+   "label": "",
+   "text": "0.719",
+   "start": 3074,
+   "end": 3079
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > bare_term > recall@10",
+   "label": "",
+   "text": "0.938",
+   "start": 3102,
+   "end": 3107
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > bare_term > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 3110,
+   "end": 3115
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/hybrid > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.450",
+   "start": 3320,
+   "end": 3325
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/hybrid > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.550",
+   "start": 3328,
+   "end": 3333
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > fixed/dense > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.650",
+   "start": 3378,
+   "end": 3383
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/robustness_summary.json",
+   "key": "rows > heading/dense > slices > conceptual > recall@10",
+   "label": "",
+   "text": "0.683",
+   "start": 3386,
+   "end": 3391
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > overall > recall@10",
+   "label": "",
+   "text": "0.878",
+   "start": 3436,
+   "end": 3441
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > recall@10",
+   "label": "",
+   "text": "0.827",
+   "start": 3450,
+   "end": 3455
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 3461,
+   "end": 3463
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "paired > heading: hybrid vs dense > overall > win",
+   "label": "",
+   "text": "7",
+   "start": 3533,
+   "end": 3534
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "paired > heading: hybrid vs dense > overall > tie",
+   "label": "",
+   "text": "12",
+   "start": 3543,
+   "end": 3545
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "paired > heading: hybrid vs dense > overall > loss",
+   "label": "",
+   "text": "7",
+   "start": 3553,
+   "end": 3554
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "paired > heading: hybrid vs dense > conceptual > win",
+   "label": "",
+   "text": "2",
+   "start": 3586,
+   "end": 3587
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "paired > heading: hybrid vs dense > conceptual > tie",
+   "label": "",
+   "text": "1",
+   "start": 3590,
+   "end": 3591
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "paired > heading: hybrid vs dense > conceptual > loss",
+   "label": "",
+   "text": "7",
+   "start": 3594,
+   "end": 3595
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > n",
+   "label": "",
+   "text": "16",
+   "start": 3818,
+   "end": 3820
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > pool",
+   "label": "",
+   "text": "200",
+   "start": 3945,
+   "end": 3948
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > exhausted",
+   "label": "",
+   "text": "9",
+   "start": 3960,
+   "end": 3961
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > n",
+   "label": "",
+   "text": "16",
+   "start": 3965,
+   "end": 3967
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > exhausted_missed",
+   "label": "",
+   "text": "0",
+   "start": 4014,
+   "end": 4015
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/bm25 > overall > n",
+   "label": "",
+   "text": "16",
+   "start": 4124,
+   "end": 4126
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/bm25 > overall > recall@10",
+   "label": "",
+   "text": "0.938",
+   "start": 4129,
+   "end": 4134
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/bm25 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.812-1.000",
+   "start": 4136,
+   "end": 4147
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/bm25 > overall > mrr",
+   "label": "",
+   "text": "0.651",
+   "start": 4151,
+   "end": 4156
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/bm25 > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.474-0.823",
+   "start": 4158,
+   "end": 4169
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/dense > overall > n",
+   "label": "",
+   "text": "16",
+   "start": 4189,
+   "end": 4191
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/dense > overall > recall@10",
+   "label": "",
+   "text": "0.656",
+   "start": 4194,
+   "end": 4199
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/dense > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.438-0.875",
+   "start": 4201,
+   "end": 4212
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/dense > overall > mrr",
+   "label": "",
+   "text": "0.331",
+   "start": 4216,
+   "end": 4221
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/dense > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.172-0.511",
+   "start": 4223,
+   "end": 4234
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/hybrid > overall > n",
+   "label": "",
+   "text": "16",
+   "start": 4255,
+   "end": 4257
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/hybrid > overall > recall@10",
+   "label": "",
+   "text": "0.938",
+   "start": 4260,
+   "end": 4265
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/hybrid > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.812-1.000",
+   "start": 4267,
+   "end": 4278
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/hybrid > overall > mrr",
+   "label": "",
+   "text": "0.487",
+   "start": 4282,
+   "end": 4287
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/hybrid > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.340-0.651",
+   "start": 4289,
+   "end": 4300
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > n",
+   "label": "",
+   "text": "16",
+   "start": 4321,
+   "end": 4323
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 4326,
+   "end": 4331
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 4333,
+   "end": 4344
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=16, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.794-1.000",
+   "start": 4352,
+   "end": 4363
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > mrr",
+   "label": "",
+   "text": "0.619",
+   "start": 4367,
+   "end": 4372
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.451-0.792",
+   "start": 4374,
+   "end": 4385
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/dense > overall > n",
+   "label": "",
+   "text": "16",
+   "start": 4407,
+   "end": 4409
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/dense > overall > recall@10",
+   "label": "",
+   "text": "0.719",
+   "start": 4412,
+   "end": 4417
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/dense > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.500-0.906",
+   "start": 4419,
+   "end": 4430
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/dense > overall > mrr",
+   "label": "",
+   "text": "0.344",
+   "start": 4434,
+   "end": 4439
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/dense > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.187-0.525",
+   "start": 4441,
+   "end": 4452
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/hybrid > overall > n",
+   "label": "",
+   "text": "16",
+   "start": 4475,
+   "end": 4477
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/hybrid > overall > recall@10",
+   "label": "",
+   "text": "1.000",
+   "start": 4480,
+   "end": 4485
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/hybrid > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 4487,
+   "end": 4498
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=16, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.794-1.000",
+   "start": 4506,
+   "end": 4517
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/hybrid > overall > mrr",
+   "label": "",
+   "text": "0.610",
+   "start": 4521,
+   "end": 4526
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/hybrid > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.440-0.786",
+   "start": 4528,
+   "end": 4539
+  },
+  {
+   "kind": "typed",
+   "source": "definition in the note below the bare-term table",
+   "key": "",
+   "label": "Recall@10 value at which the bootstrap interval degenerates",
+   "text": "1.000",
+   "start": 4622,
+   "end": 4627
+  },
+  {
+   "kind": "typed",
+   "source": "definition in the note below the bare-term table",
+   "key": "",
+   "label": "Recall@10 value at which the bootstrap interval degenerates",
+   "text": "0.000",
+   "start": 4631,
+   "end": 4636
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/hybrid > overall > mrr",
+   "label": "",
+   "text": "0.487",
+   "start": 4810,
+   "end": 4815
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > fixed/bm25 > overall > mrr",
+   "label": "",
+   "text": "0.651",
+   "start": 4819,
+   "end": 4824
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/hybrid > overall > mrr",
+   "label": "",
+   "text": "0.610",
+   "start": 4834,
+   "end": 4839
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/bare_term.json",
+   "key": "results > heading/bm25 > overall > mrr",
+   "label": "",
+   "text": "0.619",
+   "start": 4843,
+   "end": 4848
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > n_questions",
+   "label": "",
+   "text": "30",
+   "start": 5065,
+   "end": 5067
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 5079,
+   "end": 5081
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_unanswerable",
+   "label": "",
+   "text": "4",
+   "start": 5095,
+   "end": 5096
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > bootstrap > n",
+   "label": "",
+   "text": "10,000",
+   "start": 5193,
+   "end": 5199
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > pool",
+   "label": "",
+   "text": "200",
+   "start": 5223,
+   "end": 5226
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > knn > k",
+   "label": "",
+   "text": "200",
+   "start": 5234,
+   "end": 5237
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > knn > num_candidates",
+   "label": "",
+   "text": "800",
+   "start": 5258,
+   "end": 5261
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > settings > rrf_k",
+   "label": "",
+   "text": "60",
+   "start": 5269,
+   "end": 5271
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/mapping.json",
+   "key": "mapping > rag-docs > mappings > properties > embedding > index_options > type",
+   "label": "effective index_options",
+   "text": "bbq_hnsw",
+   "start": 5274,
+   "end": 5282
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 5399,
+   "end": 5401
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > overall > recall@5",
+   "label": "",
+   "text": "0.577",
+   "start": 5404,
+   "end": 5409
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > overall > recall@10",
+   "label": "",
+   "text": "0.615",
+   "start": 5412,
+   "end": 5417
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.423-0.808",
+   "start": 5419,
+   "end": 5430
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > overall > mrr",
+   "label": "",
+   "text": "0.554",
+   "start": 5434,
+   "end": 5439
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.372-0.735",
+   "start": 5441,
+   "end": 5452
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 5474,
+   "end": 5476
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > overall > recall@5",
+   "label": "",
+   "text": "0.821",
+   "start": 5479,
+   "end": 5484
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > overall > recall@10",
+   "label": "",
+   "text": "0.865",
+   "start": 5487,
+   "end": 5492
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.731-0.981",
+   "start": 5494,
+   "end": 5505
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > overall > mrr",
+   "label": "",
+   "text": "0.654",
+   "start": 5509,
+   "end": 5514
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.499-0.804",
+   "start": 5516,
+   "end": 5527
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 5550,
+   "end": 5552
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > overall > recall@5",
+   "label": "",
+   "text": "0.731",
+   "start": 5555,
+   "end": 5560
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > overall > recall@10",
+   "label": "",
+   "text": "0.788",
+   "start": 5563,
+   "end": 5568
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.635-0.923",
+   "start": 5570,
+   "end": 5581
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > overall > mrr",
+   "label": "",
+   "text": "0.601",
+   "start": 5585,
+   "end": 5590
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.441-0.764",
+   "start": 5592,
+   "end": 5603
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 5626,
+   "end": 5628
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > overall > recall@5",
+   "label": "",
+   "text": "0.635",
+   "start": 5631,
+   "end": 5636
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > overall > recall@10",
+   "label": "",
+   "text": "0.673",
+   "start": 5639,
+   "end": 5644
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.500-0.846",
+   "start": 5646,
+   "end": 5657
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > overall > mrr",
+   "label": "",
+   "text": "0.524",
+   "start": 5661,
+   "end": 5666
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.358-0.693",
+   "start": 5668,
+   "end": 5679
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 5703,
+   "end": 5705
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > overall > recall@5",
+   "label": "",
+   "text": "0.769",
+   "start": 5708,
+   "end": 5713
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > overall > recall@10",
+   "label": "",
+   "text": "0.878",
+   "start": 5716,
+   "end": 5721
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.750-0.981",
+   "start": 5723,
+   "end": 5734
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > overall > mrr",
+   "label": "",
+   "text": "0.630",
+   "start": 5738,
+   "end": 5743
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.489-0.772",
+   "start": 5745,
+   "end": 5756
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 5781,
+   "end": 5783
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > recall@5",
+   "label": "",
+   "text": "0.788",
+   "start": 5786,
+   "end": 5791
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > recall@10",
+   "label": "",
+   "text": "0.827",
+   "start": 5794,
+   "end": 5799
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.692-0.962",
+   "start": 5801,
+   "end": 5812
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > mrr",
+   "label": "",
+   "text": "0.640",
+   "start": 5816,
+   "end": 5821
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > mrr_ci95",
+   "label": "95% CI",
+   "text": "0.488-0.795",
+   "start": 5823,
+   "end": 5834
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > exact_term",
+   "label": "",
+   "text": "8",
+   "start": 5861,
+   "end": 5862
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > mixed",
+   "label": "",
+   "text": "8",
+   "start": 5865,
+   "end": 5866
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > conceptual",
+   "label": "",
+   "text": "10",
+   "start": 5869,
+   "end": 5871
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > exact_term",
+   "label": "",
+   "text": "8",
+   "start": 5978,
+   "end": 5979
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > mixed",
+   "label": "",
+   "text": "8",
+   "start": 6008,
+   "end": 6009
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > conceptual",
+   "label": "",
+   "text": "10",
+   "start": 6043,
+   "end": 6045
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > by_type > exact_term > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6098,
+   "end": 6102
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > by_type > exact_term > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6104,
+   "end": 6115
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6123,
+   "end": 6134
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > by_type > exact_term > mrr",
+   "label": "",
+   "text": "0.88",
+   "start": 6138,
+   "end": 6142
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > by_type > mixed > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6145,
+   "end": 6149
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > by_type > mixed > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6151,
+   "end": 6162
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6170,
+   "end": 6181
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > by_type > mixed > mrr",
+   "label": "",
+   "text": "0.89",
+   "start": 6185,
+   "end": 6189
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.00",
+   "start": 6192,
+   "end": 6196
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > by_type > conceptual > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.000-0.000",
+   "start": 6198,
+   "end": 6209
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=10, every question a miss",
+   "label": "exact 95% interval",
+   "text": "0.000-0.308",
+   "start": 6217,
+   "end": 6228
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/bm25 > by_type > conceptual > mrr",
+   "label": "",
+   "text": "0.03",
+   "start": 6232,
+   "end": 6236
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > by_type > exact_term > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6255,
+   "end": 6259
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > by_type > exact_term > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6261,
+   "end": 6272
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6280,
+   "end": 6291
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > by_type > exact_term > mrr",
+   "label": "",
+   "text": "0.85",
+   "start": 6295,
+   "end": 6299
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > by_type > mixed > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6302,
+   "end": 6306
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > by_type > mixed > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6308,
+   "end": 6319
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6327,
+   "end": 6338
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > by_type > mixed > mrr",
+   "label": "",
+   "text": "0.84",
+   "start": 6342,
+   "end": 6346
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.65",
+   "start": 6349,
+   "end": 6353
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > by_type > conceptual > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.350-0.900",
+   "start": 6355,
+   "end": 6366
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > by_type > conceptual > mrr",
+   "label": "",
+   "text": "0.35",
+   "start": 6370,
+   "end": 6374
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > by_type > exact_term > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6394,
+   "end": 6398
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > by_type > exact_term > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6400,
+   "end": 6411
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6419,
+   "end": 6430
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > by_type > exact_term > mrr",
+   "label": "",
+   "text": "0.94",
+   "start": 6434,
+   "end": 6438
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > by_type > mixed > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6441,
+   "end": 6445
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > by_type > mixed > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6447,
+   "end": 6458
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6466,
+   "end": 6477
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > by_type > mixed > mrr",
+   "label": "",
+   "text": "0.85",
+   "start": 6481,
+   "end": 6485
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.45",
+   "start": 6488,
+   "end": 6492
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > by_type > conceptual > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.200-0.750",
+   "start": 6494,
+   "end": 6505
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > by_type > conceptual > mrr",
+   "label": "",
+   "text": "0.13",
+   "start": 6509,
+   "end": 6513
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > by_type > exact_term > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6533,
+   "end": 6537
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > by_type > exact_term > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6539,
+   "end": 6550
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6558,
+   "end": 6569
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > by_type > exact_term > mrr",
+   "label": "",
+   "text": "0.85",
+   "start": 6573,
+   "end": 6577
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > by_type > mixed > recall@10",
+   "label": "",
+   "text": "0.88",
+   "start": 6580,
+   "end": 6584
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > by_type > mixed > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.625-1.000",
+   "start": 6586,
+   "end": 6597
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > by_type > mixed > mrr",
+   "label": "",
+   "text": "0.76",
+   "start": 6601,
+   "end": 6605
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.25",
+   "start": 6608,
+   "end": 6612
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > by_type > conceptual > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.000-0.500",
+   "start": 6614,
+   "end": 6625
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/bm25 > by_type > conceptual > mrr",
+   "label": "",
+   "text": "0.07",
+   "start": 6629,
+   "end": 6633
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > by_type > exact_term > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6654,
+   "end": 6658
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > by_type > exact_term > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6660,
+   "end": 6671
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6679,
+   "end": 6690
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > by_type > exact_term > mrr",
+   "label": "",
+   "text": "0.73",
+   "start": 6694,
+   "end": 6698
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > by_type > mixed > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6701,
+   "end": 6705
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > by_type > mixed > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6707,
+   "end": 6718
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6726,
+   "end": 6737
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > by_type > mixed > mrr",
+   "label": "",
+   "text": "0.83",
+   "start": 6741,
+   "end": 6745
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.68",
+   "start": 6748,
+   "end": 6752
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > by_type > conceptual > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.433-0.933",
+   "start": 6754,
+   "end": 6765
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > by_type > conceptual > mrr",
+   "label": "",
+   "text": "0.39",
+   "start": 6769,
+   "end": 6773
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > by_type > exact_term > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6795,
+   "end": 6799
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > by_type > exact_term > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6801,
+   "end": 6812
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6820,
+   "end": 6831
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > by_type > exact_term > mrr",
+   "label": "",
+   "text": "0.88",
+   "start": 6835,
+   "end": 6839
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > by_type > mixed > recall@10",
+   "label": "",
+   "text": "1.00",
+   "start": 6842,
+   "end": 6846
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > by_type > mixed > recall@10_ci95",
+   "label": "95% CI",
+   "text": "1.000-1.000",
+   "start": 6848,
+   "end": 6859
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "Clopper-Pearson, n=8, every question a hit",
+   "label": "exact 95% interval",
+   "text": "0.631-1.000",
+   "start": 6867,
+   "end": 6878
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > by_type > mixed > mrr",
+   "label": "",
+   "text": "0.91",
+   "start": 6882,
+   "end": 6886
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.55",
+   "start": 6889,
+   "end": 6893
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > by_type > conceptual > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.250-0.850",
+   "start": 6895,
+   "end": 6906
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > by_type > conceptual > mrr",
+   "label": "",
+   "text": "0.24",
+   "start": 6910,
+   "end": 6914
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 7090,
+   "end": 7092
+  },
+  {
+   "kind": "typed",
+   "source": "eval/results/rrf_weights.md",
+   "key": "",
+   "label": "dense weights tried (BM25 weight 1)",
+   "text": "1 / 1.5 / 2",
+   "start": 7176,
+   "end": 7187
+  },
+  {
+   "kind": "typed",
+   "source": "eval/results/rrf_weights.md",
+   "key": "",
+   "label": "BM25 weight",
+   "text": "1",
+   "start": 7201,
+   "end": 7202
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "meta > n_by_type > conceptual",
+   "label": "",
+   "text": "10",
+   "start": 7285,
+   "end": 7287
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/dense > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 7348,
+   "end": 7350
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/dense > overall > recall@10",
+   "label": "",
+   "text": "0.865",
+   "start": 7353,
+   "end": 7358
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/dense > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.731-0.981",
+   "start": 7360,
+   "end": 7371
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/dense > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.65",
+   "start": 7375,
+   "end": 7379
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1",
+   "label": "row label (key name)",
+   "text": "fixed/hybrid w1",
+   "start": 7384,
+   "end": 7399
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1 > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 7402,
+   "end": 7404
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1 > overall > recall@10",
+   "label": "",
+   "text": "0.788",
+   "start": 7407,
+   "end": 7412
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.635-0.923",
+   "start": 7414,
+   "end": 7425
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1 > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.45",
+   "start": 7429,
+   "end": 7433
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1.5",
+   "label": "row label (key name)",
+   "text": "fixed/hybrid w1.5",
+   "start": 7438,
+   "end": 7455
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1.5 > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 7458,
+   "end": 7460
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1.5 > overall > recall@10",
+   "label": "",
+   "text": "0.821",
+   "start": 7463,
+   "end": 7468
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1.5 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.667-0.962",
+   "start": 7470,
+   "end": 7481
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w1.5 > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.53",
+   "start": 7485,
+   "end": 7489
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w2",
+   "label": "row label (key name)",
+   "text": "fixed/hybrid w2",
+   "start": 7494,
+   "end": 7509
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w2 > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 7512,
+   "end": 7514
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w2 > overall > recall@10",
+   "label": "",
+   "text": "0.821",
+   "start": 7517,
+   "end": 7522
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w2 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.667-0.962",
+   "start": 7524,
+   "end": 7535
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > fixed/hybrid w2 > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.53",
+   "start": 7539,
+   "end": 7543
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/dense > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 7587,
+   "end": 7589
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/dense > overall > recall@10",
+   "label": "",
+   "text": "0.878",
+   "start": 7592,
+   "end": 7597
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/dense > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.750-0.981",
+   "start": 7599,
+   "end": 7610
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/dense > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.68",
+   "start": 7614,
+   "end": 7618
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1",
+   "label": "row label (key name)",
+   "text": "heading/hybrid w1",
+   "start": 7623,
+   "end": 7640
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1 > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 7643,
+   "end": 7645
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1 > overall > recall@10",
+   "label": "",
+   "text": "0.827",
+   "start": 7648,
+   "end": 7653
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.692-0.962",
+   "start": 7655,
+   "end": 7666
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1 > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.55",
+   "start": 7670,
+   "end": 7674
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1.5",
+   "label": "row label (key name)",
+   "text": "heading/hybrid w1.5",
+   "start": 7679,
+   "end": 7698
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1.5 > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 7701,
+   "end": 7703
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1.5 > overall > recall@10",
+   "label": "",
+   "text": "0.865",
+   "start": 7706,
+   "end": 7711
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1.5 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.731-0.981",
+   "start": 7713,
+   "end": 7724
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w1.5 > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.65",
+   "start": 7728,
+   "end": 7732
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w2",
+   "label": "row label (key name)",
+   "text": "heading/hybrid w2",
+   "start": 7737,
+   "end": 7754
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w2 > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 7757,
+   "end": 7759
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w2 > overall > recall@10",
+   "label": "",
+   "text": "0.865",
+   "start": 7762,
+   "end": 7767
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w2 > overall > recall@10_ci95",
+   "label": "95% CI",
+   "text": "0.731-0.981",
+   "start": 7769,
+   "end": 7780
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/rrf_weights.json",
+   "key": "results > heading/hybrid w2 > by_type > conceptual > recall@10",
+   "label": "",
+   "text": "0.65",
+   "start": 7784,
+   "end": 7788
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/mapping.json",
+   "key": "mapping > rag-docs > mappings > properties > embedding > index_options > type",
+   "label": "effective index_options",
+   "text": "bbq_hnsw",
+   "start": 7797,
+   "end": 7805
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/index_options.json",
+   "key": "results > fixed/dense [bbq_hnsw] > overall > recall@10",
+   "label": "",
+   "text": "0.865",
+   "start": 7874,
+   "end": 7879
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/index_options.json",
+   "key": "results > fixed/dense [hnsw] > overall > recall@10",
+   "label": "",
+   "text": "0.865",
+   "start": 7883,
+   "end": 7888
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/index_options.json",
+   "key": "results > fixed/hybrid [bbq_hnsw] > overall > recall@10",
+   "label": "",
+   "text": "0.788",
+   "start": 7891,
+   "end": 7896
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/index_options.json",
+   "key": "results > fixed/hybrid [hnsw] > overall > recall@10",
+   "label": "",
+   "text": "0.788",
+   "start": 7900,
+   "end": 7905
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/index_options.json",
+   "key": "results > heading/dense [bbq_hnsw] > overall > recall@10",
+   "label": "",
+   "text": "0.878",
+   "start": 7915,
+   "end": 7920
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/index_options.json",
+   "key": "results > heading/dense [hnsw] > overall > recall@10",
+   "label": "",
+   "text": "0.878",
+   "start": 7924,
+   "end": 7929
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/index_options.json",
+   "key": "results > heading/hybrid [bbq_hnsw] > overall > recall@10",
+   "label": "",
+   "text": "0.827",
+   "start": 7932,
+   "end": 7937
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/index_options.json",
+   "key": "results > heading/hybrid [hnsw] > overall > recall@10",
+   "label": "",
+   "text": "0.827",
+   "start": 7941,
+   "end": 7946
+  },
+  {
+   "kind": "typed",
+   "source": "eval/results/failure_analysis.md",
+   "key": "",
+   "label": "golden question ids",
+   "text": "c009, c010, c002",
+   "start": 8112,
+   "end": 8128
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > n_questions",
+   "label": "",
+   "text": "30",
+   "start": 8311,
+   "end": 8313
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > context > max_chunks",
+   "label": "",
+   "text": "8",
+   "start": 8337,
+   "end": 8338
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > context > per_doc",
+   "label": "",
+   "text": "2",
+   "start": 8352,
+   "end": 8353
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > n_answerable - false_refusals",
+   "label": "answered answerable questions",
+   "text": "21 of 26",
+   "start": 8933,
+   "end": 8941
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > answer_coverage > value",
+   "label": "",
+   "text": "0.808",
+   "start": 8943,
+   "end": 8948
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > answer_coverage > ci95",
+   "label": "95% CI",
+   "text": "0.654-0.962",
+   "start": 8953,
+   "end": 8964
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > false_refusals",
+   "label": "",
+   "text": "5",
+   "start": 8968,
+   "end": 8969
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > correct_refusals",
+   "label": "",
+   "text": "4",
+   "start": 8972,
+   "end": 8973
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > n_unanswerable",
+   "label": "",
+   "text": "4",
+   "start": 8977,
+   "end": 8978
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > answered_unanswerable",
+   "label": "",
+   "text": "0",
+   "start": 8981,
+   "end": 8982
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > faithfulness_strict > value",
+   "label": "",
+   "text": "0.962",
+   "start": 8985,
+   "end": 8990
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > faithfulness_strict > ci95",
+   "label": "95% CI",
+   "text": "0.924-1.000",
+   "start": 8992,
+   "end": 9003
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > faithfulness_strict > denominator",
+   "label": "",
+   "text": "78",
+   "start": 9005,
+   "end": 9007
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > faithfulness_strict > units",
+   "label": "",
+   "text": "21",
+   "start": 9019,
+   "end": 9021
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > faithfulness_lenient > value",
+   "label": "",
+   "text": "1.000",
+   "start": 9033,
+   "end": 9038
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > citation_precision > value",
+   "label": "",
+   "text": "0.917",
+   "start": 9041,
+   "end": 9046
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > citation_precision > ci95",
+   "label": "95% CI",
+   "text": "0.864-0.974",
+   "start": 9048,
+   "end": 9059
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > ci > citation_precision > denominator",
+   "label": "",
+   "text": "84",
+   "start": 9061,
+   "end": 9063
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > summary > n_answerable - false_refusals",
+   "label": "answered answerable questions",
+   "text": "23 of 26",
+   "start": 9095,
+   "end": 9103
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > answer_coverage > value",
+   "label": "",
+   "text": "0.885",
+   "start": 9105,
+   "end": 9110
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > answer_coverage > ci95",
+   "label": "95% CI",
+   "text": "0.731-1.000",
+   "start": 9115,
+   "end": 9126
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > summary > false_refusals",
+   "label": "",
+   "text": "3",
+   "start": 9130,
+   "end": 9131
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > summary > correct_refusals",
+   "label": "",
+   "text": "4",
+   "start": 9134,
+   "end": 9135
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > summary > n_unanswerable",
+   "label": "",
+   "text": "4",
+   "start": 9139,
+   "end": 9140
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > summary > answered_unanswerable",
+   "label": "",
+   "text": "0",
+   "start": 9143,
+   "end": 9144
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > faithfulness_strict > value",
+   "label": "",
+   "text": "0.961",
+   "start": 9147,
+   "end": 9152
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > faithfulness_strict > ci95",
+   "label": "95% CI",
+   "text": "0.912-1.000",
+   "start": 9154,
+   "end": 9165
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > faithfulness_strict > denominator",
+   "label": "",
+   "text": "77",
+   "start": 9167,
+   "end": 9169
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > faithfulness_strict > units",
+   "label": "",
+   "text": "23",
+   "start": 9181,
+   "end": 9183
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > faithfulness_lenient > value",
+   "label": "",
+   "text": "1.000",
+   "start": 9195,
+   "end": 9200
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > citation_precision > value",
+   "label": "",
+   "text": "0.951",
+   "start": 9203,
+   "end": 9208
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > citation_precision > ci95",
+   "label": "95% CI",
+   "text": "0.887-1.000",
+   "start": 9210,
+   "end": 9221
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > ci > citation_precision > denominator",
+   "label": "",
+   "text": "81",
+   "start": 9223,
+   "end": 9225
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > context_has_expected",
+   "label": "",
+   "text": "21 of 26",
+   "start": 9323,
+   "end": 9331
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > summary > context_has_expected",
+   "label": "",
+   "text": "22 of 26",
+   "start": 9345,
+   "end": 9353
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > false_refusals",
+   "label": "",
+   "text": "5",
+   "start": 9409,
+   "end": 9410
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/dense > summary > false_refusals",
+   "label": "",
+   "text": "3",
+   "start": 9419,
+   "end": 9420
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "paired_hybrid_vs_dense > answerable_26 > outcomes > both_answered",
+   "label": "",
+   "text": "20",
+   "start": 9596,
+   "end": 9598
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "paired_hybrid_vs_dense > answerable_26 > outcomes > only_hybrid_answered",
+   "label": "",
+   "text": "1",
+   "start": 9612,
+   "end": 9613
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "paired_hybrid_vs_dense > answerable_26 > outcomes > only_dense_answered",
+   "label": "",
+   "text": "3",
+   "start": 9626,
+   "end": 9627
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "paired_hybrid_vs_dense > answerable_26 > outcomes > both_refused",
+   "label": "",
+   "text": "2",
+   "start": 9642,
+   "end": 9643
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "paired_hybrid_vs_dense > answerable_26 > faithfulness_both_verified > win",
+   "label": "",
+   "text": "2",
+   "start": 9714,
+   "end": 9715
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "paired_hybrid_vs_dense > answerable_26 > faithfulness_both_verified > tie",
+   "label": "",
+   "text": "16",
+   "start": 9726,
+   "end": 9728
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "paired_hybrid_vs_dense > answerable_26 > faithfulness_both_verified > loss",
+   "label": "",
+   "text": "2",
+   "start": 9739,
+   "end": 9740
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > n_unanswerable",
+   "label": "",
+   "text": "4",
+   "start": 9771,
+   "end": 9772
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > correct_refusals",
+   "label": "",
+   "text": "4",
+   "start": 9801,
+   "end": 9802
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > n_unanswerable",
+   "label": "",
+   "text": "4",
+   "start": 9806,
+   "end": 9807
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > answered_unanswerable",
+   "label": "",
+   "text": "0",
+   "start": 9860,
+   "end": 9861
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "configs > heading/hybrid > summary > n_unanswerable",
+   "label": "",
+   "text": "4",
+   "start": 10404,
+   "end": 10405
+  },
+  {
+   "kind": "computed",
+   "source": "computed here",
+   "key": "0.025 ** (1/4)",
+   "label": "exact 95% lower bound for 4 of 4 refusals",
+   "text": "0.40",
+   "start": 10455,
+   "end": 10459
+  },
+  {
+   "kind": "typed",
+   "source": "docs/BUILD_GUIDE.md licence section",
+   "key": "",
+   "label": "HTTP status of the Enterprise-gated rrf retriever on a Basic licence",
+   "text": "403",
+   "start": 10595,
+   "end": 10598
+  },
+  {
+   "kind": "typed",
+   "source": "docs/BUILD_GUIDE.md licence section",
+   "key": "",
+   "label": "days of the trial licence",
+   "text": "30",
+   "start": 10639,
+   "end": 10641
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/native_rrf_check.json",
+   "key": "meta > license > expiry (date part)",
+   "label": "trial expiry",
+   "text": "2026-11-22",
+   "start": 10661,
+   "end": 10671
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/native_rrf_check.json",
+   "key": "summary > fixed > n",
+   "label": "",
+   "text": "26",
+   "start": 10693,
+   "end": 10695
+  },
+  {
+   "kind": "typed",
+   "source": "docs/BUILD_GUIDE.md",
+   "key": "",
+   "label": "two chunkers",
+   "text": "2",
+   "start": 10708,
+   "end": 10709
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/native_rrf_check.json",
+   "key": "summary > fixed + heading > first_rank_identical",
+   "label": "sum over both chunkers",
+   "text": "52",
+   "start": 10758,
+   "end": 10760
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/native_rrf_check.json",
+   "key": "summary > fixed + heading > n",
+   "label": "sum over both chunkers",
+   "text": "52",
+   "start": 10764,
+   "end": 10766
+  },
+  {
+   "kind": "typed",
+   "source": "eval/results/native_rrf_check.md",
+   "key": "",
+   "label": "top-10 list in the native-vs-Python comparison",
+   "text": "10",
+   "start": 10772,
+   "end": 10774
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/native_rrf_check.json",
+   "key": "summary > fixed + heading > top10_chunks_identical_order",
+   "label": "sum over both chunkers",
+   "text": "48",
+   "start": 10800,
+   "end": 10802
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/native_rrf_check.json",
+   "key": "summary > fixed + heading > n",
+   "label": "sum over both chunkers",
+   "text": "52",
+   "start": 10806,
+   "end": 10808
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/hybrid > overall > recall@10",
+   "label": "",
+   "text": "0.788",
+   "start": 11077,
+   "end": 11082
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > recall@10",
+   "label": "",
+   "text": "0.827",
+   "start": 11086,
+   "end": 11091
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > fixed/dense > overall > recall@10",
+   "label": "",
+   "text": "0.865",
+   "start": 11099,
+   "end": 11104
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/dense > overall > recall@10",
+   "label": "",
+   "text": "0.878",
+   "start": 11108,
+   "end": 11113
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 11119,
+   "end": 11121
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "fixed > tokens_median",
+   "label": "",
+   "text": "367",
+   "start": 11136,
+   "end": 11139
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "heading > tokens_median",
+   "label": "",
+   "text": "245",
+   "start": 11144,
+   "end": 11147
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "heading > tokens_max",
+   "label": "",
+   "text": "649",
+   "start": 11189,
+   "end": 11192
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "whats_next_sections_removed",
+   "label": "",
+   "text": "281",
+   "start": 11245,
+   "end": 11248
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "whats_next_tokens_removed",
+   "label": "",
+   "text": "30,606",
+   "start": 11259,
+   "end": 11265
+  },
+  {
+   "kind": "doc",
+   "source": "docs/CORPUS.md",
+   "key": "",
+   "label": "headless include partials excluded (regex-read)",
+   "text": "9",
+   "start": 11357,
+   "end": 11358
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "entities_decoded",
+   "label": "",
+   "text": "1,281",
+   "start": 11433,
+   "end": 11438
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > answer_model",
+   "label": "",
+   "text": "claude-sonnet-5-5",
+   "start": 11946,
+   "end": 11963
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > verifier_model",
+   "label": "",
+   "text": "claude-haiku-5-5",
+   "start": 11966,
+   "end": 11982
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval_generation.jsonl + answer_eval_verification.jsonl",
+   "key": "questions with a verification record",
+   "label": "answered questions (both configs)",
+   "text": "44",
+   "start": 11999,
+   "end": 12001
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval_generation.jsonl + answer_eval_verification.jsonl",
+   "key": "min(generation + verification cost_usd)",
+   "label": "per-answered-question cost",
+   "text": "$0.0076",
+   "start": 12026,
+   "end": 12033
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval_generation.jsonl + answer_eval_verification.jsonl",
+   "key": "max(generation + verification cost_usd)",
+   "label": "per-answered-question cost",
+   "text": "$0.0190",
+   "start": 12037,
+   "end": 12044
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval_generation.jsonl + answer_eval_verification.jsonl",
+   "key": "median(generation + verification cost_usd)",
+   "label": "per-answered-question cost",
+   "text": "$0.0131",
+   "start": 12058,
+   "end": 12065
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval_generation.jsonl + answer_eval_verification.jsonl",
+   "key": "questions without a verification record",
+   "label": "refused questions (both configs)",
+   "text": "16",
+   "start": 12068,
+   "end": 12070
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval_generation.jsonl + answer_eval_verification.jsonl",
+   "key": "min(generation cost_usd)",
+   "label": "refusal cost",
+   "text": "$0.0057",
+   "start": 12085,
+   "end": 12092
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval_generation.jsonl + answer_eval_verification.jsonl",
+   "key": "max(generation cost_usd)",
+   "label": "refusal cost",
+   "text": "$0.0136",
+   "start": 12096,
+   "end": 12103
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/answer_eval.json",
+   "key": "meta > run_cost_usd_reported",
+   "label": "",
+   "text": "$0.7295",
+   "start": 12123,
+   "end": 12130
+  },
+  {
+   "kind": "computed",
+   "source": "eval/results/answer_eval_generation.jsonl + answer_eval_verification.jsonl",
+   "key": "sum of all cost_usd in both logs",
+   "label": "answer-eval total from logs",
+   "text": "$0.7296",
+   "start": 12141,
+   "end": 12148
+  },
+  {
+   "kind": "doc",
+   "source": "NOTES.md Phase 8 step 2",
+   "key": "",
+   "label": "one live /ask, answerable, 12 sentences",
+   "text": "$0.0173",
+   "start": 12239,
+   "end": 12246
+  },
+  {
+   "kind": "doc",
+   "source": "NOTES.md Phase 8 step 2",
+   "key": "",
+   "label": "worst-case estimate for one /ask",
+   "text": "$0.053",
+   "start": 12268,
+   "end": 12274
+  },
+  {
+   "kind": "doc",
+   "source": "NOTES.md Phase 8 step 2",
+   "key": "",
+   "label": "one live /ask refusal",
+   "text": "$0.0103",
+   "start": 12292,
+   "end": 12299
+  },
+  {
+   "kind": "doc",
+   "source": "STATUS.md 'Spend so far'",
+   "key": "",
+   "label": "whole-project API spend; the ledger's 1.0776 excludes the clean-clone embedding (0.0534)",
+   "text": "about $1.1",
+   "start": 12365,
+   "end": 12375
+  },
+  {
+   "kind": "doc",
+   "source": "STATUS.md / NOTES.md Phase 8 step 2",
+   "key": "",
+   "label": "spend-ledger value after the live API calls",
+   "text": "1.0776",
+   "start": 12402,
+   "end": 12408
+  },
+  {
+   "kind": "doc",
+   "source": "eval/results/clean_clone_check.md; STATUS.md",
+   "key": "",
+   "label": "clean-clone embedding, run from the host",
+   "text": "$0.0534",
+   "start": 12421,
+   "end": 12428
+  },
+  {
+   "kind": "doc",
+   "source": "STATUS.md 'README limitations' (copied verbatim)",
+   "key": "",
+   "label": "limitation text",
+   "text": "The verifier was not validated against human judgement: hand labelling was attempted three times and each attempt failed its own control checks, so no human-labelled accuracy is reported.",
+   "start": 12489,
+   "end": 12676
+  },
+  {
+   "kind": "doc",
+   "source": "STATUS.md 'README limitations' (copied verbatim)",
+   "key": "",
+   "label": "limitation text",
+   "text": "Answers were compared with the reference answers by an automated judge only, and nobody has reviewed its output by hand, so that check is unvalidated and no correctness figures are reported. The judge flagged the answers to m007 and c007 as contradicting their references; those references may be too narrow.",
+   "start": 12679,
+   "end": 12987
+  },
+  {
+   "kind": "doc",
+   "source": "STATUS.md 'README limitations' (copied verbatim)",
+   "key": "",
+   "label": "limitation text",
+   "text": "the verifier mutation set is a dev set built from the verifier's own earlier failures; faithfulness numbers are verifier outputs; n is small (26 answerable questions); no held-out set, so all sensitivity runs are sensitivity analyses, not tuning.",
+   "start": 12996,
+   "end": 13242
+  },
+  {
+   "kind": "typed",
+   "source": "STATUS.md 'Checkpoint 4: CLOSED'",
+   "key": "",
+   "label": "human labelling round that had no controls",
+   "text": "1",
+   "start": 13312,
+   "end": 13313
+  },
+  {
+   "kind": "typed",
+   "source": "STATUS.md 'Checkpoint 4: CLOSED'",
+   "key": "",
+   "label": "human labelling rounds that failed their pre-registered controls",
+   "text": "2 and 3",
+   "start": 13359,
+   "end": 13366
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/verify_mutation_haiku.json",
+   "key": "n",
+   "label": "",
+   "text": "25",
+   "start": 13479,
+   "end": 13481
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/verify_mutation_haiku.json",
+   "key": "summary > wrong_pairs > no",
+   "label": "",
+   "text": "10",
+   "start": 13524,
+   "end": 13526
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/verify_mutation_haiku.json",
+   "key": "summary > wrong_pairs > n",
+   "label": "",
+   "text": "10",
+   "start": 13530,
+   "end": 13532
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/verify_mutation_haiku.json",
+   "key": "summary > controls_verbatim > yes",
+   "label": "",
+   "text": "5",
+   "start": 13563,
+   "end": 13564
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/verify_mutation_haiku.json",
+   "key": "summary > controls_verbatim > n",
+   "label": "",
+   "text": "5",
+   "start": 13568,
+   "end": 13569
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/verify_mutation_haiku.json",
+   "key": "summary > controls_paraphrase > yes",
+   "label": "",
+   "text": "10",
+   "start": 13583,
+   "end": 13585
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/verify_mutation_haiku.json",
+   "key": "summary > controls_paraphrase > n",
+   "label": "",
+   "text": "10",
+   "start": 13589,
+   "end": 13591
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/retrieval_baseline.json",
+   "key": "results > heading/hybrid > overall > n",
+   "label": "",
+   "text": "26",
+   "start": 13779,
+   "end": 13781
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/chunk_stats.json",
+   "key": "pages",
+   "label": "",
+   "text": "502",
+   "start": 13830,
+   "end": 13833
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/golden_overlap.json",
+   "key": "by_type > conceptual > ratio_median",
+   "label": "",
+   "text": "0.635",
+   "start": 14249,
+   "end": 14254
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/golden_overlap.json",
+   "key": "by_type > exact_term > ratio_median",
+   "label": "",
+   "text": "0.865",
+   "start": 14258,
+   "end": 14263
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/golden_overlap.json",
+   "key": "by_type > conceptual > rare_terms_mean",
+   "label": "",
+   "text": "0.6",
+   "start": 14280,
+   "end": 14283
+  },
+  {
+   "kind": "result",
+   "source": "eval/results/golden_overlap.json",
+   "key": "by_type > conceptual > copied_phrase",
+   "label": "",
+   "text": "0",
+   "start": 14314,
+   "end": 14315
+  },
+  {
+   "kind": "doc",
+   "source": "eval/results/clean_clone_check.md",
+   "key": "",
+   "label": "dense/hybrid first ranks moved in the clean clone",
+   "text": "1 of 104",
+   "start": 14676,
+   "end": 14684
+  },
+  {
+   "kind": "typed",
+   "source": "docs/SETUP.md cost table",
+   "key": "",
+   "label": "approximate paid embedding step",
+   "text": "$0.05",
+   "start": 15366,
+   "end": 15371
+  },
+  {
+   "kind": "doc",
+   "source": "docs/CORPUS.md",
+   "key": "",
+   "label": "pinned corpus commit (regex-read by this script)",
+   "text": "6c42e266fcc1f0e0edd4805baea904e1b3cbaf9c",
+   "start": 15468,
+   "end": 15508
+  },
+  {
+   "kind": "typed",
+   "source": "docs/CORPUS.md",
+   "key": "",
+   "label": "CC BY licence version",
+   "text": "4.0",
+   "start": 15517,
+   "end": 15520
+  },
+  {
+   "kind": "typed",
+   "source": "docs/BUILD_GUIDE.md Stretch",
+   "key": "",
+   "label": "reranker candidate depth (a proposal, not a result)",
+   "text": "50",
+   "start": 15763,
+   "end": 15765
+  }
+ ]
+}
