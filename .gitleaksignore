@@ -1,0 +1,6 @@
+# Public Kubernetes documentation sample, not a credential.
+# eval/results/answer_eval_generation.jsonl line 41 quotes a kubectl example from the pinned corpus
+# (docs/reference/access-authn-authz/authentication.md, "--auth-provider-arg=refresh-token=...").
+# gitleaks reports it as generic-api-key; the value is the upstream docs example.
+802300f7ea26fb3e5623cb43606533701c5d554c:eval/results/answer_eval_generation.jsonl:generic-api-key:41
+eval/results/answer_eval_generation.jsonl:generic-api-key:41
